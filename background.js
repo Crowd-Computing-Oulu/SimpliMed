@@ -1,7 +1,5 @@
-// require("dotenv").config();
-// const API_TOKEN = process.env.API_TOKEN;
 import { API_TOKEN } from "./config.js";
-// const API_TOKEN = "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";
+
 const MODEL = "facebook/bart-large-cnn";
 
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
