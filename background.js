@@ -24,28 +24,16 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   );
 });
 
-// function displayInformation(title, summary) {
-//   /**
-//    * Displays the title and summary information in the extention pop-up.
-//    **/
-//   console.log("display information is working ");
-//   document.getElementById("main-heading").textContent = title;
-//   document.getElementById("summary").textContent = summary;
-// }
-
 async function getTabInformation(tab) {
   /**
-   * Retrieves information from the active tab. In this case, it retrieves the
-   * title of the article and the text that we want to summarise.
+   * Retrieves information from the active tab.
+   * Title and the abstract-content is retrieved.
    **/
   //   turning the page into document object
   const response = await fetch(tab.url);
   const text = await response.text();
-  //   console.log("responsetextis", text);
-
   const parser = new DOMParser();
   const doc = parser.parseFromString(text, "text/html");
-  console.log("document is ", doc);
   const tabInformation = {
     textTitle: doc
       .getElementsByClassName("heading-title")[0]
@@ -59,7 +47,7 @@ async function getTabInformation(tab) {
   return tabInformation;
 }
 
-// // Using the API
+// // Using an API
 
 // async function runModel(model, text) {
 //   console.log("run model is almost working");
@@ -82,33 +70,79 @@ async function getTabInformation(tab) {
 
 // USING GPT3 API FROM OPENAI
 
-async function summarizeText(text, OPENAI_TOKEN) {
-  return new Promise((resolve, reject) => {
-    fetch("https://api.openai.com/v1/engines/davinci-codex/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_TOKEN}`,
+// async function summarizeText(text, OPENAI_TOKEN) {
+//   return new Promise((resolve, reject) => {
+//     fetch("https://api.openai.com/v1/engines/text-davinci-003/completions", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${OPENAI_TOKEN}`,
+//       },
+//       body: JSON.stringify({
+//         // prompt: `provide a summary for this text in dr seuss style: ${text}`,
+//         prompt: `simplify this text and dont summerize it: ${text}`,
+
+//         max_tokens: 800,
+//       }),
+//     })
+//       .then((response) => response.json())
+//       .then((data) => {
+//         const summary = data.choices[0].text;
+//         // Do something with the summary
+//         console.log("data is", data);
+//         console.log("summary is", summary);
+//         resolve(summary);
+//       })
+//       .catch((error) => {
+//         console.error(error);
+//         reject(error);
+//       });
+//   });
+// }
+// ****
+const MAX_TOKENS = 800;
+const TEMPERATURE = 0.9;
+async function summarizeText(
+  text,
+  OPENAI_TOKEN,
+  temperature = 0.4,
+  model = "gpt-3.5-turbo"
+) {
+  const url = "https://api.openai.com/v1/chat/completions";
+  const payload = {
+    model: model,
+    messages: [
+      { role: "system", content: "You are a helpful assistant." },
+      {
+        role: "user",
+        content: `simplify this text and dont summerize it: ${text}`,
       },
-      body: JSON.stringify({
-        prompt: `summarize this text and display with the main headlines such as background, method, results: ${text}`,
-        max_tokens: 300,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        const summary = data.choices[0].text.trim();
-        // Do something with the summary
-        console.log(summary);
-        resolve(summary);
-      })
-      .catch((error) => {
-        console.error(error);
-        reject(error);
-      });
-  });
+    ],
+    temperature: TEMPERATURE,
+    max_tokens: MAX_TOKENS,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENAI_TOKEN}`,
+    },
+    body: JSON.stringify(payload),
+  };
+  const response = await fetch(url, options);
+  const summary = await response.json();
+  return summary.choices[0].message.content.trim();
 }
 
+// const options = {
+//   contentType: "application/json",
+//   headers: { Authorization: "Bearer " + OPENAI_TOKEN },
+//   payload: JSON.stringify(payload),
+// };
+//   const summary = JSON.parse(UrlFetchApp.fetch(url, options).getContentText());
+//   return summary.choices[0].message.content.trim();
+// }
+// ****
 function displayInformation(title, summary) {
   /**
    * Displays the title and summary information in the extention pop-up.
