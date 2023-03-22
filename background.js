@@ -1,7 +1,20 @@
 import { API_TOKEN, OPENAI_TOKEN } from "./config.js";
+// initializing the chrome storage local API
+console.log("before installing key pairs");
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.storage.local.set({ key: value }, function () {
+    console.log("Value is set to " + value);
+  });
+});
 
 // const MODEL = "facebook/bart-large-cnn";
-
+chrome.storage.local.set({ TESTKEY: "testKey" }, function () {
+  console.log("Sthis is just a test,");
+});
+chrome.storage.local.get(["TESTKEY"], (data) => {
+  console.log(data.TESTKEY);
+});
+localStorage.setItem("localstorage", "123");
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   const currentTab = tabs[0];
 
@@ -42,8 +55,8 @@ async function getTabInformation(tab) {
       .querySelectorAll("div.abstract-content p")[0]
       .textContent.trim(),
   };
-  console.log("text title", tabInformation.textTitle);
-  console.log(tabInformation.textToSummarise);
+  // console.log("text title", tabInformation.textTitle);
+  // console.log("text to be summerized", tabInformation.textToSummarise);
   return tabInformation;
 }
 
@@ -132,7 +145,21 @@ async function summarizeText(
   };
   const response = await fetch(url, options);
   const summary = await response.json();
-  return summary.choices[0].message.content.trim();
+  const summerizedMsg = summary.choices[0].message.content.trim();
+  // Store the summary in local storage
+  chrome.storage.local.set({ StoredSummary: summerizedMsg }, function () {
+    console.log("Summary  get stored in local storage");
+  });
+  // chrome.storage.local.set({ StoredSummary: summerizedMsg }).then(() => {
+  //   console.log("Value is set to " + summerizedMsg);
+  // });
+  chrome.storage.local.set({ test: "summary" }, function () {
+    console.log("test stored in local storage");
+  });
+  // chrome.storage.local.get({ StoredSummary: summerizedMsg }, function () {
+  //   // console.log(StoredSummary);
+  // });
+  return summerizedMsg;
 }
 
 // const options = {
