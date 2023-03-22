@@ -101,7 +101,8 @@ async function getTabInformation(tab) {
 // }
 // ****
 const MAX_TOKENS = 800;
-const TEMPERATURE = 0.9;
+// Using Lower Temperature to generate a more predictable text
+const TEMPERATURE = 0.5;
 async function summarizeText(
   text,
   OPENAI_TOKEN,
