@@ -24,13 +24,18 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
     tabInformation["textToSummarise"],
     OPENAI_TOKEN
   );
+  const summerizeResultLVL1 = await summarizeTextLVL1(
+    tabInformation["textToSummarise"],
+    OPENAI_TOKEN
+  );
 
   toggleLoader(false);
   displayInformation(
     tabInformation["textTitle"],
     // modelResult[0]["summary_text"],
 
-    summerizeResult
+    summerizeResult,
+    summerizeResultLVL1
   );
 });
 
@@ -124,9 +129,10 @@ async function summarizeText(
     model: model,
     messages: [
       { role: "system", content: "You are a helpful assistant." },
+
       {
         role: "user",
-        content: `simplify this text and dont summerize it: ${text}`,
+        content: `simplify this text like i am a university professor : ${text}`,
       },
     ],
     temperature: TEMPERATURE,
@@ -142,24 +148,73 @@ async function summarizeText(
   };
   const response = await fetch(url, options);
   const summary = await response.json();
+  console.log(summary);
+
   const summerizedMsg = summary.choices[0].message.content.trim();
   // Store the summary in local storage
   chrome.storage.local.set({ StoredSummary: summerizedMsg }, function () {
     if (chrome.runtime.lastError) {
       console.error(chrome.runtime.lastError);
     } else {
-      console.log("storedsummery has been set.");
+      // console.log("storedsummery has been set.");
     }
   });
   chrome.storage.local.get("StoredSummary", function (result) {
-    console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
+    // console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
+  });
+
+  return summerizedMsg;
+}
+
+async function summarizeTextLVL1(
+  text,
+  OPENAI_TOKEN,
+  temperature = 0.4,
+  model = "gpt-3.5-turbo"
+) {
+  const url = "https://api.openai.com/v1/chat/completions";
+  const payload = {
+    model: model,
+    messages: [
+      { role: "system", content: "You are a helpful assistant." },
+      {
+        role: "user",
+        content: `simplify this text like i am a 7years old : ${text}`,
+      },
+    ],
+    temperature: TEMPERATURE,
+    max_tokens: MAX_TOKENS,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENAI_TOKEN}`,
+    },
+    body: JSON.stringify(payload),
+  };
+  const response = await fetch(url, options);
+  const summary = await response.json();
+  console.log(summary);
+
+  const summerizedMsg = summary.choices[0].message.content.trim();
+  // Store the summary in local storage
+  chrome.storage.local.set({ StoredSummary: summerizedMsg }, function () {
+    if (chrome.runtime.lastError) {
+      console.error(chrome.runtime.lastError);
+    } else {
+      // console.log("storedsummery has been set.");
+    }
+  });
+  chrome.storage.local.get("StoredSummary", function (result) {
+    // console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
   });
 
   return summerizedMsg;
 }
 
 // ****
-function displayInformation(title, summary) {
+function displayInformation(title, summary, summary1) {
   /**
    * Displays the title and summary information in the extention pop-up.
    **/
@@ -167,6 +222,10 @@ function displayInformation(title, summary) {
   mainHeadingElement.textContent = title;
   const summaryElemnt = document.getElementsByClassName("summary")[0];
   summaryElemnt.textContent = summary;
+
+  const summaryElemnt1 = document.getElementsByClassName("summary1")[0];
+  summaryElemnt1.textContent = summary1;
+
   // Adding the slide bar after retrieving the summary and title
   if (
     summaryElemnt.textContent !== "" &&
@@ -188,3 +247,7 @@ function toggleLoader(toggleSwitch) {
     document.getElementById("loader").style.display = "none";
   }
 }
+// retrieving the selected value of user
+// const contentSelection = document.querySelector(
+//   'input[name="content-type"]:checked'
+// ).value;

@@ -1,6 +1,7 @@
 @import url("https://unpkg.com/style.css/style.css");
 
-div.main-content {
+div.main-content,
+div.main-content1 {
   width: 50rem;
   padding-left: 5%;
   padding-right: 5%;
@@ -11,7 +12,8 @@ div.main-content {
 h5.main-heading {
   width: 90%;
 }
-p.summary {
+p.summary,
+p.summary1 {
   width: 90%;
   font-size: 1.1rem;
 }
