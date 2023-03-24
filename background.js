@@ -163,8 +163,17 @@ function displayInformation(title, summary) {
   /**
    * Displays the title and summary information in the extention pop-up.
    **/
-  document.getElementsByClassName("main-heading")[0].textContent = title;
-  document.getElementsByClassName("summary")[0].textContent = summary;
+  const mainHeadingElement = document.getElementsByClassName("main-heading")[0];
+  mainHeadingElement.textContent = title;
+  const summaryElemnt = document.getElementsByClassName("summary")[0];
+  summaryElemnt.textContent = summary;
+  // Adding the slide bar after retrieving the summary and title
+  if (
+    summaryElemnt.textContent !== "" &&
+    mainHeadingElement.textContent !== ""
+  ) {
+    document.getElementById("difficulty-lvl").classList.remove("hidden");
+  }
 }
 
 function toggleLoader(toggleSwitch) {
