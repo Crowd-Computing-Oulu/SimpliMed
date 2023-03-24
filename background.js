@@ -1,20 +1,17 @@
 import { API_TOKEN, OPENAI_TOKEN } from "./config.js";
-// initializing the chrome storage local API
-console.log("before installing key pairs");
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.local.set({ key: value }, function () {
-    console.log("Value is set to " + value);
-  });
+
+// just a test for chrome local storage
+chrome.storage.local.set({ test: "21321" }, function () {
+  if (chrome.runtime.lastError) {
+    console.error(chrome.runtime.lastError);
+  } else {
+    console.log("Value is set to 21321");
+  }
+});
+chrome.storage.local.get("test", function (result) {
+  console.log("The value of 'test' is: " + result.test);
 });
 
-// const MODEL = "facebook/bart-large-cnn";
-chrome.storage.local.set({ TESTKEY: "testKey" }, function () {
-  console.log("Sthis is just a test,");
-});
-chrome.storage.local.get(["TESTKEY"], (data) => {
-  console.log(data.TESTKEY);
-});
-localStorage.setItem("localstorage", "123");
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   const currentTab = tabs[0];
 
@@ -148,28 +145,19 @@ async function summarizeText(
   const summerizedMsg = summary.choices[0].message.content.trim();
   // Store the summary in local storage
   chrome.storage.local.set({ StoredSummary: summerizedMsg }, function () {
-    console.log("Summary  get stored in local storage");
+    if (chrome.runtime.lastError) {
+      console.error(chrome.runtime.lastError);
+    } else {
+      console.log("storedsummery has been set.");
+    }
   });
-  // chrome.storage.local.set({ StoredSummary: summerizedMsg }).then(() => {
-  //   console.log("Value is set to " + summerizedMsg);
-  // });
-  chrome.storage.local.set({ test: "summary" }, function () {
-    console.log("test stored in local storage");
+  chrome.storage.local.get("StoredSummary", function (result) {
+    console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
   });
-  // chrome.storage.local.get({ StoredSummary: summerizedMsg }, function () {
-  //   // console.log(StoredSummary);
-  // });
+
   return summerizedMsg;
 }
 
-// const options = {
-//   contentType: "application/json",
-//   headers: { Authorization: "Bearer " + OPENAI_TOKEN },
-//   payload: JSON.stringify(payload),
-// };
-//   const summary = JSON.parse(UrlFetchApp.fetch(url, options).getContentText());
-//   return summary.choices[0].message.content.trim();
-// }
 // ****
 function displayInformation(title, summary) {
   /**
