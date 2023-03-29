@@ -260,8 +260,21 @@ function toggleLoader(toggleSwitch) {
 const rangeInput = document.querySelector('input[type="range"]');
 rangeInput.addEventListener("change", () => {
   if (rangeInput.value === "1") {
-    document.getElementsByClassName("original-obs")[0].classList.add("hidden");
-    document.getElementsByClassName("summary")[0].classList.remove("hidden");
+    console.log("the value is 1");
+    document.getElementsByClassName("original-abs")[0].classList.add("hidden");
+    document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.remove("hidden");
+  } else if (rangeInput.value === "2") {
+    console.log("the value is 2");
+    document.getElementsByClassName("original-abs")[0].classList.add("hidden");
+    document.getElementsByClassName("summary")[0].classList.remove("hidden");
+    document.getElementsByClassName("summary1")[0].classList.add("hidden");
+  } else if (rangeInput.value === "3") {
+    console.log("the value is 2");
+    document
+      .getElementsByClassName("original-abs")[0]
+      .classList.remove("hidden");
+    document.getElementsByClassName("summary")[0].classList.add("hidden");
+    document.getElementsByClassName("summary1")[0].classList.add("hidden");
   }
 });
