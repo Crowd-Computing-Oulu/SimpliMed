@@ -1,4 +1,4 @@
-import { API_TOKEN, OPENAI_TOKEN } from "./config.js";
+import { OPENAI_TOKEN } from "./config.js";
 
 // just a test for chrome local storage
 chrome.storage.local.set({ test: "21321" }, function () {
@@ -20,6 +20,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
 
   const tabInformation = await getTabInformation(currentTab);
   // const modelResult = await runModel(MODEL, tabInformation["textToSummarise"]);
+
   const summerizeResult = await summarizeText(
     tabInformation["textToSummarise"],
     OPENAI_TOKEN
@@ -33,7 +34,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   displayInformation(
     tabInformation["textTitle"],
     // modelResult[0]["summary_text"],
-
+    tabInformation["textToSummarise"],
     summerizeResult,
     summerizeResultLVL1
   );
@@ -214,10 +215,15 @@ async function summarizeTextLVL1(
 }
 
 // ****
-function displayInformation(title, summary, summary1) {
+function displayInformation(title, originalAbs, summary, summary1) {
+  // Displaying the original Abstract
+  const originalAbsElement = document.getElementsByClassName("original-abs")[0];
+  originalAbsElement.textContent = originalAbs;
+
   /**
    * Displays the title and summary information in the extention pop-up.
    **/
+
   const mainHeadingElement = document.getElementsByClassName("main-heading")[0];
   mainHeadingElement.textContent = title;
   const summaryElemnt = document.getElementsByClassName("summary")[0];
@@ -251,3 +257,11 @@ function toggleLoader(toggleSwitch) {
 // const contentSelection = document.querySelector(
 //   'input[name="content-type"]:checked'
 // ).value;
+const rangeInput = document.querySelector('input[type="range"]');
+rangeInput.addEventListener("change", () => {
+  if (rangeInput.value === "1") {
+    document.getElementsByClassName("original-obs")[0].classList.add("hidden");
+    document.getElementsByClassName("summary")[0].classList.remove("hidden");
+    document.getElementsByClassName("summary1")[0].classList.remove("hidden");
+  }
+});
