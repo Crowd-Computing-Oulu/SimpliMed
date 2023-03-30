@@ -20,6 +20,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
 
   const tabInformation = await getTabInformation(currentTab);
   // const modelResult = await runModel(MODEL, tabInformation["textToSummarise"]);
+  console.log("this is tab information", tabInformation);
 
   const summerizeResult = await summarizeText(
     tabInformation["textToSummarise"],
@@ -50,13 +51,20 @@ async function getTabInformation(tab) {
   const text = await response.text();
   const parser = new DOMParser();
   const doc = parser.parseFromString(text, "text/html");
+  // to add all paraghraphs when we have different p for background, methods,...
+  const paragraphs = doc.querySelectorAll("div.abstract-content p");
+  let allParagraphs = "";
+  for (let i = 0; i < paragraphs.length; i++) {
+    allParagraphs += paragraphs[i].textContent;
+  }
+  console.log("paragraphs", paragraphs);
+  console.log("allparagraphs", allParagraphs);
+
   const tabInformation = {
     textTitle: doc
       .getElementsByClassName("heading-title")[0]
       .textContent.trim(),
-    textToSummarise: doc
-      .querySelectorAll("div.abstract-content p")[0]
-      .textContent.trim(),
+    textToSummarise: allParagraphs,
   };
   // console.log("text title", tabInformation.textTitle);
   // console.log("text to be summerized", tabInformation.textToSummarise);
@@ -270,7 +278,8 @@ rangeInput.addEventListener("change", () => {
     document.getElementsByClassName("summary")[0].classList.remove("hidden");
     document.getElementsByClassName("summary1")[0].classList.add("hidden");
   } else if (rangeInput.value === "3") {
-    console.log("the value is 2");
+    console.log("the value is 3");
+    console.log(document.getElementsByClassName("original-abs")[0].textContent);
     document
       .getElementsByClassName("original-abs")[0]
       .classList.remove("hidden");
