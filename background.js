@@ -126,11 +126,11 @@ async function getTabInformation(tab) {
 // ****
 const MAX_TOKENS = 800;
 // Using Lower Temperature to generate a more predictable text
-const TEMPERATURE = 0.5;
+const TEMPERATURE = 0.2;
 async function summarizeText(
   text,
   OPENAI_TOKEN,
-  temperature = 0.4,
+  // temperature = 0.4,
   model = "gpt-3.5-turbo"
 ) {
   const url = "https://api.openai.com/v1/chat/completions";
@@ -178,6 +178,8 @@ async function summarizeText(
 async function summarizeTextLVL1(
   text,
   OPENAI_TOKEN,
+  // higher values like 0.8 will make the output more random,
+  // while lower values like 0.2 will make it more focused and deterministic.
   temperature = 0.4,
   model = "gpt-3.5-turbo"
 ) {
@@ -234,6 +236,7 @@ function displayInformation(title, originalAbs, summary, summary1) {
 
   const mainHeadingElement = document.getElementsByClassName("main-heading")[0];
   mainHeadingElement.textContent = title;
+
   const summaryElemnt = document.getElementsByClassName("summary")[0];
   summaryElemnt.textContent = summary;
 
@@ -245,6 +248,7 @@ function displayInformation(title, originalAbs, summary, summary1) {
     summaryElemnt.textContent !== "" &&
     mainHeadingElement.textContent !== ""
   ) {
+    // Slide bar will show after the content is loaded
     document.getElementById("difficulty-lvl").classList.remove("hidden");
   }
 }
@@ -267,16 +271,19 @@ function toggleLoader(toggleSwitch) {
 // ).value;
 const rangeInput = document.querySelector('input[type="range"]');
 rangeInput.addEventListener("change", () => {
+  // Showing the first lvl difficulty summary
   if (rangeInput.value === "1") {
     console.log("the value is 1");
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.remove("hidden");
+    // Showing the second lvl difficulty summary
   } else if (rangeInput.value === "2") {
     console.log("the value is 2");
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.remove("hidden");
     document.getElementsByClassName("summary1")[0].classList.add("hidden");
+    // showing the original abs
   } else if (rangeInput.value === "3") {
     console.log("the value is 3");
     console.log(document.getElementsByClassName("original-abs")[0].textContent);
