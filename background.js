@@ -1,7 +1,24 @@
 import { OPENAI_TOKEN } from "./config.js";
 
-// checking the url of the page
-let currentUrl = window.location.href;
+chrome.browserAction.onClicked.addListener(function (tab) {
+  var windowWidth = 600; // Set your window width
+  var windowHeight = 400; // Set your window height
+  var screenWidth = screen.availWidth;
+  var screenHeight = screen.availHeight;
+  var left = Math.round((screenWidth - windowWidth) / 2);
+  var top = Math.round((screenHeight - windowHeight) / 2);
+
+  chrome.windows.create({
+    url: chrome.extension.getURL("popup.html"), // Replace with your popup URL
+    type: "popup",
+    width: windowWidth,
+    height: windowHeight,
+    left: left,
+    top: top,
+  });
+});
+
+// let currentUrl = window.location.href;
 // if (!currentUrl.includes("https://pubmed.ncbi.nlm.nih.gov/")) {
 //   console.log("am i workin?");
 //   alert(
