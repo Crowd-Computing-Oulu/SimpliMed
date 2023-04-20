@@ -1,5 +1,7 @@
 @import url("https://unpkg.com/style.css/style.css");
-
+body {
+  /* background-color: rgb(228, 182, 182); */
+}
 div.main-content,
 div.main-content1 {
   width: 50rem;
@@ -8,8 +10,10 @@ div.main-content1 {
   padding-bottom: 5%;
   /* to center  */
 }
-
-h5.main-heading {
+h2.main-heading {
+  font-size: 1rem;
+}
+h4.main-heading {
   width: 90%;
 }
 p {
@@ -19,12 +23,12 @@ p {
 .main-heading {
   color: blue;
 }
-div#loader {
+/* div#loader {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 15%;
-}
+} */
 
 div#spinner {
   border: 16px solid #f3f3f3; /* Light grey */
@@ -56,4 +60,95 @@ div#spinner {
 }
 .hidden {
   display: none !important;
+}
+
+/* new css */
+.loader-container {
+  /* margin: 0; */
+  /* height: 100vh; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+.loader-container h4 {
+  color: black !important;
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.7rem;
+}
+#loader {
+  padding-top: 15%;
+  width: 16em;
+  height: 8em;
+  position: relative;
+  overflow: hidden;
+}
+#loader::before,
+#loader::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+}
+
+#loader::before {
+  width: inherit;
+  height: 0.2em;
+  background-color: hsla(0, 0%, 85%);
+}
+
+#loader::after {
+  box-sizing: border-box;
+  width: 50%;
+  height: inherit;
+  border: 0.2em solid hsla(0, 0%, 85%);
+  border-radius: 50%;
+  left: 25%;
+}
+
+#loader span {
+  position: absolute;
+  width: 5vh;
+  height: 5vh;
+  background-color: rgb(0, 117, 111);
+  border-radius: 50%;
+  bottom: 0.2em;
+  left: -5%;
+  animation: 2s linear infinite;
+  transform-origin: 50% -3em;
+  animation-name: run, rotating;
+}
+#loader span:nth-child(2) {
+  animation-delay: 0.075s;
+}
+#loader span:nth-child(3) {
+  animation-delay: 0.15s;
+}
+@keyframes run {
+  0% {
+    left: -5%;
+  }
+  10%,
+  60% {
+    left: calc((100% - 5%) / 2);
+  }
+  70%,
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes rotating {
+  0%,
+  10% {
+    transform: rotate(0deg);
+  }
+  60%,
+  100% {
+    transform: rotate(-1turn);
+  }
 }
