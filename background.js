@@ -1,5 +1,15 @@
 import { OPENAI_TOKEN } from "./config.js";
 
+// checking the url of the page
+let currentUrl = window.location.href;
+// if (!currentUrl.includes("https://pubmed.ncbi.nlm.nih.gov/")) {
+//   console.log("am i workin?");
+//   alert(
+//     "This plugin is only working with URLs containing `pubmed.ncbi.nlm.nih.gov`"
+//   );
+//   return;
+// }
+
 // just a test for chrome local storage
 chrome.storage.local.set({ test: "21321" }, function () {
   if (chrome.runtime.lastError) {
@@ -34,8 +44,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   toggleLoader(false);
   displayInformation(
     tabInformation["textTitle"],
-    // modelResult[0]["summary_text"],
-    tabInformation["textToSummarise"],
+    tabInformation["originalAbs"],
     summerizeResult,
     summerizeResultLVL1
   );
@@ -49,10 +58,16 @@ async function getTabInformation(tab) {
   //   turning the page into document object
   const response = await fetch(tab.url);
   const text = await response.text();
+
+  // const abstractHtml = text.getElementById("abstract");
+
   const parser = new DOMParser();
+  // coverting html into a document
   const doc = parser.parseFromString(text, "text/html");
   // to add all paraghraphs when we have different p for background, methods,...
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
+  const originalAbstractHtml = doc.getElementById("abstract");
+  console.log("this is the original abst", originalAbstractHtml);
   let allParagraphs = "";
   for (let i = 0; i < paragraphs.length; i++) {
     allParagraphs += paragraphs[i].textContent;
@@ -65,6 +80,7 @@ async function getTabInformation(tab) {
       .getElementsByClassName("heading-title")[0]
       .textContent.trim(),
     textToSummarise: allParagraphs,
+    originalAbs: originalAbstractHtml,
   };
   // console.log("text title", tabInformation.textTitle);
   // console.log("text to be summerized", tabInformation.textToSummarise);
@@ -228,7 +244,7 @@ async function summarizeTextLVL1(
 function displayInformation(title, originalAbs, summary, summary1) {
   // Displaying the original Abstract
   const originalAbsElement = document.getElementsByClassName("original-abs")[0];
-  originalAbsElement.textContent = originalAbs;
+  originalAbsElement.innerHTML = originalAbs.innerHTML;
 
   /**
    * Displays the title and summary information in the extention pop-up.
@@ -273,20 +289,20 @@ const rangeInput = document.querySelector('input[type="range"]');
 rangeInput.addEventListener("change", () => {
   // Showing the first lvl difficulty summary
   if (rangeInput.value === "1") {
-    console.log("the value is 1");
+    // console.log("the value is 1");
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.remove("hidden");
     // Showing the second lvl difficulty summary
   } else if (rangeInput.value === "2") {
-    console.log("the value is 2");
+    // console.log("the value is 2");
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.remove("hidden");
     document.getElementsByClassName("summary1")[0].classList.add("hidden");
     // showing the original abs
   } else if (rangeInput.value === "3") {
-    console.log("the value is 3");
-    console.log(document.getElementsByClassName("original-abs")[0].textContent);
+    // console.log("the value is 3");
+    // console.log(document.getElementsByClassName("original-abs")[0].textContent);
     document
       .getElementsByClassName("original-abs")[0]
       .classList.remove("hidden");
