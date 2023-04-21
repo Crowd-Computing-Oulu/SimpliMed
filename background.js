@@ -1,31 +1,27 @@
 import { OPENAI_TOKEN } from "./config.js";
 
-chrome.browserAction.onClicked.addListener(function (tab) {
-  var windowWidth = 600; // Set your window width
-  var windowHeight = 400; // Set your window height
-  var screenWidth = screen.availWidth;
-  var screenHeight = screen.availHeight;
-  var left = Math.round((screenWidth - windowWidth) / 2);
-  var top = Math.round((screenHeight - windowHeight) / 2);
+// chrome.browserAction.onClicked.addListener(function (tab) {
+//   // var windowWidth = 600; // Set your window width
+//   // var windowHeight = 400; // Set your window height
+//   // var screenWidth = screen.availWidth;
+//   // var screenHeight = screen.availHeight;
+//   // var left = Math.round((screenWidth - windowWidth) / 2);
+//   // var top = Math.round((screenHeight - windowHeight) / 2);
 
-  chrome.windows.create({
-    url: chrome.extension.getURL("popup.html"), // Replace with your popup URL
-    type: "popup",
-    width: windowWidth,
-    height: windowHeight,
-    left: left,
-    top: top,
-  });
-});
-
-// let currentUrl = window.location.href;
-// if (!currentUrl.includes("https://pubmed.ncbi.nlm.nih.gov/")) {
-//   console.log("am i workin?");
-//   alert(
-//     "This plugin is only working with URLs containing `pubmed.ncbi.nlm.nih.gov`"
+//   chrome.windows.create(
+//     {
+//       url: "popup.html",
+//       type: "popup",
+//       width: 800,
+//       height: 600,
+//       left: screen.width / 2 - 800 / 2,
+//       top: screen.height / 2 - 600 / 2,
+//     },
+//     function (window) {
+//       chrome.windows.update(window.id, { focused: true });
+//     }
 //   );
-//   return;
-// }
+// });
 
 // just a test for chrome local storage
 chrome.storage.local.set({ test: "21321" }, function () {
@@ -261,7 +257,11 @@ async function summarizeTextLVL1(
 function displayInformation(title, originalAbs, summary, summary1) {
   // Displaying the original Abstract
   const originalAbsElement = document.getElementsByClassName("original-abs")[0];
-  originalAbsElement.innerHTML = originalAbs.innerHTML;
+  // fixes the undefined problem
+  if (originalAbs) {
+    originalAbsElement.innerHTML = originalAbs.innerHTML;
+  }
+  // originalAbsElement.innerHTML = originalAbs.innerHTML;
 
   /**
    * Displays the title and summary information in the extention pop-up.
