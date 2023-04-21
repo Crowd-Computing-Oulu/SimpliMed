@@ -2,23 +2,27 @@
 body {
   /* background-color: rgb(228, 182, 182); */
 }
-div.main-content,
-div.main-content1 {
-  width: 50rem;
+div.main-content {
+  width: 40rem;
   padding-left: 5%;
   padding-right: 5%;
   padding-bottom: 5%;
+  text-align: justify;
   /* to center  */
 }
-h2.main-heading {
+/* .main-heading h2,
+.main-heading > h2 {
   font-size: 1rem;
+} */
+h2 {
+  font-size: 1.3rem;
 }
 h4.main-heading {
   width: 90%;
 }
 p {
-  width: 90%;
-  font-size: 1.1rem;
+  width: 98%;
+  font-size: 1rem;
 }
 .main-heading {
   color: blue;
@@ -55,8 +59,9 @@ div#spinner {
   padding-bottom: 2rem;
 }
 .difficulty-lvl__title {
-  font-size: 1.2rem;
+  font-size: 1rem;
   padding-right: 1rem;
+  font-style: italic;
 }
 .hidden {
   display: none !important;
