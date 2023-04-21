@@ -7,11 +7,12 @@
     "default_popup": "popup.html"
   },
   "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://*.pubmed.ncbi.nlm.nih.gov/*"],
   "content_scripts": [
     {
       "js": ["background.js"],
       "css": ["style.css"],
-      "matches": ["https://pubmed.ncbi.nlm.nih.gov/*"]
+      "matches": ["https://*.pubmed.ncbi.nlm.nih.gov/*"]
     }
   ]
 }
