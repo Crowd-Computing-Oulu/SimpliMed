@@ -49,6 +49,18 @@ chrome.storage.local.get("test", function (result) {
 
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   const currentTab = tabs[0];
+  console.log("current tab", currentTab);
+  // To check if the user is on the right website
+  if (currentTab.url.indexOf("pubmed.ncbi.nlm.nih.gov") === -1) {
+    console.log("am i working as a main coneldsjfa");
+    const mainContentElement =
+      document.getElementsByClassName("main-content")[0];
+    const lodaerContainerElement =
+      document.getElementsByClassName("loader-container")[0];
+    lodaerContainerElement.classList.add("hidden");
+    mainContentElement.classList.remove("hidden");
+    mainContentElement.innerHTML = `<div class="error-message"> This Url is not supported by the extention!</div>`;
+  }
 
   toggleLoader(true);
   displayInformation("", "");
@@ -257,7 +269,7 @@ function toggleLoader(toggleSwitch) {
     document
       .getElementsByClassName("main-content")[0]
       .classList.remove("hidden");
-    document.getElementsByClassName("loader-containerr")[0].style.display =
+    document.getElementsByClassName("loader-container")[0].style.display =
       "none";
   }
 }
