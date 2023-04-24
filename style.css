@@ -1,9 +1,25 @@
 @import url("https://unpkg.com/style.css/style.css");
+* {
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --hue: 223;
+  --bg: hsl(var(--hue), 10%, 90%);
+  --fg: hsl(var(--hue), 10%, 10%);
+  /* font-size: calc(16px + (24 - 16) * (100vw - 320px) / (1280 - 320)); */
+}
 body {
-  /* background-color: rgb(228, 182, 182); */
+  /* height: 100px !important; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40rem;
 }
 div.main-content {
-  width: 40rem;
   padding-left: 5%;
   padding-right: 5%;
   padding-bottom: 5%;
@@ -27,12 +43,6 @@ p {
 .main-heading {
   color: blue;
 }
-/* div#loader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 15%;
-} */
 
 div#spinner {
   border: 16px solid #f3f3f3; /* Light grey */
@@ -68,92 +78,75 @@ div#spinner {
 }
 
 /* new css */
+
 .loader-container {
-  /* margin: 0; */
+  padding: 2rem;
+  /* background: var(--bg); */
+  color: var(--fg);
+  font: 1em/1.5 sans-serif;
   /* height: 100vh; */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-}
-.loader-container h4 {
-  color: black !important;
-  z-index: 1;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.7rem;
-}
-#loader {
-  padding-top: 15%;
-  width: 16em;
-  height: 8em;
-  position: relative;
-  overflow: hidden;
-}
-#loader::before,
-#loader::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
+  display: grid;
+  place-items: center;
 }
 
-#loader::before {
-  width: inherit;
-  height: 0.2em;
-  background-color: hsla(0, 0%, 85%);
+.pl {
+  display: block;
+  width: 6.25em;
+  height: 6.25em;
+}
+.pl__ring,
+.pl__ball {
+  animation: ring 2s ease-out infinite;
+}
+.pl__ball {
+  animation-name: ball;
 }
 
-#loader::after {
-  box-sizing: border-box;
-  width: 50%;
-  height: inherit;
-  border: 0.2em solid hsla(0, 0%, 85%);
-  border-radius: 50%;
-  left: 25%;
-}
-
-#loader span {
-  position: absolute;
-  width: 5vh;
-  height: 5vh;
-  background-color: rgb(0, 117, 111);
-  border-radius: 50%;
-  bottom: 0.2em;
-  left: -5%;
-  animation: 2s linear infinite;
-  transform-origin: 50% -3em;
-  animation-name: run, rotating;
-}
-#loader span:nth-child(2) {
-  animation-delay: 0.075s;
-}
-#loader span:nth-child(3) {
-  animation-delay: 0.15s;
-}
-@keyframes run {
-  0% {
-    left: -5%;
-  }
-  10%,
-  60% {
-    left: calc((100% - 5%) / 2);
-  }
-  70%,
-  100% {
-    left: 100%;
+/* Dark theme  */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: hsl(var(--hue), 10%, 10%);
+    --fg: hsl(var(--hue), 10%, 90%);
   }
 }
 
-@keyframes rotating {
-  0%,
-  10% {
-    transform: rotate(0deg);
+/* Animation */
+@keyframes ring {
+  from {
+    stroke-dasharray: 0 257 0 0 1 0 0 258;
   }
-  60%,
-  100% {
-    transform: rotate(-1turn);
+  25% {
+    stroke-dasharray: 0 0 0 0 257 0 258 0;
+  }
+  50%,
+  to {
+    stroke-dasharray: 0 0 0 0 0 515 0 0;
+  }
+}
+@keyframes ball {
+  from,
+  50% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: 1;
+  }
+  64% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: -109;
+  }
+  78% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: -145;
+  }
+  92% {
+    animation-timing-function: ease-in;
+    stroke-dashoffset: -157;
+  }
+  57%,
+  71%,
+  85%,
+  99%,
+  to {
+    animation-timing-function: ease-out;
+    stroke-dashoffset: -163;
   }
 }

@@ -1,4 +1,5 @@
 import { OPENAI_TOKEN } from "./config.js";
+import { getActiveTabURL } from "./utilis.js";
 
 // chrome.browserAction.onClicked.addListener(function (tab) {
 //   // var windowWidth = 600; // Set your window width
@@ -24,6 +25,17 @@ import { OPENAI_TOKEN } from "./config.js";
 // });
 
 // just a test for chrome local storage
+
+// document.addEventListener("DOMContentLoaded", async () => {
+//   const activeTab = await getActiveTabURL();
+//   if (activeTab.url.includes("pubmed.ncbi.nlm.nih.gov")) {
+//     return;
+//   } else {
+//     const mainContentElement =
+//       document.getElementsByClassName("main-content")[0];
+//     mainContentElement.innerHTML = "<div>this aint the correct url </div>";
+//   }
+// });
 chrome.storage.local.set({ test: "21321" }, function () {
   if (chrome.runtime.lastError) {
     console.error(chrome.runtime.lastError);
@@ -238,11 +250,15 @@ function toggleLoader(toggleSwitch) {
    * Toggles the display of the loader element.
    */
   if (toggleSwitch) {
-    document.getElementById("loader").style.display = "flex";
-    document.getElementById("loader").style.flexDirection = "column";
-    document.getElementById("loader").style.alignItems = "center";
+    // document.getElementById("loader").style.display = "flex";
+    // document.getElementById("loader").style.flexDirection = "column";
+    // document.getElementById("loader").style.alignItems = "center";
   } else {
-    document.getElementById("loader").style.display = "none";
+    document
+      .getElementsByClassName("main-content")[0]
+      .classList.remove("hidden");
+    document.getElementsByClassName("loader-containerr")[0].style.display =
+      "none";
   }
 }
 // retrieving the selected value of user
