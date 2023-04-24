@@ -1,6 +1,9 @@
 import { OPENAI_TOKEN } from "./config.js";
 import { getActiveTabURL } from "./utilis.js";
 
+// to store the data
+let currentSavedPapers = [];
+let currentTab;
 // chrome.browserAction.onClicked.addListener(function (tab) {
 //   // var windowWidth = 600; // Set your window width
 //   // var windowHeight = 400; // Set your window height
@@ -26,29 +29,20 @@ import { getActiveTabURL } from "./utilis.js";
 
 // just a test for chrome local storage
 
-// document.addEventListener("DOMContentLoaded", async () => {
-//   const activeTab = await getActiveTabURL();
-//   if (activeTab.url.includes("pubmed.ncbi.nlm.nih.gov")) {
-//     return;
+// chrome.storage.local.set({ test: "21321" }, function () {
+//   if (chrome.runtime.lastError) {
+//     console.error(chrome.runtime.lastError);
 //   } else {
-//     const mainContentElement =
-//       document.getElementsByClassName("main-content")[0];
-//     mainContentElement.innerHTML = "<div>this aint the correct url </div>";
+//     console.log("Value is set to 21321");
 //   }
 // });
-chrome.storage.local.set({ test: "21321" }, function () {
-  if (chrome.runtime.lastError) {
-    console.error(chrome.runtime.lastError);
-  } else {
-    console.log("Value is set to 21321");
-  }
-});
-chrome.storage.local.get("test", function (result) {
-  console.log("The value of 'test' is: " + result.test);
-});
+// chrome.storage.local.get("test", function (result) {
+//   console.log("The value of 'test' is: " + result.test);
+// });
 
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
-  const currentTab = tabs[0];
+  currentTab = tabs[0];
+
   console.log("current tab", currentTab);
   // To check if the user is on the right website
   if (currentTab.url.indexOf("pubmed.ncbi.nlm.nih.gov") === -1) {
@@ -142,7 +136,7 @@ async function summarizeText(
 
       {
         role: "user",
-        content: `simplify this text like i am a university professor : ${text}`,
+        content: `Simplify this text for a audience with technical background of the subject, target level of simplification is 8 out of 10. Keep the technical terms, jargon and important information.  Please ensure that the article retains its main ideas and arguments: ${text}`,
       },
     ],
     temperature: TEMPERATURE,
@@ -162,16 +156,16 @@ async function summarizeText(
 
   const summerizedMsg = summary.choices[0].message.content.trim();
   // Store the summary in local storage
-  chrome.storage.local.set({ StoredSummary: summerizedMsg }, function () {
-    if (chrome.runtime.lastError) {
-      console.error(chrome.runtime.lastError);
-    } else {
-      // console.log("storedsummery has been set.");
-    }
-  });
-  chrome.storage.local.get("StoredSummary", function (result) {
-    // console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
-  });
+  // chrome.storage.local.set({ StoredSummary: summerizedMsg }, function () {
+  //   if (chrome.runtime.lastError) {
+  //     console.error(chrome.runtime.lastError);
+  //   } else {
+  //     console.log("storedsummery has been set.");
+  //   }
+  // });
+  // chrome.storage.local.get("StoredSummary", function (result) {
+  //   // console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
+  // });
 
   return summerizedMsg;
 }
@@ -191,7 +185,7 @@ async function summarizeTextLVL1(
       { role: "system", content: "You are a helpful assistant." },
       {
         role: "user",
-        content: `simplify this text like i am a 7years old : ${text}`,
+        content: ` Simplify this text for a general audience with no technical background of the subject, target level of simplification is 2out of 10.  There are no specific sections or concepts within the text that need to  be emphasized. Technical terms and jargon can be simplified or  explained, but important information should not be lost in the process.  Please ensure that the article retains its main ideas and arguments: ${text}`,
       },
     ],
     temperature: TEMPERATURE,
@@ -211,22 +205,38 @@ async function summarizeTextLVL1(
 
   const summerizedMsg = summary.choices[0].message.content.trim();
   // Store the summary in local storage
-  chrome.storage.local.set({ StoredSummary: summerizedMsg }, function () {
-    if (chrome.runtime.lastError) {
-      console.error(chrome.runtime.lastError);
-    } else {
-      // console.log("storedsummery has been set.");
-    }
-  });
-  chrome.storage.local.get("StoredSummary", function (result) {
-    // console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
-  });
+  // chrome.storage.local.set({ StoredSummary: summerizedMsg }, function () {
+  //   if (chrome.runtime.lastError) {
+  //     console.error(chrome.runtime.lastError);
+  //   } else {
+  //     // console.log("storedsummery has been set.");
+  //   }
+  // });
+  // chrome.storage.local.get("StoredSummary", function (result) {
+  //   // console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
+  // });
 
   return summerizedMsg;
 }
 
 // ****
 function displayInformation(title, originalAbs, summary, summary1) {
+  // store in the storage
+  const data = {};
+  data[currentTab] = [summary, summary1];
+  chrome.storage.sync.set(data, function () {
+    console.log("Data saved successfully! in:");
+  });
+
+  chrome.storage.sync.get(currentTab, function (data) {
+    const summaries = data[currentTab];
+    const summary = summaries[0];
+    const summary1 = summaries[1];
+    console.log(
+      "Summaries for " + currentTab + ": " + summary1 + ", " + summary
+    );
+  });
+
   // Displaying the original Abstract
   const originalAbsElement = document.getElementsByClassName("original-abs")[0];
   // fixes the undefined problem
@@ -285,12 +295,16 @@ rangeInput.addEventListener("change", () => {
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.remove("hidden");
+    document.getElementsByClassName("title")[0].classList.remove("hidden");
+
     // Showing the second lvl difficulty summary
   } else if (rangeInput.value === "2") {
     // console.log("the value is 2");
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.remove("hidden");
     document.getElementsByClassName("summary1")[0].classList.add("hidden");
+    document.getElementsByClassName("title")[0].classList.remove("hidden");
+
     // showing the original abs
   } else if (rangeInput.value === "3") {
     // console.log("the value is 3");
@@ -298,6 +312,8 @@ rangeInput.addEventListener("change", () => {
     document
       .getElementsByClassName("original-abs")[0]
       .classList.remove("hidden");
+    document.getElementsByClassName("title")[0].classList.add("hidden");
+
     document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.add("hidden");
   }
