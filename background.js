@@ -1,52 +1,19 @@
 import { OPENAI_TOKEN } from "./config.js";
-import { getActiveTabURL } from "./utilis.js";
+// import { getActiveTabURL } from "./utilis.js";
 
 // to store the data
 let currentSavedPapers = [];
 let currentTab;
-// chrome.browserAction.onClicked.addListener(function (tab) {
-//   // var windowWidth = 600; // Set your window width
-//   // var windowHeight = 400; // Set your window height
-//   // var screenWidth = screen.availWidth;
-//   // var screenHeight = screen.availHeight;
-//   // var left = Math.round((screenWidth - windowWidth) / 2);
-//   // var top = Math.round((screenHeight - windowHeight) / 2);
-
-//   chrome.windows.create(
-//     {
-//       url: "popup.html",
-//       type: "popup",
-//       width: 800,
-//       height: 600,
-//       left: screen.width / 2 - 800 / 2,
-//       top: screen.height / 2 - 600 / 2,
-//     },
-//     function (window) {
-//       chrome.windows.update(window.id, { focused: true });
-//     }
-//   );
-// });
-
-// just a test for chrome local storage
-
-// chrome.storage.local.set({ test: "21321" }, function () {
-//   if (chrome.runtime.lastError) {
-//     console.error(chrome.runtime.lastError);
-//   } else {
-//     console.log("Value is set to 21321");
-//   }
-// });
-// chrome.storage.local.get("test", function (result) {
-//   console.log("The value of 'test' is: " + result.test);
-// });
+let storedSummary = "text test  ";
+let storedSummary1;
 
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   currentTab = tabs[0];
 
-  console.log("current tab", currentTab);
+  // console.log("current tab", currentTab);
   // To check if the user is on the right website
   if (currentTab.url.indexOf("pubmed.ncbi.nlm.nih.gov") === -1) {
-    console.log("am i working as a main coneldsjfa");
+    console.log("this url is not supported");
     const mainContentElement =
       document.getElementsByClassName("main-content")[0];
     const lodaerContainerElement =
@@ -60,8 +27,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   displayInformation("", "");
 
   const tabInformation = await getTabInformation(currentTab);
-  // const modelResult = await runModel(MODEL, tabInformation["textToSummarise"]);
-  console.log("this is tab information", tabInformation);
+  // console.log("this is tab information", tabInformation);
 
   const summerizeResult = await summarizeText(
     tabInformation["textToSummarise"],
@@ -90,21 +56,19 @@ async function getTabInformation(tab) {
   const response = await fetch(tab.url);
   const text = await response.text();
 
-  // const abstractHtml = text.getElementById("abstract");
-
   const parser = new DOMParser();
   // coverting html into a document
   const doc = parser.parseFromString(text, "text/html");
   // to add all paraghraphs when we have different p for background, methods,...
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
   const originalAbstractHtml = doc.getElementById("abstract");
-  console.log("this is the original abst", originalAbstractHtml);
+  // console.log("this is the original abst", originalAbstractHtml);
   let allParagraphs = "";
   for (let i = 0; i < paragraphs.length; i++) {
     allParagraphs += paragraphs[i].textContent;
   }
-  console.log("paragraphs", paragraphs);
-  console.log("allparagraphs", allParagraphs);
+  // console.log("paragraphs", paragraphs);
+  // console.log("allparagraphs", allParagraphs);
 
   const tabInformation = {
     textTitle: doc
@@ -152,7 +116,7 @@ async function summarizeText(
   };
   const response = await fetch(url, options);
   const summary = await response.json();
-  console.log(summary);
+  // console.log(summary);
 
   const summerizedMsg = summary.choices[0].message.content.trim();
   // Store the summary in local storage
@@ -166,7 +130,7 @@ async function summarizeText(
   // chrome.storage.local.get("StoredSummary", function (result) {
   //   // console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
   // });
-
+  // storedSummary = summerizedMsg;
   return summerizedMsg;
 }
 
@@ -201,7 +165,7 @@ async function summarizeTextLVL1(
   };
   const response = await fetch(url, options);
   const summary = await response.json();
-  console.log(summary);
+  // console.log(summary);
 
   const summerizedMsg = summary.choices[0].message.content.trim();
   // Store the summary in local storage
@@ -215,6 +179,8 @@ async function summarizeTextLVL1(
   // chrome.storage.local.get("StoredSummary", function (result) {
   //   // console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
   // });
+  storedSummary1 = summerizedMsg;
+  // console.log("the summary which is just stored is", storedSummary1);
 
   return summerizedMsg;
 }
@@ -222,20 +188,50 @@ async function summarizeTextLVL1(
 // ****
 function displayInformation(title, originalAbs, summary, summary1) {
   // store in the storage
-  const data = {};
-  data[currentTab] = [summary, summary1];
-  chrome.storage.sync.set(data, function () {
-    console.log("Data saved successfully! in:");
+  chrome.storage.local.get("urls", function (data) {
+    // if the data object doesnt exist, create it
+    if (!data.urls) {
+      data.urls = {};
+      console.log("data object created");
+    }
+    // Check if the URL is already in the data object
+    if (!data.urls[currentTab.url]) {
+      // If the URL isn't in the data object yet, create a new entry
+      // console.log("type of this summary is", typeof storedSummary1);
+      console.log("summary is:", summary);
+      // const testtest = JSON.stringify(storedSummary1);
+      data.urls[currentTab.url] = {
+        test1: storedSummary,
+        test2: storedSummary1,
+      };
+      console.log(storedSummary1);
+      console.log("new entry added");
+      // saving the data
+      chrome.storage.local.set({ urls: data.urls }, function () {
+        console.log("Data saved successfully!");
+      });
+    } else {
+      console.log("URL already exists in storage.");
+    }
+    chrome.storage.local.get("urls", function (data) {
+      console.log("data urls are ...", data.urls[currentTab.url]);
+    });
   });
+  // const data = {};
+  // data[currentTab] = [summary, summary1];
+  // console.log(data);
+  // chrome.storage.sync.set(data, function () {
+  //   console.log("Data saved successfully! in:");
+  // });
 
-  chrome.storage.sync.get(currentTab, function (data) {
-    const summaries = data[currentTab];
-    const summary = summaries[0];
-    const summary1 = summaries[1];
-    console.log(
-      "Summaries for " + currentTab + ": " + summary1 + ", " + summary
-    );
-  });
+  // chrome.storage.sync.get(currentTab, function (data) {
+  //   const summaries = data[currentTab];
+  //   const summary = summaries[0];
+  //   const summary1 = summaries[1];
+  //   console.log(
+  //     "Summaries for " + currentTab + ": " + summary1 + ", " + summary
+  //   );
+  // });
 
   // Displaying the original Abstract
   const originalAbsElement = document.getElementsByClassName("original-abs")[0];
