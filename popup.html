@@ -61,7 +61,26 @@
         <span class="difficulty-lvl__title"
           >Change the version of the simplified text</span
         >
-        <input type="range" min="1" max="3" step="1" value="3" />
+        <div class="difficulty-lvl__slider">
+          <label for="slider"></label>
+          <input
+            type="range"
+            id="slider"
+            name="slider"
+            min="1"
+            max="3"
+            step="1"
+            value="3"
+            list="tickmarks"
+          />
+          <datalist id="tickmarks">
+            <option value="1">Elementry</option>
+            <option value="2">Advanced</option>
+            <option value="3">Original</option>
+          </datalist>
+        </div>
+
+        <!-- <input type="range" min="1" max="3" step="1" value="3" /> -->
       </div>
       <div class="main-content hidden">
         <h4 class="main-heading">Heading</h4>

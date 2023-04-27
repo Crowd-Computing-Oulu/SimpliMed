@@ -11,6 +11,7 @@
   --fg: hsl(var(--hue), 10%, 10%);
   /* font-size: calc(16px + (24 - 16) * (100vw - 320px) / (1280 - 320)); */
 }
+
 .container {
   /* height: 100px; */
   display: flex;
@@ -51,6 +52,7 @@ p {
 
 #difficulty-lvl {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   padding-top: 2rem;
@@ -59,6 +61,22 @@ p {
   font-size: 1rem;
   padding-right: 1rem;
   font-style: italic;
+}
+datalist {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  writing-mode: horizontal-lr;
+  width: 200px;
+}
+
+option {
+  padding: 0;
+}
+
+input[type="range"] {
+  width: 200px;
+  margin: 0;
 }
 .hidden {
   display: none !important;
