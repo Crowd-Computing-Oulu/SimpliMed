@@ -4,8 +4,9 @@ import { OPENAI_TOKEN } from "./config.js";
 // to store the data
 let currentSavedPapers = [];
 let currentTab;
-let storedSummary = "text test  ";
-let storedSummary1;
+// let storedSummary = await summarizeText();
+// console.log(storedSummary);
+// let storedSummary1 = "test";
 
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   currentTab = tabs[0];
@@ -24,7 +25,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   }
 
   toggleLoader(true);
-  displayInformation("", "");
+  // displayInformation("", "");
 
   const tabInformation = await getTabInformation(currentTab);
   // console.log("this is tab information", tabInformation);
@@ -37,6 +38,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
     tabInformation["textToSummarise"],
     OPENAI_TOKEN
   );
+  console.log(summerizeResult);
 
   toggleLoader(false);
   displayInformation(
@@ -67,9 +69,6 @@ async function getTabInformation(tab) {
   for (let i = 0; i < paragraphs.length; i++) {
     allParagraphs += paragraphs[i].textContent;
   }
-  // console.log("paragraphs", paragraphs);
-  // console.log("allparagraphs", allParagraphs);
-
   const tabInformation = {
     textTitle: doc
       .getElementsByClassName("heading-title")[0]
@@ -116,21 +115,7 @@ async function summarizeText(
   };
   const response = await fetch(url, options);
   const summary = await response.json();
-  // console.log(summary);
-
   const summerizedMsg = summary.choices[0].message.content.trim();
-  // Store the summary in local storage
-  // chrome.storage.local.set({ StoredSummary: summerizedMsg }, function () {
-  //   if (chrome.runtime.lastError) {
-  //     console.error(chrome.runtime.lastError);
-  //   } else {
-  //     console.log("storedsummery has been set.");
-  //   }
-  // });
-  // chrome.storage.local.get("StoredSummary", function (result) {
-  //   // console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
-  // });
-  // storedSummary = summerizedMsg;
   return summerizedMsg;
 }
 
@@ -168,25 +153,13 @@ async function summarizeTextLVL1(
   // console.log(summary);
 
   const summerizedMsg = summary.choices[0].message.content.trim();
-  // Store the summary in local storage
-  // chrome.storage.local.set({ StoredSummary: summerizedMsg }, function () {
-  //   if (chrome.runtime.lastError) {
-  //     console.error(chrome.runtime.lastError);
-  //   } else {
-  //     // console.log("storedsummery has been set.");
-  //   }
-  // });
-  // chrome.storage.local.get("StoredSummary", function (result) {
-  //   // console.log("The value of 'StoredSummary' is: " + result.StoredSummary);
-  // });
-  storedSummary1 = summerizedMsg;
-  // console.log("the summary which is just stored is", storedSummary1);
 
   return summerizedMsg;
 }
 
 // ****
 function displayInformation(title, originalAbs, summary, summary1) {
+  console.log("the summary inside display information is", summary);
   // store in the storage
   chrome.storage.local.get("urls", function (data) {
     // if the data object doesnt exist, create it
@@ -198,13 +171,13 @@ function displayInformation(title, originalAbs, summary, summary1) {
     if (!data.urls[currentTab.url]) {
       // If the URL isn't in the data object yet, create a new entry
       // console.log("type of this summary is", typeof storedSummary1);
-      console.log("summary is:", summary);
+      // console.log("summary is:", summary);
       // const testtest = JSON.stringify(storedSummary1);
       data.urls[currentTab.url] = {
-        test1: storedSummary,
-        test2: storedSummary1,
+        summaryElementry: summary,
+        summaryAdvanced: summary1,
       };
-      console.log(storedSummary1);
+      // console.log(storedSummary1);
       console.log("new entry added");
       // saving the data
       chrome.storage.local.set({ urls: data.urls }, function () {
@@ -248,6 +221,7 @@ function displayInformation(title, originalAbs, summary, summary1) {
   mainHeadingElement.textContent = title;
 
   const summaryElemnt = document.getElementsByClassName("summary")[0];
+  console.log("summary before textcontent is,", summary);
   summaryElemnt.textContent = summary;
 
   const summaryElemnt1 = document.getElementsByClassName("summary1")[0];
