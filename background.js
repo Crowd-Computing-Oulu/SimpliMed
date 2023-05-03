@@ -1,17 +1,10 @@
 import { OPENAI_TOKEN } from "./config.js";
-// import { getActiveTabURL } from "./utilis.js";
 
-// to store the data
-let currentSavedPapers = [];
 let currentTab;
-// let storedSummary = await summarizeText();
-// console.log(storedSummary);
-// let storedSummary1 = "test";
 
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   currentTab = tabs[0];
 
-  // console.log("current tab", currentTab);
   // To check if the user is on the right website
   if (currentTab.url.indexOf("pubmed.ncbi.nlm.nih.gov") === -1) {
     console.log("this url is not supported");
@@ -28,24 +21,23 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   // displayInformation("", "");
 
   const tabInformation = await getTabInformation(currentTab);
-  // console.log("this is tab information", tabInformation);
 
-  const summerizeResult = await summarizeText(
+  const summerizeElementryResult = await summarizeTextElementry(
     tabInformation["textToSummarise"],
     OPENAI_TOKEN
   );
-  const summerizeResultLVL1 = await summarizeTextLVL1(
+  const summerizeAdvancedResult = await summarizeTextAdvanced(
     tabInformation["textToSummarise"],
     OPENAI_TOKEN
   );
-  console.log(summerizeResult);
+  console.log(summerizeElementryResult);
 
   toggleLoader(false);
   displayInformation(
     tabInformation["textTitle"],
     tabInformation["originalAbs"],
-    summerizeResult,
-    summerizeResultLVL1
+    summerizeElementryResult,
+    summerizeAdvancedResult
   );
 });
 
@@ -64,7 +56,7 @@ async function getTabInformation(tab) {
   // to add all paraghraphs when we have different p for background, methods,...
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
   const originalAbstractHtml = doc.getElementById("abstract");
-  // console.log("this is the original abst", originalAbstractHtml);
+
   let allParagraphs = "";
   for (let i = 0; i < paragraphs.length; i++) {
     allParagraphs += paragraphs[i].textContent;
@@ -76,8 +68,6 @@ async function getTabInformation(tab) {
     textToSummarise: allParagraphs,
     originalAbs: originalAbstractHtml,
   };
-  // console.log("text title", tabInformation.textTitle);
-  // console.log("text to be summerized", tabInformation.textToSummarise);
   return tabInformation;
 }
 
@@ -85,10 +75,9 @@ async function getTabInformation(tab) {
 const MAX_TOKENS = 800;
 // Using Lower Temperature to generate a more predictable text
 const TEMPERATURE = 0.2;
-async function summarizeText(
+async function summarizeTextElementry(
   text,
   OPENAI_TOKEN,
-  // temperature = 0.4,
   model = "gpt-3.5-turbo"
 ) {
   const url = "https://api.openai.com/v1/chat/completions";
@@ -119,12 +108,12 @@ async function summarizeText(
   return summerizedMsg;
 }
 
-async function summarizeTextLVL1(
+async function summarizeTextAdvanced(
   text,
   OPENAI_TOKEN,
   // higher values like 0.8 will make the output more random,
   // while lower values like 0.2 will make it more focused and deterministic.
-  temperature = 0.4,
+  temperature = 0.2,
   model = "gpt-3.5-turbo"
 ) {
   const url = "https://api.openai.com/v1/chat/completions";
@@ -190,21 +179,6 @@ function displayInformation(title, originalAbs, summary, summary1) {
       console.log("data urls are ...", data.urls[currentTab.url]);
     });
   });
-  // const data = {};
-  // data[currentTab] = [summary, summary1];
-  // console.log(data);
-  // chrome.storage.sync.set(data, function () {
-  //   console.log("Data saved successfully! in:");
-  // });
-
-  // chrome.storage.sync.get(currentTab, function (data) {
-  //   const summaries = data[currentTab];
-  //   const summary = summaries[0];
-  //   const summary1 = summaries[1];
-  //   console.log(
-  //     "Summaries for " + currentTab + ": " + summary1 + ", " + summary
-  //   );
-  // });
 
   // Displaying the original Abstract
   const originalAbsElement = document.getElementsByClassName("original-abs")[0];
@@ -220,16 +194,16 @@ function displayInformation(title, originalAbs, summary, summary1) {
   const mainHeadingElement = document.getElementsByClassName("main-heading")[0];
   mainHeadingElement.textContent = title;
 
-  const summaryElemnt = document.getElementsByClassName("summary")[0];
-  console.log("summary before textcontent is,", summary);
-  summaryElemnt.textContent = summary;
+  const summaryElementryElement = document.getElementsByClassName("summary")[0];
+  // console.log("summary before textcontent is,", summary);
+  summaryElementryElement.textContent = summary;
 
-  const summaryElemnt1 = document.getElementsByClassName("summary1")[0];
-  summaryElemnt1.textContent = summary1;
+  const summaryAdvancedElement = document.getElementsByClassName("summary1")[0];
+  summaryAdvancedElement.textContent = summary1;
 
   // Adding the slide bar after retrieving the summary and title
   if (
-    summaryElemnt.textContent !== "" &&
+    summaryElementryElement.textContent !== "" &&
     mainHeadingElement.textContent !== ""
   ) {
     // Slide bar will show after the content is loaded
@@ -261,7 +235,6 @@ const rangeInput = document.querySelector('input[type="range"]');
 rangeInput.addEventListener("change", () => {
   // Showing the first lvl difficulty summary
   if (rangeInput.value === "1") {
-    // console.log("the value is 1");
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.remove("hidden");
@@ -269,7 +242,6 @@ rangeInput.addEventListener("change", () => {
 
     // Showing the second lvl difficulty summary
   } else if (rangeInput.value === "2") {
-    // console.log("the value is 2");
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.remove("hidden");
     document.getElementsByClassName("summary1")[0].classList.add("hidden");
@@ -277,8 +249,6 @@ rangeInput.addEventListener("change", () => {
 
     // showing the original abs
   } else if (rangeInput.value === "3") {
-    // console.log("the value is 3");
-    // console.log(document.getElementsByClassName("original-abs")[0].textContent);
     document
       .getElementsByClassName("original-abs")[0]
       .classList.remove("hidden");
