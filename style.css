@@ -40,10 +40,11 @@ h2 {
   font-size: 1.3rem;
 }
 h4.main-heading {
-  width: 98%;
+  width: 100%;
+  margin-top: 0;
 }
 p {
-  width: 98%;
+  width: 100%;
   font-size: 1rem;
 }
 .main-heading {
@@ -52,10 +53,15 @@ p {
 
 #difficulty-lvl {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 2rem;
+  padding: 1.5rem 0;
+  width: 100%;
+  background-color: rgb(220, 221, 221);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 .difficulty-lvl__title {
   font-size: 1rem;
@@ -94,12 +100,23 @@ input[type="range"] {
   place-items: center;
 }
 .loader-description {
-  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-size: 1rem;
-  font-weight: bold;
   color: rgb(135, 135, 135);
-  text-transform: uppercase;
   font-family: sans-serif;
+  text-align: center;
+}
+.loader-description p {
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+.loader-description span {
+  font-size: 0.8rem;
+  font-style: italic;
 }
 
 .pl {
