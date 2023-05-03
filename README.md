@@ -11,10 +11,10 @@
 
  ``export const OPENAI_TOKEN = "your_API_token"``
 
-##Load the extension in Google Chrome by following these steps:
+## Load the extension in Google Chrome by following these steps:
 
-    Open the Google Chrome browser.
-    Click the three dots in the top-right corner of the browser window.
-    Select "More Tools" > "Extensions".
-    Enable "Developer Mode" in the top-right corner of the window.
-    Click "Load unpacked" and select the folder that contains your extension
+    1. Open the Google Chrome browser.
+    2. Click the three dots in the top-right corner of the browser window.
+    3. Select "More Tools" > "Extensions".
+    4. Enable "Developer Mode" in the top-right corner of the window.
+    5. Click "Load unpacked" and select the folder that contains your extension
