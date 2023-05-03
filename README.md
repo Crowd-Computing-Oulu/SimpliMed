@@ -6,9 +6,10 @@
 ## Usage
 
 1. Create a `config.js` file in the root directory of the extension.
-2. Add your API token to the `config.js` file. This file is not included in the GitHub repository to keep your token private.
+2. Add your API token to the `config.js` file. This file is not included in the GitHub repository to keep the token private.
 3. In the `config.js` include the following with your API Token:
-### ``export const OPENAI_TOKEN = "your_API_token"``
+
+ ``export const OPENAI_TOKEN = "your_API_token"``
 
 ##Load the extension in Google Chrome by following these steps:
 
