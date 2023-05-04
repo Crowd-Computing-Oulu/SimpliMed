@@ -21,24 +21,78 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   // displayInformation("", "");
 
   const tabInformation = await getTabInformation(currentTab);
+  console.log("current tab is ", currentTab);
 
-  const summerizeElementryResult = await summarizeTextElementry(
-    tabInformation["textToSummarise"],
-    OPENAI_TOKEN
-  );
-  const summerizeAdvancedResult = await summarizeTextAdvanced(
-    tabInformation["textToSummarise"],
-    OPENAI_TOKEN
-  );
-  console.log(summerizeElementryResult);
+  chrome.storage.local.get("urls", function (data) {
+    (async function () {
+      if (data.urls[currentTab.url]) {
+        console.log(
+          "This Abstract have been summerized previously, this is the result"
+        );
+        toggleLoader(false);
+        displayInformation(
+          tabInformation["textTitle"],
+          tabInformation["originalAbs"],
+          data.urls[currentTab.url].summaryElementary,
+          data.urls[currentTab.url].summaryAdvanced
+        );
+      } else {
+        console.log("this is a new Abstract, which will be summerized soon");
+        const summerizeElementaryResult = await summarizeTextElementary(
+          tabInformation["textToSummerize"],
+          OPENAI_TOKEN
+        );
+        const summerizeAdvancedResult = await summarizeTextAdvanced(
+          tabInformation["textToSummerize"],
+          OPENAI_TOKEN
+        );
+        displayInformation(
+          tabInformation["textTitle"],
+          tabInformation["originalAbs"],
+          summerizeElementaryResult,
+          summerizeAdvancedResult
+        );
+        toggleLoader(false);
+      }
+    })();
+    // Check if the URL is already in the data object
+    // console.log(
+    //   "this paper already exist in the data base,",
+    //   data.urls[currentTab.url]
+    // );
 
-  toggleLoader(false);
-  displayInformation(
-    tabInformation["textTitle"],
-    tabInformation["originalAbs"],
-    summerizeElementryResult,
-    summerizeAdvancedResult
-  );
+    // chrome.storage.local.get("urls", function (data) {
+    //   console.log(
+    //     "data second properrty is ...",
+    //     data.urls[currentTab.url].summaryElementary
+    //   );
+    // });
+  });
+  // if (data.urls[currentTab.url]) {
+  //   const summerizeElementaryResult = await summarizeTextElementary(
+  //     tabInformation["textToSummerize"],
+  //     OPENAI_TOKEN
+  //   );
+  //   console.log(data);
+  // }
+
+  // const summerizeElementaryResult = await summarizeTextElementary(
+  //   tabInformation["textToSummerize"],
+  //   OPENAI_TOKEN
+  // );
+  // const summerizeAdvancedResult = await summarizeTextAdvanced(
+  //   tabInformation["textToSummerize"],
+  //   OPENAI_TOKEN
+  // );
+  // console.log(summerizeElementaryResult);
+
+  // toggleLoader(false);
+  // displayInformation(
+  //   tabInformation["textTitle"],
+  //   tabInformation["originalAbs"],
+  //   summerizeElementaryResult,
+  //   summerizeAdvancedResult
+  // );
 });
 
 async function getTabInformation(tab) {
@@ -65,7 +119,7 @@ async function getTabInformation(tab) {
     textTitle: doc
       .getElementsByClassName("heading-title")[0]
       .textContent.trim(),
-    textToSummarise: allParagraphs,
+    textToSummerize: allParagraphs,
     originalAbs: originalAbstractHtml,
   };
   return tabInformation;
@@ -75,7 +129,7 @@ async function getTabInformation(tab) {
 const MAX_TOKENS = 800;
 // Using Lower Temperature to generate a more predictable text
 const TEMPERATURE = 0.2;
-async function summarizeTextElementry(
+async function summarizeTextElementary(
   text,
   OPENAI_TOKEN,
   model = "gpt-3.5-turbo"
@@ -163,7 +217,7 @@ function displayInformation(title, originalAbs, summary, summary1) {
       // console.log("summary is:", summary);
       // const testtest = JSON.stringify(storedSummary1);
       data.urls[currentTab.url] = {
-        summaryElementry: summary,
+        summaryElementary: summary,
         summaryAdvanced: summary1,
       };
       // console.log(storedSummary1);
@@ -194,16 +248,17 @@ function displayInformation(title, originalAbs, summary, summary1) {
   const mainHeadingElement = document.getElementsByClassName("main-heading")[0];
   mainHeadingElement.textContent = title;
 
-  const summaryElementryElement = document.getElementsByClassName("summary")[0];
+  const summaryElementaryElement =
+    document.getElementsByClassName("summary")[0];
   // console.log("summary before textcontent is,", summary);
-  summaryElementryElement.textContent = summary;
+  summaryElementaryElement.textContent = summary;
 
   const summaryAdvancedElement = document.getElementsByClassName("summary1")[0];
   summaryAdvancedElement.textContent = summary1;
 
   // Adding the slide bar after retrieving the summary and title
   if (
-    summaryElementryElement.textContent !== "" &&
+    summaryElementaryElement.textContent !== "" &&
     mainHeadingElement.textContent !== ""
   ) {
     // Slide bar will show after the content is loaded
