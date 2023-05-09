@@ -65,44 +65,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
         toggleLoader(false);
       }
     })();
-    // Check if the URL is already in the data object
-    // console.log(
-    //   "this paper already exist in the data base,",
-    //   data.urls[currentTab.url]
-    // );
-
-    // chrome.storage.local.get("urls", function (data) {
-    //   console.log(
-    //     "data second properrty is ...",
-    //     data.urls[currentTab.url].summaryElementary
-    //   );
-    // });
   });
-  // if (data.urls[currentTab.url]) {
-  //   const summarizeElementaryResult = await summarizeTextElementary(
-  //     tabInformation["textToSummarize"],
-  //     OPENAI_TOKEN
-  //   );
-  //   console.log(data);
-  // }
-
-  // const summarizeElementaryResult = await summarizeTextElementary(
-  //   tabInformation["textToSummarize"],
-  //   OPENAI_TOKEN
-  // );
-  // const summarizeAdvancedResult = await summarizeTextAdvanced(
-  //   tabInformation["textToSummarize"],
-  //   OPENAI_TOKEN
-  // );
-  // console.log(summarizeElementaryResult);
-
-  // toggleLoader(false);
-  // displayInformation(
-  //   tabInformation["textTitle"],
-  //   tabInformation["originalAbs"],
-  //   summarizeElementaryResult,
-  //   summarizeAdvancedResult
-  // );
 });
 
 async function getTabInformation(tab) {
@@ -347,9 +310,6 @@ function toggleLoader(toggleSwitch) {
   }
 }
 // retrieving the selected value of user
-// const contentSelection = document.querySelector(
-//   'input[name="content-type"]:checked'
-// ).value;
 const rangeInput = document.querySelector('input[type="range"]');
 rangeInput.addEventListener("change", () => {
   // Showing the first lvl difficulty summary
