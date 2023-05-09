@@ -83,6 +83,24 @@ async function getTabInformation(tab) {
   // to add all paraghraphs when we have different p for background, methods,...
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
   const originalAbstractHtml = doc.getElementById("abstract");
+  // const subTitleParagraph = originalAbstractHtml.querySelector(
+  //   "p > strong.sub-title "
+  // );
+  // // Remove the paragraph with the keywords
+  // const paragraphParent = subTitleParagraph.parentNode;
+  // paragraphParent.removeChild(subTitleParagraph);
+
+  // console.log("this is the orignal abstract without keyword:", paragraphParent);
+  // if (subTitleParagraph) {
+  //   console.log(
+  //     'Found paragraph with class="sub-title" and direct child <strong> element:',
+  //     subTitleParagraph.parentNode
+  //   );
+  // } else {
+  //   console.log(
+  //     'Did not find any paragraphs with class="sub-title" and direct child <strong> element.'
+  //   );
+  // }
 
   let allParagraphs = "";
   for (let i = 0; i < paragraphs.length; i++) {
