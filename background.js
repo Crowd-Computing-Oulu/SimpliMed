@@ -34,7 +34,8 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
           tabInformation["textTitle"],
           tabInformation["originalAbs"],
           data.urls[currentTab.url].summaryElementary,
-          data.urls[currentTab.url].summaryAdvanced
+          data.urls[currentTab.url].summaryAdvanced,
+          data.urls[currentTab.url].summaryTitle
         );
       } else {
         console.log("this is a new Abstract, which will be summarized soon");
@@ -293,7 +294,8 @@ function displayInformation(
    * Displays the title and summary information in the extention pop-up.
    **/
 
-  const mainHeadingElement = document.getElementsByClassName("main-heading")[0];
+  const mainHeadingElement =
+    document.getElementsByClassName("original-title")[0];
   mainHeadingElement.textContent = title;
 
   const summaryElementaryElement =
@@ -312,7 +314,7 @@ function displayInformation(
     document.getElementsByClassName("summary-title")[0];
   summaryTitleElement.textContent = summarizedTitle;
   console.log(
-    "this is the summartitle element",
+    "this is the summartitle element:::",
     summaryTitleElement.textContent
   );
   // Adding the slide bar after retrieving the summary and title
@@ -323,6 +325,8 @@ function displayInformation(
   ) {
     // Slide bar will show after the content is loaded
     document.getElementById("difficulty-lvl").classList.remove("hidden");
+  } else {
+    console.log("one of the fields are empty");
   }
 }
 
@@ -353,7 +357,9 @@ rangeInput.addEventListener("change", () => {
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.remove("hidden");
-    document.getElementsByClassName("main-heading")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("original-title")[0]
+      .classList.add("hidden");
     document
       .getElementsByClassName("summary-title")[0]
       .classList.remove("hidden");
@@ -369,9 +375,9 @@ rangeInput.addEventListener("change", () => {
     document
       .getElementsByClassName("title-abstract")[0]
       .classList.remove("hidden");
-    // document
-    //   .getElementsByClassName("main-heading")[0]
-    //   .classList.remove("hidden");
+    document
+      .getElementsByClassName("original-title")[0]
+      .classList.add("hidden");
     document
       .getElementsByClassName("summary-title")[0]
       .classList.remove("hidden");
@@ -387,7 +393,7 @@ rangeInput.addEventListener("change", () => {
     document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.add("hidden");
     document
-      .getElementsByClassName("main-heading")[0]
+      .getElementsByClassName("original-title")[0]
       .classList.remove("hidden");
     document.getElementsByClassName("summary-title")[0].classList.add("hidden");
   }

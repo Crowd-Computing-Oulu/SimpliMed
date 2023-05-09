@@ -38,17 +38,17 @@ div.main-content {
 h2 {
   font-size: 1.3rem;
 }
-h4.main-heading {
+h4.original-title,
+h4.summary-title {
   width: 100%;
   margin-top: 0;
+  color: rgb(72, 72, 255);
+
   font-size: 1.3rem;
 }
 p {
   width: 100%;
   font-size: 1rem;
-}
-.main-heading {
-  color: rgb(72, 72, 255);
 }
 
 #difficulty-lvl {
