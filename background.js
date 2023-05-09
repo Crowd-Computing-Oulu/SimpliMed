@@ -27,7 +27,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
     (async function () {
       if (data.urls[currentTab.url]) {
         console.log(
-          "This Abstract have been summerized previously, this is the result"
+          "This Abstract have been summarized previously, this is the result"
         );
         toggleLoader(false);
         displayInformation(
@@ -37,20 +37,20 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
           data.urls[currentTab.url].summaryAdvanced
         );
       } else {
-        console.log("this is a new Abstract, which will be summerized soon");
-        const summerizeElementaryResult = await summarizeTextElementary(
-          tabInformation["textToSummerize"],
+        console.log("this is a new Abstract, which will be summarized soon");
+        const summarizeElementaryResult = await summarizeTextElementary(
+          tabInformation["textToSummarize"],
           OPENAI_TOKEN
         );
-        const summerizeAdvancedResult = await summarizeTextAdvanced(
-          tabInformation["textToSummerize"],
+        const summarizeAdvancedResult = await summarizeTextAdvanced(
+          tabInformation["textToSummarize"],
           OPENAI_TOKEN
         );
         displayInformation(
           tabInformation["textTitle"],
           tabInformation["originalAbs"],
-          summerizeElementaryResult,
-          summerizeAdvancedResult
+          summarizeElementaryResult,
+          summarizeAdvancedResult
         );
         toggleLoader(false);
       }
@@ -69,29 +69,29 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
     // });
   });
   // if (data.urls[currentTab.url]) {
-  //   const summerizeElementaryResult = await summarizeTextElementary(
-  //     tabInformation["textToSummerize"],
+  //   const summarizeElementaryResult = await summarizeTextElementary(
+  //     tabInformation["textToSummarize"],
   //     OPENAI_TOKEN
   //   );
   //   console.log(data);
   // }
 
-  // const summerizeElementaryResult = await summarizeTextElementary(
-  //   tabInformation["textToSummerize"],
+  // const summarizeElementaryResult = await summarizeTextElementary(
+  //   tabInformation["textToSummarize"],
   //   OPENAI_TOKEN
   // );
-  // const summerizeAdvancedResult = await summarizeTextAdvanced(
-  //   tabInformation["textToSummerize"],
+  // const summarizeAdvancedResult = await summarizeTextAdvanced(
+  //   tabInformation["textToSummarize"],
   //   OPENAI_TOKEN
   // );
-  // console.log(summerizeElementaryResult);
+  // console.log(summarizeElementaryResult);
 
   // toggleLoader(false);
   // displayInformation(
   //   tabInformation["textTitle"],
   //   tabInformation["originalAbs"],
-  //   summerizeElementaryResult,
-  //   summerizeAdvancedResult
+  //   summarizeElementaryResult,
+  //   summarizeAdvancedResult
   // );
 });
 
@@ -119,7 +119,7 @@ async function getTabInformation(tab) {
     textTitle: doc
       .getElementsByClassName("heading-title")[0]
       .textContent.trim(),
-    textToSummerize: allParagraphs,
+    textToSummarize: allParagraphs,
     originalAbs: originalAbstractHtml,
   };
   return tabInformation;
@@ -158,8 +158,8 @@ async function summarizeTextElementary(
   };
   const response = await fetch(url, options);
   const summary = await response.json();
-  const summerizedMsg = summary.choices[0].message.content.trim();
-  return summerizedMsg;
+  const summarizedMsg = summary.choices[0].message.content.trim();
+  return summarizedMsg;
 }
 
 async function summarizeTextAdvanced(
@@ -195,9 +195,9 @@ async function summarizeTextAdvanced(
   const summary = await response.json();
   // console.log(summary);
 
-  const summerizedMsg = summary.choices[0].message.content.trim();
+  const summarizedMsg = summary.choices[0].message.content.trim();
 
-  return summerizedMsg;
+  return summarizedMsg;
 }
 
 // ****
