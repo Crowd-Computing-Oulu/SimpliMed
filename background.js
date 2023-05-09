@@ -38,19 +38,28 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
         );
       } else {
         console.log("this is a new Abstract, which will be summarized soon");
+        // to summarize the text for elementary level
         const summarizeElementaryResult = await summarizeTextElementary(
           tabInformation["textToSummarize"],
           OPENAI_TOKEN
         );
+        // to summarize the text for advance level
+
         const summarizeAdvancedResult = await summarizeTextAdvanced(
           tabInformation["textToSummarize"],
+          OPENAI_TOKEN
+        );
+        // to summarize the title
+        const summarizedTitleResult = await summarizeTitle(
+          tabInformation["textTitle"],
           OPENAI_TOKEN
         );
         displayInformation(
           tabInformation["textTitle"],
           tabInformation["originalAbs"],
           summarizeElementaryResult,
-          summarizeAdvancedResult
+          summarizeAdvancedResult,
+          summarizedTitleResult
         );
         toggleLoader(false);
       }
@@ -200,9 +209,47 @@ async function summarizeTextAdvanced(
   return summarizedMsg;
 }
 
+async function summarizeTitle(title, OPENAI_TOKEN, model = "gpt-3.5-turbo") {
+  const url = "https://api.openai.com/v1/chat/completions";
+  const payload = {
+    model: model,
+    messages: [
+      { role: "system", content: "You are a helpful assistant." },
+
+      {
+        role: "user",
+        content: `Simplify this title for a audience without technical background of the subject: ${title}`,
+      },
+    ],
+    temperature: TEMPERATURE,
+    max_tokens: MAX_TOKENS,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENAI_TOKEN}`,
+    },
+    body: JSON.stringify(payload),
+  };
+  const response = await fetch(url, options);
+  const summary = await response.json();
+  const summarizedTitle = summary.choices[0].message.content.trim();
+  return summarizedTitle;
+}
+
 // ****
-function displayInformation(title, originalAbs, summary, summary1) {
-  console.log("the summary inside display information is", summary);
+function displayInformation(
+  title,
+  originalAbs,
+  summary,
+  summary1,
+  summarizedTitle
+) {
+  console.log(
+    "the summarized title inside display information is",
+    summarizedTitle
+  );
   // store in the storage
   chrome.storage.local.get("urls", function (data) {
     // if the data object doesnt exist, create it
@@ -219,6 +266,7 @@ function displayInformation(title, originalAbs, summary, summary1) {
       data.urls[currentTab.url] = {
         summaryElementary: summary,
         summaryAdvanced: summary1,
+        summaryTitle: summarizedTitle,
       };
       // console.log(storedSummary1);
       console.log("new entry added");
@@ -255,11 +303,23 @@ function displayInformation(title, originalAbs, summary, summary1) {
 
   const summaryAdvancedElement = document.getElementsByClassName("summary1")[0];
   summaryAdvancedElement.textContent = summary1;
+  console.log(
+    "this is the summaradvance element",
+    summaryAdvancedElement.textContent
+  );
 
+  const summaryTitleElement =
+    document.getElementsByClassName("summary-title")[0];
+  summaryTitleElement.textContent = summarizedTitle;
+  console.log(
+    "this is the summartitle element",
+    summaryTitleElement.textContent
+  );
   // Adding the slide bar after retrieving the summary and title
   if (
     summaryElementaryElement.textContent !== "" &&
-    mainHeadingElement.textContent !== ""
+    mainHeadingElement.textContent !== "" &&
+    summaryTitleElement.textContent !== ""
   ) {
     // Slide bar will show after the content is loaded
     document.getElementById("difficulty-lvl").classList.remove("hidden");
@@ -293,23 +353,42 @@ rangeInput.addEventListener("change", () => {
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.remove("hidden");
-    document.getElementsByClassName("title")[0].classList.remove("hidden");
+    document.getElementsByClassName("main-heading")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("summary-title")[0]
+      .classList.remove("hidden");
+    document
+      .getElementsByClassName("title-abstract")[0]
+      .classList.remove("hidden");
 
     // Showing the second lvl difficulty summary
   } else if (rangeInput.value === "2") {
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.remove("hidden");
     document.getElementsByClassName("summary1")[0].classList.add("hidden");
-    document.getElementsByClassName("title")[0].classList.remove("hidden");
+    document
+      .getElementsByClassName("title-abstract")[0]
+      .classList.remove("hidden");
+    // document
+    //   .getElementsByClassName("main-heading")[0]
+    //   .classList.remove("hidden");
+    document
+      .getElementsByClassName("summary-title")[0]
+      .classList.remove("hidden");
 
     // showing the original abs
   } else if (rangeInput.value === "3") {
     document
       .getElementsByClassName("original-abs")[0]
       .classList.remove("hidden");
-    document.getElementsByClassName("title")[0].classList.add("hidden");
-
+    document
+      .getElementsByClassName("title-abstract")[0]
+      .classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("main-heading")[0]
+      .classList.remove("hidden");
+    document.getElementsByClassName("summary-title")[0].classList.add("hidden");
   }
 });
