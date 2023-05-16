@@ -24,8 +24,12 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   console.log("current tab is ", currentTab);
 
   chrome.storage.local.get("urls", function (data) {
+    console.log("current tab is", currentTab);
+    console.log("current tab url is", currentTab.url);
     (async function () {
-      if (data.urls[currentTab.url]) {
+      // console.log("data urls are:", data.urls);
+      // Checking the both arguments, To prevent an error for undefined data.urls
+      if (data.urls && data.urls[currentTab.url]) {
         console.log(
           "This Abstract have been summarized previously, this is the result"
         );
@@ -85,10 +89,14 @@ async function getTabInformation(tab) {
   const originalAbstractHtml = doc.getElementById("abstract");
   // const subTitleParagraph = originalAbstractHtml.querySelector(
   //   "p > strong.sub-title "
-  // );
+  // ).parentNode;
+  // console.log("this is subtitle", subTitleParagraph);
+
+  // console.log(subTitleParagraph.parentNode);
   // // Remove the paragraph with the keywords
   // const paragraphParent = subTitleParagraph.parentNode;
-  // paragraphParent.removeChild(subTitleParagraph);
+  // originalAbstractHtml.removeChild(subTitleParagraph);
+  // console.log("after remove a child", paragraphParent);
 
   // console.log("this is the orignal abstract without keyword:", paragraphParent);
   // if (subTitleParagraph) {
@@ -129,11 +137,15 @@ async function summarizeTextElementary(
   const payload = {
     model: model,
     messages: [
-      { role: "system", content: "You are a helpful assistant." },
+      {
+        role: "system",
+        content:
+          "You are an expert science communicator who simplify the text ",
+      },
 
       {
         role: "user",
-        content: `Simplify this text for a audience with technical background of the subject, target level of simplification is 8 out of 10. Keep the technical terms, jargon and important information.  Please ensure that the article retains its main ideas and arguments: ${text}`,
+        content: `  ${text}`,
       },
     ],
     temperature: TEMPERATURE,
@@ -165,10 +177,14 @@ async function summarizeTextAdvanced(
   const payload = {
     model: model,
     messages: [
-      { role: "system", content: "You are a helpful assistant." },
+      {
+        role: "system",
+        content:
+          "You are an expert science communicator who understands how to simplify scientific text specifically in the medical field. You know how to write so that people from all backgrounds can understand the text. In this task, you must simplify the following abstract, using simplification levels. Simplification level 1 means the output should be as simple as possible, written to an elementary school pupil. In other words, an elementary school pupil should be able to understand what the original text communicates. Simplification level 10 means no simplification, the output text should be exactly the same as the original text. In any case, remember to retain key information in the abstract, but transform all jargon and complicated medical terminology into easier-to-read text, according to the wanted simplification level.",
+      },
       {
         role: "user",
-        content: ` Simplify this text for a general audience with no technical background of the subject, target level of simplification is 2out of 10.  There are no specific sections or concepts within the text that need to  be emphasized. Technical terms and jargon can be simplified or  explained, but important information should not be lost in the process.  Please ensure that the article retains its main ideas and arguments: ${text}`,
+        content: `at first, write what you have been asked to do as an expert in science communicator in all the details and tell me what 8 out of 10 means. and then Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments.  ${text}`,
       },
     ],
     temperature: TEMPERATURE,
@@ -333,8 +349,8 @@ rangeInput.addEventListener("change", () => {
   // Showing the first lvl difficulty summary
   if (rangeInput.value === "1") {
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
-    document.getElementsByClassName("summary")[0].classList.add("hidden");
-    document.getElementsByClassName("summary1")[0].classList.remove("hidden");
+    document.getElementsByClassName("summary")[0].classList.remove("hidden");
+    document.getElementsByClassName("summary1")[0].classList.add("hidden");
     document
       .getElementsByClassName("original-title")[0]
       .classList.add("hidden");
@@ -348,8 +364,8 @@ rangeInput.addEventListener("change", () => {
     // Showing the second lvl difficulty summary
   } else if (rangeInput.value === "2") {
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
-    document.getElementsByClassName("summary")[0].classList.remove("hidden");
-    document.getElementsByClassName("summary1")[0].classList.add("hidden");
+    document.getElementsByClassName("summary")[0].classList.add("hidden");
+    document.getElementsByClassName("summary1")[0].classList.remove("hidden");
     document
       .getElementsByClassName("title-abstract")[0]
       .classList.remove("hidden");
