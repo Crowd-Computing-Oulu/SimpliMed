@@ -144,7 +144,7 @@ async function summarizeTextElementary(
 
       {
         role: "user",
-        content: `at first, write what you have been asked to do as an expert in science communicator in all the details and tell me what 2 out of 10 means. and then Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments.  ${text}`,
+        content: ` Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments.  ${text}`,
       },
     ],
     temperature: TEMPERATURE,
@@ -183,7 +183,7 @@ async function summarizeTextAdvanced(
       },
       {
         role: "user",
-        content: `at first, write what you have been asked to do as an expert in science communicator in all the details and tell me what 8 out of 10 means. and then Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments.  ${text}`,
+        content: `  Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments.  ${text}`,
       },
     ],
     temperature: TEMPERATURE,
@@ -321,14 +321,8 @@ function displayInformation(
 }
 
 function toggleLoader(toggleSwitch) {
-  /**
-   * Toggles the display of the loader element.
-   */
-  if (toggleSwitch) {
-    // document.getElementById("loader").style.display = "flex";
-    // document.getElementById("loader").style.flexDirection = "column";
-    // document.getElementById("loader").style.alignItems = "center";
-  } else {
+  // Doesnt show the loader anymore
+  if (!toggleSwitch) {
     document
       .getElementsByClassName("main-content")[0]
       .classList.remove("hidden");
