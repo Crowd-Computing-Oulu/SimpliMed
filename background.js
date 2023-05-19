@@ -27,7 +27,6 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
     console.log("current tab is", currentTab);
     console.log("current tab url is", currentTab.url);
     (async function () {
-      // console.log("data urls are:", data.urls);
       // Checking the both arguments, To prevent an error for undefined data.urls
       if (data.urls && data.urls[currentTab.url]) {
         console.log(
@@ -140,12 +139,12 @@ async function summarizeTextElementary(
       {
         role: "system",
         content:
-          "You are an expert science communicator who simplify the text ",
+          "You are an expert science communicator who understands how to simplify scientific text specifically in the medical field. You know how to write so that people from all backgrounds can understand the text. In this task, you must simplify the following abstract, using simplification levels. Simplification level 1 means the output should be as simple as possible, written to an elementary school pupil. In other words, an elementary school pupil should be able to understand what the original text communicates. Simplification level 10 means no simplification, the output text should be exactly the same as the original text. In any case, remember to retain key information in the abstract, but transform all jargon and complicated medical terminology into easier-to-read text, according to the wanted simplification level.",
       },
 
       {
         role: "user",
-        content: `  ${text}`,
+        content: `at first, write what you have been asked to do as an expert in science communicator in all the details and tell me what 2 out of 10 means. and then Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments.  ${text}`,
       },
     ],
     temperature: TEMPERATURE,
@@ -200,7 +199,6 @@ async function summarizeTextAdvanced(
   };
   const response = await fetch(url, options);
   const summary = await response.json();
-  // console.log(summary);
 
   const summarizedMsg = summary.choices[0].message.content.trim();
 
@@ -258,15 +256,11 @@ function displayInformation(
     // Check if the URL is already in the data object
     if (!data.urls[currentTab.url]) {
       // If the URL isn't in the data object yet, create a new entry
-      // console.log("type of this summary is", typeof storedSummary1);
-      // console.log("summary is:", summary);
-      // const testtest = JSON.stringify(storedSummary1);
       data.urls[currentTab.url] = {
         summaryElementary: summary,
         summaryAdvanced: summary1,
         summaryTitle: summarizedTitle,
       };
-      // console.log(storedSummary1);
       console.log("new entry added");
       // saving the data
       chrome.storage.local.set({ urls: data.urls }, function () {
@@ -297,7 +291,6 @@ function displayInformation(
 
   const summaryElementaryElement =
     document.getElementsByClassName("summary")[0];
-  // console.log("summary before textcontent is,", summary);
   summaryElementaryElement.textContent = summary;
 
   const summaryAdvancedElement = document.getElementsByClassName("summary1")[0];
