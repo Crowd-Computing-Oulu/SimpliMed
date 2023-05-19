@@ -86,28 +86,18 @@ async function getTabInformation(tab) {
   // to add all paraghraphs when we have different p for background, methods,...
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
   const originalAbstractHtml = doc.getElementById("abstract");
-  // const subTitleParagraph = originalAbstractHtml.querySelector(
-  //   "p > strong.sub-title "
-  // ).parentNode;
-  // console.log("this is subtitle", subTitleParagraph);
-
-  // console.log(subTitleParagraph.parentNode);
-  // // Remove the paragraph with the keywords
-  // const paragraphParent = subTitleParagraph.parentNode;
-  // originalAbstractHtml.removeChild(subTitleParagraph);
-  // console.log("after remove a child", paragraphParent);
-
-  // console.log("this is the orignal abstract without keyword:", paragraphParent);
-  // if (subTitleParagraph) {
-  //   console.log(
-  //     'Found paragraph with class="sub-title" and direct child <strong> element:',
-  //     subTitleParagraph.parentNode
-  //   );
-  // } else {
-  //   console.log(
-  //     'Did not find any paragraphs with class="sub-title" and direct child <strong> element.'
-  //   );
-  // }
+  // remove the keywords if the abstract contains any
+  if (originalAbstractHtml.querySelector("p > strong.sub-title ").parentNode) {
+    console.log("am i working?");
+    const subTitleParagraph = originalAbstractHtml.querySelector(
+      "p > strong.sub-title "
+    ).parentNode;
+    console.log("this is subtitle", subTitleParagraph);
+    // Remove the paragraph with the keywords
+    const paragraphParent = subTitleParagraph.parentNode;
+    originalAbstractHtml.removeChild(subTitleParagraph);
+    console.log("after remove a child", paragraphParent);
+  }
 
   let allParagraphs = "";
   for (let i = 0; i < paragraphs.length; i++) {
