@@ -53,7 +53,8 @@ async function getAbstract(req, res, next) {
     return res.status(500).json({
       message: err.message,
     });
-    res.abstract = abstract;
-    next();
   }
+  res.abstract = abstract;
+  next();
 }
+module.exports = router;
