@@ -24,8 +24,6 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   console.log("current tab is ", currentTab);
 
   chrome.storage.local.get("urls", function (data) {
-    console.log("current tab is", currentTab);
-    console.log("current tab url is", currentTab.url);
     (async function () {
       // Checking the both arguments, To prevent an error for undefined data.urls
       if (data.urls && data.urls[currentTab.url]) {
@@ -87,17 +85,17 @@ async function getTabInformation(tab) {
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
   const originalAbstractHtml = doc.getElementById("abstract");
   // remove the keywords if the abstract contains any
-  if (originalAbstractHtml.querySelector("p > strong.sub-title ").parentNode) {
-    console.log("am i working?");
-    const subTitleParagraph = originalAbstractHtml.querySelector(
-      "p > strong.sub-title "
-    ).parentNode;
-    console.log("this is subtitle", subTitleParagraph);
-    // Remove the paragraph with the keywords
-    const paragraphParent = subTitleParagraph.parentNode;
-    originalAbstractHtml.removeChild(subTitleParagraph);
-    console.log("after remove a child", paragraphParent);
-  }
+  // if (originalAbstractHtml.querySelector("p > strong.sub-title ").parentNode) {
+  //   console.log("am i working?");
+  //   const subTitleParagraph = originalAbstractHtml.querySelector(
+  //     "p > strong.sub-title "
+  //   ).parentNode;
+  //   console.log("this is subtitle", subTitleParagraph);
+  //   // Remove the paragraph with the keywords
+  //   const paragraphParent = subTitleParagraph.parentNode;
+  //   originalAbstractHtml.removeChild(paragraphParent);
+  //   console.log("after remove a child", paragraphParent);
+  // }
 
   let allParagraphs = "";
   for (let i = 0; i < paragraphs.length; i++) {
