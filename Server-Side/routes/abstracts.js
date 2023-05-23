@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Abstract = require("../models/abstracts");
 
-// Getting All
+// GETting All
 router.get("/", async (req, res) => {
   try {
     const abstracts = await Abstract.find();
@@ -17,7 +17,7 @@ router.get("/:id", getAbstract, (req, res) => {
   res.json(res.abstract);
 });
 
-// Creating ONE POST
+// Creating ONE / POST
 router.post("/", async (req, res) => {
   const abstract = new Abstract({
     url: req.body.url,
