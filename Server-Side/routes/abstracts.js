@@ -22,8 +22,8 @@ router.post("/", async (req, res) => {
   const abstract = new Abstract({
     url: req.body.url,
     originalAbstract: req.body.originalAbstract,
-    elementryAbstract: req.body.elementryAbstract,
-    advanceAbstract: req.body.advanceAbstract,
+    elementaryAbstract: req.body.elementaryAbstract,
+    advancedAbstract: req.body.advancedAbstract,
   });
   try {
     const newAbstract = await abstract.save();
