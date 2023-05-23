@@ -8,7 +8,7 @@ const abstractSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  elementryAbstract: {
+  elementaryAbstract: {
     type: String,
     required: true,
   },
