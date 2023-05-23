@@ -1,28 +1,18 @@
 GET http://localhost:3000/abstracts
 
 ###
-GET http://localhost:3000/abstracts/646a3ca02529bed03dce5571
+GET http://localhost:3000/abstracts/646c6809c69f48a4497260f4
 
 ###
 POST http://localhost:3000/abstracts/
 Content-Type: application/json
 
 {
-  "url": "this is url",
-  "originalAbstract": "this is original",
-  "elementryAbstract": "this is elememtru",
-  "advancedAbstract": "this is advanced"
-
+  "url": "dldfoewi231231",
+  "advancedAbstract": "this is advanced",
+  "originalAbstract": "this is orignal abst",
+  "elementaryAbstract": "this is also required"
 }
-
 ###
-DELETE http://localhost:3000/abstracts/646a389e8c2d6fdf2ed5a1ae
-
-# ###
-# PATCH http://localhost:3000/abstracts/646a490f32f75532f63a5f94
-# Content-Type: application/json
-
-# {
-#   "name": "NEW NerwAME"
-# }
+DELETE http://localhost:3000/abstracts/
 
