@@ -1,6 +1,7 @@
 import { OPENAI_TOKEN } from "./config.js";
 
 let currentTab;
+let originalText;
 
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   currentTab = tabs[0];
@@ -84,6 +85,8 @@ async function getTabInformation(tab) {
   // to add all paraghraphs when we have different p for background, methods,...
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
   const originalAbstractHtml = doc.getElementById("abstract");
+  originalText = originalAbstractHtml;
+
   // remove the keywords if the abstract contains any
   // if (originalAbstractHtml.querySelector("p > strong.sub-title ").parentNode) {
   //   console.log("am i working?");
@@ -316,6 +319,8 @@ function toggleLoader(toggleSwitch) {
       .classList.remove("hidden");
     document.getElementsByClassName("loader-container")[0].style.display =
       "none";
+    // click the askBtn to show the Questions section
+    document.getElementById("askBtn").classList.remove("hidden");
   }
 }
 // retrieving the selected value of user
@@ -368,7 +373,7 @@ rangeInput.addEventListener("change", () => {
   }
 });
 
-// click the askBtn to show the Questions section
+// functions for the Question section
 document.getElementById("askBtn").addEventListener("click", function () {
   var questionsSection = document.getElementById("questionsSection");
   if (questionsSection.classList.contains("hidden")) {
@@ -377,3 +382,47 @@ document.getElementById("askBtn").addEventListener("click", function () {
     questionsSection.classList.add("hidden");
   }
 });
+document.getElementById("sendBtn").addEventListener("click", function (e) {
+  e.preventDefault();
+  var questionInput = document.getElementById("questionInput").value;
+  askQuestion(questionInput, originalText, OPENAI_TOKEN);
+  console.log("question is", questionInput, originalText);
+});
+async function askQuestion(
+  questionInput,
+  originalText,
+  OPENAI_TOKEN,
+  model = "gpt-3.5-turbo"
+) {
+  const url = "https://api.openai.com/v1/chat/completions";
+  const payload = {
+    model: model,
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert science communicator",
+      },
+
+      {
+        role: "user",
+        content: ` I have provided this text to you:"  ${originalText} " and now I have a question which is this: ${questionInput} `,
+      },
+    ],
+    temperature: TEMPERATURE,
+    max_tokens: MAX_TOKENS,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENAI_TOKEN}`,
+    },
+    body: JSON.stringify(payload),
+  };
+  const response = await fetch(url, options);
+  const answer = await response.json();
+  console.log("answer is", answer);
+  const answerMsg = answer.choices[0].message.content.trim();
+  console.log("this is the answer", answerMsg);
+  return answerMsg;
+}
