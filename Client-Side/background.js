@@ -367,3 +367,13 @@ rangeInput.addEventListener("change", () => {
     document.getElementsByClassName("summary-title")[0].classList.add("hidden");
   }
 });
+
+// click the askBtn to show the Questions section
+document.getElementById("askBtn").addEventListener("click", function () {
+  var questionsSection = document.getElementById("questionsSection");
+  if (questionsSection.classList.contains("hidden")) {
+    questionsSection.classList.remove("hidden");
+  } else {
+    questionsSection.classList.add("hidden");
+  }
+});
