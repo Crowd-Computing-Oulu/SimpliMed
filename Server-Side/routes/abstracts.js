@@ -42,6 +42,7 @@ router.delete("/:id", getAbstract, async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+// Middleware
 async function getAbstract(req, res, next) {
   let abstract;
   try {
