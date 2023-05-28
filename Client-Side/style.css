@@ -175,6 +175,8 @@ form {
   background-color: rgb(100, 100, 193);
   color: white;
   font-size: 0.8rem;
+}
+button:hover {
   cursor: pointer;
 }
 #askBtn {
@@ -198,4 +200,13 @@ form {
   border-radius: 5px;
   padding: 0.5rem;
   font-size: 1rem;
+}
+#questionsSection > #answers {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  background-color: rgb(179 179 203);
+  width: 80%;
+  padding: 1rem;
+  border-radius: 15px;
 }

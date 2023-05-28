@@ -85,7 +85,6 @@ async function getTabInformation(tab) {
   // to add all paraghraphs when we have different p for background, methods,...
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
   const originalAbstractHtml = doc.getElementById("abstract");
-  originalText = originalAbstractHtml;
 
   // remove the keywords if the abstract contains any
   // if (originalAbstractHtml.querySelector("p > strong.sub-title ").parentNode) {
@@ -104,6 +103,8 @@ async function getTabInformation(tab) {
   for (let i = 0; i < paragraphs.length; i++) {
     allParagraphs += paragraphs[i].textContent;
   }
+  originalText = allParagraphs;
+
   const tabInformation = {
     textTitle: doc
       .getElementsByClassName("heading-title")[0]
@@ -424,5 +425,7 @@ async function askQuestion(
   console.log("answer is", answer);
   const answerMsg = answer.choices[0].message.content.trim();
   console.log("this is the answer", answerMsg);
+  // show the answer to the user
+  document.getElementById("answers").textContent = answerMsg;
   return answerMsg;
 }
