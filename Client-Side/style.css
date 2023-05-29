@@ -210,3 +210,50 @@ button:hover {
   padding: 1rem;
   border-radius: 15px;
 }
+
+/* for login/singin page  */
+h1 {
+  text-align: center;
+}
+
+form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+form input[type="text"],
+form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+form button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #4ca2af;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+#message {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  font-weight: bold;
+}
