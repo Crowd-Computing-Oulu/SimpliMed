@@ -1,15 +1,15 @@
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcrypt");
 var User = require("../models/user");
+
 exports.signup = (req, res) => {
-  console.log(req.body.password);
-  console.log(req.body.name);
   const user = new User({
     name: req.body.name,
     email: req.body.email,
     role: req.body.role,
     password: bcrypt.hashSync(req.body.password, 8),
   });
+
   user
     .save()
     .then((user) => {
@@ -18,8 +18,10 @@ exports.signup = (req, res) => {
     .catch((err) => {
       res.status(500).send({ message: err });
     });
+
   console.log(user);
 };
+
 exports.signin = (req, res) => {
   User.findOne({ email: req.body.email })
     .exec()
@@ -27,18 +29,22 @@ exports.signin = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: "User not found" });
       }
+
       var passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
       );
+
       if (!passwordIsValid) {
         return res
           .status(401)
           .send({ accessToken: null, message: "Invalid Password" });
       }
+
       var token = jwt.sign({ id: user.id }, process.env.API_SECRET, {
         expiresIn: 86400,
       });
+
       res
         .status(200)
         .send({
