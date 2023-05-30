@@ -324,11 +324,23 @@ function toggleLoader(toggleSwitch) {
     document.getElementById("askBtn").classList.remove("hidden");
   }
 }
+let originalTime = 0;
+let advancedTime = 0;
+let elementaryTime = 0;
+let timerInterval;
 // retrieving the selected value of user
 const rangeInput = document.querySelector('input[type="range"]');
 rangeInput.addEventListener("change", () => {
   // Showing the first lvl difficulty summary
   if (rangeInput.value === "1") {
+    // measuring time spent on the Elementary abstract
+    clearInterval(timerInterval); // Clear previous interval to start fresh
+    timerInterval = setInterval(() => {
+      elementaryTime++; // Increment the Elementary time
+      console.log(elementaryTime);
+    }, 1000); // Update the elapsed time every second the user is on elementary abstract
+
+    // adding / removing hidden class based on the range inputvalue
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.remove("hidden");
     document.getElementsByClassName("summary1")[0].classList.add("hidden");
@@ -344,6 +356,13 @@ rangeInput.addEventListener("change", () => {
 
     // Showing the second lvl difficulty summary
   } else if (rangeInput.value === "2") {
+    // measuring time spent on the advanced abstract
+    clearInterval(timerInterval); // Clear previous interval to start fresh
+    timerInterval = setInterval(() => {
+      advancedTime++; // Increment the advanced time
+      console.log(advancedTime);
+    }, 1000); // Update the elapsed time every second the user is on advanced abstract
+
     document.getElementsByClassName("original-abs")[0].classList.add("hidden");
     document.getElementsByClassName("summary")[0].classList.add("hidden");
     document.getElementsByClassName("summary1")[0].classList.remove("hidden");
@@ -359,6 +378,13 @@ rangeInput.addEventListener("change", () => {
 
     // showing the original abs
   } else if (rangeInput.value === "3") {
+    // measuring time spent on the original abstract
+    clearInterval(timerInterval); // Clear previous interval to start fresh
+    timerInterval = setInterval(() => {
+      originalTime++; // Increment the original time
+      console.log(originalTime);
+    }, 1000); // Update the elapsed time every second the user is on original abstract
+
     document
       .getElementsByClassName("original-abs")[0]
       .classList.remove("hidden");
