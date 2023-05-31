@@ -17,6 +17,8 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
     mainContentElement.classList.remove("hidden");
     mainContentElement.innerHTML = `<div class="error-message"> This Url is not supported by the extention!</div>`;
   }
+  // To check if the correct url has a valid abstract
+  // if()
 
   toggleLoader(true);
   // displayInformation("", "");
@@ -80,12 +82,20 @@ async function getTabInformation(tab) {
   const text = await response.text();
 
   const parser = new DOMParser();
+
   // coverting html into a document
   const doc = parser.parseFromString(text, "text/html");
+
   // to add all paraghraphs when we have different p for background, methods,...
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
   const originalAbstractHtml = doc.getElementById("abstract");
-
+  if (!originalAbstractHtml) {
+    console.log(
+      "This article doesnt have a valid abstract, please choose another article"
+    );
+    return "Original Abstract Not Found";
+  }
+  console.log("Tthis line of code should not be executed");
   // remove the keywords if the abstract contains any
   // if (originalAbstractHtml.querySelector("p > strong.sub-title ").parentNode) {
   //   console.log("am i working?");
