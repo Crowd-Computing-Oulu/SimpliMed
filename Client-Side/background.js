@@ -410,82 +410,82 @@ rangeInput.addEventListener("change", () => {
   }
 });
 
-// This funtion will open up the Q&A like a drop down menu
-document.getElementById("askBtn").addEventListener("click", function () {
-  var questionsSection = document.getElementById("questionsSection");
-  if (questionsSection.classList.contains("hidden")) {
-    questionsSection.classList.remove("hidden");
-  } else {
-    questionsSection.classList.add("hidden");
-  }
-});
-// This funtion sends users' new questions and old conversation to the AI and recieves re. open up the Q&A like a drop down menu
-let conversation = [];
-let allQuestions = [];
-let allQuestionsString;
-let allAnswers = [];
-let allAnswersString;
+// // This funtion will open up the Q&A like a drop down menu
+// document.getElementById("askBtn").addEventListener("click", function () {
+//   var questionsSection = document.getElementById("questionsSection");
+//   if (questionsSection.classList.contains("hidden")) {
+//     questionsSection.classList.remove("hidden");
+//   } else {
+//     questionsSection.classList.add("hidden");
+//   }
+// });
+// // This funtion sends users' new questions and old conversation to the AI and recieves re. open up the Q&A like a drop down menu
+// let conversation = [];
+// let allQuestions = [];
+// let allQuestionsString;
+// let allAnswers = [];
+// let allAnswersString;
 
-document.getElementById("sendBtn").addEventListener("click", function (e) {
-  e.preventDefault();
-  var questionInput = document.getElementById("questionInput").value; // getting the question from user
-  allQuestions.push(questionInput); //pushing the new question to the questions
-  allQuestionsString = allQuestions.join(" "); // joining the elements of the array to create a single string
-  askQuestion(questionInput, originalText, OPENAI_TOKEN); //calling the function that sends the question
-  console.log("all answers is:", allAnswersString);
-  console.log("all questions", allQuestionsString);
-});
-async function askQuestion(
-  questionInput,
-  originalText,
-  OPENAI_TOKEN,
-  model = "gpt-3.5-turbo"
-) {
-  const url = "https://api.openai.com/v1/chat/completions";
+// document.getElementById("sendBtn").addEventListener("click", function (e) {
+//   e.preventDefault();
+//   var questionInput = document.getElementById("questionInput").value; // getting the question from user
+//   allQuestions.push(questionInput); //pushing the new question to the questions
+//   allQuestionsString = allQuestions.join(" "); // joining the elements of the array to create a single string
+//   askQuestion(questionInput, originalText, OPENAI_TOKEN); //calling the function that sends the question
+//   console.log("all answers is:", allAnswersString);
+//   console.log("all questions", allQuestionsString);
+// });
+// async function askQuestion(
+//   questionInput,
+//   originalText,
+//   OPENAI_TOKEN,
+//   model = "gpt-3.5-turbo"
+// ) {
+//   const url = "https://api.openai.com/v1/chat/completions";
 
-  // Constructing message object for the user's question
-  // const userMessage = {
-  //   role: "user",
-  //   content: `I have provided this text to you already: ${originalText} and now I have a question which is ${questionInput}`,
-  // };
-  // Adding the user message to the conversation
-  // conversation.push(userMessage);
-  // console.log("conversation is", conversation);
+//   // Constructing message object for the user's question
+//   // const userMessage = {
+//   //   role: "user",
+//   //   content: `I have provided this text to you already: ${originalText} and now I have a question which is ${questionInput}`,
+//   // };
+//   // Adding the user message to the conversation
+//   // conversation.push(userMessage);
+//   // console.log("conversation is", conversation);
 
-  const payload = {
-    model: model,
-    messages: [
-      {
-        role: "system",
-        content: "You are an expert science communicator",
-      },
-      {
-        role: "user",
-        content: ` I have provided this text to you: ${originalText} and here are my questions: "${allQuestionsString}" which you already answered with "${allAnswersString}", this is my new question ${questionInput} `,
-      },
-    ],
-    temperature: TEMPERATURE,
-    max_tokens: MAX_TOKENS,
-  };
-  const options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${OPENAI_TOKEN}`,
-    },
-    body: JSON.stringify(payload),
-  };
-  const response = await fetch(url, options);
-  const answer = await response.json();
-  console.log("answer is", answer);
-  const answerMsg = answer.choices[0].message.content.trim();
+//   const payload = {
+//     model: model,
+//     messages: [
+//       {
+//         role: "system",
+//         content: "You are an expert science communicator",
+//       },
+//       {
+//         role: "user",
+//         content: ` I have provided this text to you: ${originalText} and here are my questions: "${allQuestionsString}" which you already answered with "${allAnswersString}", this is my new question ${questionInput} `,
+//       },
+//     ],
+//     temperature: TEMPERATURE,
+//     max_tokens: MAX_TOKENS,
+//   };
+//   const options = {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${OPENAI_TOKEN}`,
+//     },
+//     body: JSON.stringify(payload),
+//   };
+//   const response = await fetch(url, options);
+//   const answer = await response.json();
+//   console.log("answer is", answer);
+//   const answerMsg = answer.choices[0].message.content.trim();
 
-  allAnswers.push(answerMsg);
-  allAnswersString = allAnswers.join(" ");
-  console.log("this is the answer", answerMsg);
+//   allAnswers.push(answerMsg);
+//   allAnswersString = allAnswers.join(" ");
+//   console.log("this is the answer", answerMsg);
 
-  document.getElementById("answers").textContent = answerMsg; // show the answer to the user
-  document.getElementById("answers").classList.remove("hidden"); // show the answer to the user
+//   document.getElementById("answers").textContent = answerMsg; // show the answer to the user
+//   document.getElementById("answers").classList.remove("hidden"); // show the answer to the user
 
-  return answerMsg;
-}
+//   return answerMsg;
+// }

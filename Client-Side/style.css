@@ -160,7 +160,7 @@ input[type="range"] {
 }
 
 /* Questions  */
-#questionsSection {
+/* #questionsSection {
   padding: 0 2rem;
   border: solid 1px #543884;
   border-radius: 15px;
@@ -217,7 +217,7 @@ button:hover {
   width: 80%;
   padding: 1rem;
   border-radius: 15px;
-}
+} */
 
 /* for login/singin page  */
 h1 {
