@@ -1,25 +1,46 @@
-const mongoose = require("mongoose");
-const abstractSchema = new mongoose.Schema({
-  url: {
-    type: String,
-    required: true,
+const mongoose = require("mongoose"),
+  Schema = mongoose.Schema;
+
+// Abstract Schema
+const abstractSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: [true, "Title is required!"],
+    },
+    url: {
+      type: String,
+      unique: [true, "Url already exists!"],
+      lowercase: true,
+      trim: true,
+      required: [true, "Url not provided!"],
+      validate: {
+        validator: function (v) {
+          return /^[^\s@]+\.[^\s@]+$/.test(v);
+        },
+        message: "{VALUE} is not a valid url!",
+      },
+    },
+    originalAbstract: {
+      type: String,
+      required: true,
+    },
+    advancedAbstract: {
+      type: String,
+      required: true,
+    },
+    elementaryAbstract: {
+      type: String,
+      required: true,
+    },
+    created: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  originalAbstract: {
-    type: String,
-    required: true,
-  },
-  elementaryAbstract: {
-    type: String,
-    required: true,
-  },
-  advancedAbstract: {
-    type: String,
-    required: true,
-  },
-  generatedDate: {
-    type: Date,
-    required: true,
-    default: Date.now,
-  },
-});
+  {
+    collection: "abstracts",
+  }
+);
+
 module.exports = mongoose.model("Abstract", abstractSchema);
