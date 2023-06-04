@@ -39,7 +39,7 @@ const abstractSchema = new Schema(
     },
   },
   {
-    collection: "abstracts",
+    collection: "abstracts", //name of the mongoDB collection where the documents will be stored
   }
 );
 
