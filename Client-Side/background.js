@@ -17,6 +17,21 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
     mainContentElement.classList.remove("hidden");
     mainContentElement.innerHTML = `<div class="error-message"> This Url is not supported by the extention!</div>`;
   }
+  // Throws an error if the user is on the pubmed website but on an incorrect path
+  if (
+    currentTab.url.includes("https://pubmed.ncbi.nlm.nih.gov/trending/") ||
+    currentTab.url.includes("https://pubmed.ncbi.nlm.nih.gov/?term")
+  ) {
+    console.log("You need to open an article");
+    const mainContentElement =
+      document.getElementsByClassName("main-content")[0];
+    const lodaerContainerElement =
+      document.getElementsByClassName("loader-container")[0];
+    lodaerContainerElement.classList.add("hidden");
+    mainContentElement.classList.remove("hidden");
+    mainContentElement.innerHTML = `<div class="error-message"> You need to open an article!</div>`;
+  }
+
   // To check if the correct url has a valid abstract
   // if()
 
