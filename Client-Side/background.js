@@ -39,7 +39,16 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   // displayInformation("", "");
 
   const tabInformation = await getTabInformation(currentTab);
-  console.log("current tab is ", currentTab);
+  // try {
+  //   // Process the tab information
+  //   // ...
+  // } catch (error) {
+  //   // Handle the error
+  //   console.log("there is an error in the catch");
+  //   console.error(error);
+  // }
+
+  // console.log("current tab is ", currentTab);
 
   chrome.storage.local.get("urls", function (data) {
     (async function () {
@@ -108,9 +117,15 @@ async function getTabInformation(tab) {
     console.log(
       "This article doesnt have a valid abstract, please choose another article"
     );
-    return "Original Abstract Not Found";
+    alert(
+      "This article doesnt have a valid abstract, please choose another article"
+    );
+    toggleLoader(false);
+    throw new Error(
+      "This Article has no Abstract, please choose another Article."
+    );
   }
-  console.log("Tthis line of code should not be executed");
+
   // remove the keywords if the abstract contains any
   // if (originalAbstractHtml.querySelector("p > strong.sub-title ").parentNode) {
   //   console.log("am i working?");
@@ -346,7 +361,7 @@ function toggleLoader(toggleSwitch) {
     document.getElementsByClassName("loader-container")[0].style.display =
       "none";
     // click the askBtn to show the Questions section
-    document.getElementById("askBtn").classList.remove("hidden");
+    // document.getElementById("askBtn").classList.remove("hidden");
   }
 }
 let originalTime = 0;
