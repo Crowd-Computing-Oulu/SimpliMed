@@ -27,11 +27,34 @@ exports.signup = (req, res) => {
 };
 
 exports.signin = (req, res) => {
+  let user = null;
   User.findOne({ username: req.body.username })
     .exec()
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "User not found" });
+        // return res.status(404).send({ message: "User not found" });
+        // signup(req, res);
+
+        // User.findOne({ username: req.body.username });
+
+        user = new User({
+          username: req.body.username,
+          // name: req.body.name,
+          // email: req.body.email,
+          // role: req.body.role,
+          // password: bcrypt.hashSync(req.body.password, 8),
+        });
+
+        user
+          .save()
+          .then((user) => {
+            // res.status(200).send({ message: "User registered successfully" });
+          })
+          .catch((err) => {
+            // res.status(500).send({ message: err });
+          });
+
+        console.log(user);
       }
 
       // var passwordIsValid = bcrypt.compareSync(

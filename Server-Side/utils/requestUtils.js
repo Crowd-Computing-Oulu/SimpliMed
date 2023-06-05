@@ -23,6 +23,7 @@ const sendHttpRequest = (options) => {
 };
 
 const sendHttpsRequest = (options) => {
+  console.log("this is uptions", options);
   return new Promise((resolve, reject) => {
     const req = https.request(options, (res) => {
       let data = "";

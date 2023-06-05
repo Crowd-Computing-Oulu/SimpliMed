@@ -43,7 +43,6 @@ exports.test = async (req, res) => {
     .catch((err) => {
       console.log(err);
     });
-  console.log(req);
   res.status(200).send({ message: "Done" });
 };
 
