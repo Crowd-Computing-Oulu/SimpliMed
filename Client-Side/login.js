@@ -131,4 +131,4 @@ function handleSubmit(event) {
 }
 
 // Add form submit event listener
-ratingForm.addEventListener("submit", handleSubmit);
+ratingPilotForm.addEventListener("submit", handleSubmit);
