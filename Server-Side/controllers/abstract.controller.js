@@ -2,7 +2,6 @@
 const Abstract = require("../models/abstract");
 const Interaction = require("../models/interaction");
 const { sendHttpRequest, sendHttpsRequest } = require("../utils/requestUtils");
-// const OPENAI_TOKEN = require("../")
 
 // Delete Later
 exports.test = async (req, res) => {
@@ -22,14 +21,14 @@ exports.test = async (req, res) => {
         content: ` Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments. ${req.body.text}`,
       },
     ],
-    temperature: TEMPERATURE,
-    max_tokens: MAX_TOKENS,
+    temperature: 0.5,
+    max_tokens: 1200,
   };
 
   sendHttpsRequest({
     hostname: "api.openai.com",
-    port: 443,
-    path: "/v1/chat/completions",
+    // port: 443,
+    path: "v1/chat/completions",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +37,7 @@ exports.test = async (req, res) => {
     body: JSON.stringify(payload),
   })
     .then((data) => {
-      console.log(data.message);
+      console.log("this is baghali", data);
     })
     .catch((err) => {
       console.log(err);

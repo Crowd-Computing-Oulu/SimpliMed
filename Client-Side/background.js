@@ -190,6 +190,12 @@ async function summarizeTextElementary(
     },
     body: JSON.stringify(payload),
   };
+  console.log(
+    "this is url",
+    JSON.stringify(url),
+    "this is options:",
+    JSON.stringify(options)
+  );
   const response = await fetch(url, options);
   const summary = await response.json();
   const summarizedMsg = summary.choices[0].message.content.trim();

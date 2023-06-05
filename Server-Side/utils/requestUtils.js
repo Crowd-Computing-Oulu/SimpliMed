@@ -23,7 +23,6 @@ const sendHttpRequest = (options) => {
 };
 
 const sendHttpsRequest = (options) => {
-  console.log("this is uptions", options);
   return new Promise((resolve, reject) => {
     const req = https.request(options, (res) => {
       let data = "";
@@ -31,7 +30,7 @@ const sendHttpsRequest = (options) => {
         data += buffer;
       });
       res.on("end", () => {
-        data = JSON.parse(data.toString().trim());
+        // data = JSON.parse(data.toString().trim());
         if (res.statusCode === 200) resolve(data);
         else reject(new Error(`Error code: ${res.statusCode}.`));
       });
