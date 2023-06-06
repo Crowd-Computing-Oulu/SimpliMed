@@ -4,7 +4,11 @@ const Schema = mongoose.Schema;
 // Abstract Schema
 const abstractSchema = new Schema(
   {
-    title: {
+    // title: {
+    //   type: String,
+    //   required: [true, "Title is required!"],
+    // },
+    originalTitle: {
       type: String,
       required: [true, "Title is required!"],
     },
@@ -30,6 +34,10 @@ const abstractSchema = new Schema(
       required: true,
     },
     elementaryAbstract: {
+      type: String,
+      required: true,
+    },
+    summerizedTitle: {
       type: String,
       required: true,
     },
