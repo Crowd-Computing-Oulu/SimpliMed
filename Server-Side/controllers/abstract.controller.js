@@ -160,6 +160,26 @@ exports.test = async (req, res) => {
   }
 };
 ////
+async function requestResults(req) {
+  const advancedPrompt =
+    " Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments";
+  const elementaryPrompt =
+    " Simplify the following abstract of a medical research article to the general public. The target level of simplification is 2 out of 10. Please ensure that the article retains its main ideas and arguments";
+  const titlePrompt =
+    " Simplify the following title of a medical research article to the general public";
+
+  const advancedResult = await fetchResults(req.body.text, advancedPrompt);
+  const elementaryResult = await fetchResults(req.body.text, elementaryPrompt);
+  const titleResult = await fetchResults(req.body.title, titlePrompt);
+
+  console.log("result in test", advancedResult, elementaryResult, titleResult);
+  // res.status(200).send({ message: "Done" });
+  return {
+    advancedAbstract: advancedResult.message,
+    elementaryAbstract: elementaryResult.message,
+    summerizedTitle: titleResult.message,
+  };
+}
 exports.requestAbstract = async (req, res) => {
   console.log("Abstract Requested.");
 
@@ -182,12 +202,16 @@ exports.requestAbstract = async (req, res) => {
   if (abstract == null) {
     console.log("Creating a new Abstract Record.");
     // add api call
+    const results = await requestResults(req);
+    console.log("this is final results", results);
+    //
     abstract = new Abstract({
-      title: req.body.title,
       url: req.body.url,
+      originalTitle: req.body.originalTitle,
       originalAbstract: req.body.originalAbstract,
-      advancedAbstract: req.body.advancedAbstract,
-      elementaryAbstract: req.body.elementaryAbstract,
+      summerizedTitle: results.summerizedTitle,
+      advancedAbstract: results.advancedAbstract,
+      elementaryAbstract: results.elementaryAbstract,
     });
 
     await abstract
@@ -214,7 +238,9 @@ exports.requestAbstract = async (req, res) => {
     .save()
     .then((interaction) => {
       console.log("Logged Interaction.");
-      res.status(200).send({ message: "Interaction registered successfully" });
+      res
+        .status(200)
+        .send({ message: "Interaction registered successfully", abstract });
     })
     .catch((err) => {
       console.log("Error Logging Interaction.");
