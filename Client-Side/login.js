@@ -6,6 +6,8 @@
 //     const username = document.getElementById("signup-username").value;
 //     const password = document.getElementById("signup-password").value;
 
+const { exists } = require("../Server-Side/models/abstract");
+
 //     //  signup AJAX request
 //     var xhr = new XMLHttpRequest();
 //     xhr.open("POST", "Signup-endpoint-url", true);
@@ -89,35 +91,53 @@
 //   });
 
 // Login Form Submission
-document
-  .getElementById("login-form")
-  .addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const username = document.getElementById("username").value;
-    console.log("user submited");
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username }),
-    };
-    try {
-      var response = await fetch("http://localhost:8080/users/login", options);
-      response = await response.json();
-      response = response.choices[0].message.content.trim();
-    } catch (error) {
-      console.log(error);
-    }
-    chrome.storage.local.set(
-      { accessToken: response.accessToken },
-      function () {
-        console.log("access token saved successfully!");
-      }
-    );
-    console.log("this is the access token", response.accessToken);
-    console.log(response);
-  });
+chrome.storage.local.get("accessToken", function (data) {
+  console.log("access token retreived from the chrome storage");
+  // If the token already exist hide the login-in page
+  if (data.accessToken) {
+    // the token should be validated (how?)
+    console.log("this is the acess token", data);
+    document.getElementById("login-container").classList.add("hidden");
+    console.log("access token exist");
+  } else {
+    // If token doesnt exists, user need to log in
+    console.log("access token doesnt exist");
+    document
+      .getElementById("login-form")
+      .addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const username = document.getElementById("username").value;
+        console.log("user submited");
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username }),
+        };
+        try {
+          var response = await fetch(
+            "http://localhost:8080/users/login",
+            options
+          );
+          response = await response.json();
+          response = response.choices[0].message.content.trim();
+        } catch (error) {
+          console.log(error);
+        }
+        chrome.storage.local.set(
+          { accessToken: response.accessToken },
+          function () {
+            console.log("access token saved successfully!");
+          }
+        );
+
+        console.log("this is the access token", response.accessToken);
+        console.log(response);
+      });
+  }
+});
+
 // $("#login-form").submit(function (event) {
 //   event.preventDefault();
 //   const username = document.getElementById("login-username").value;
