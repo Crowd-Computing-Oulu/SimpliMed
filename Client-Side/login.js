@@ -95,7 +95,10 @@ chrome.storage.local.get("accessToken", function (data) {
   console.log("access token retreived from the chrome storage");
   // If the token already exist hide the login-in page
   if (data.accessToken) {
-    // the token should be validated (how?)
+    // the token should be validated (how?) and deleted if it is wrong to generate another one
+    // chrome.storage.local.remove("accessToken", function() {
+    //   console.log("accessToken removed from storage");
+    // });
     console.log("this is the acess token", data);
     document.getElementById("login-container").classList.add("hidden");
     console.log("access token exist");
