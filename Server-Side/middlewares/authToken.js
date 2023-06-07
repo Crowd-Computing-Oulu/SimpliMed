@@ -11,21 +11,38 @@ const verifyToken = (req, res, next) => {
       req.headers.authorization.split(" ")[1],
       process.env.API_SECRET,
       function (err, decode) {
-        if (err) req.user = undefined;
+        if (err) {
+          req.user = undefined;
+          res
+            .status(500)
+            .send({ message: "Authorization failed: Invalid Token" });
+        }
+        console.log("decode:", decode, "decodeid", decode.id);
         User.findOne({ _id: decode.id })
           .exec()
           .then((user) => {
             req.user = user;
-            next();
+            if (req.user) {
+              next();
+            } else {
+              res
+                .status(500)
+                .send({ message: "Authorization failed: User not found" });
+            }
           })
           .catch((err) => {
-            res.status(500).send({ message: err });
+            res
+              .status(500)
+              .send({ message: "Authorization failed: Invalid Token" });
           });
       }
     );
   } else {
     req.user = undefined;
-    next();
+    // next();
+    res
+      .status(500)
+      .send({ message: "Authorization failed, Token is required" });
   }
 };
 module.exports = verifyToken;

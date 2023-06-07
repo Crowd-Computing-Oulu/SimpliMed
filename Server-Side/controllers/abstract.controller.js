@@ -214,16 +214,23 @@ exports.requestAbstract = async (req, res) => {
       elementaryAbstract: results.elementaryAbstract,
     });
 
-    await abstract
-      .save()
-      .then((anAbstract) => {
-        console.log("Created a new Abstract Record.");
-      })
-      .catch((err) => {
-        console.log("Error Creating a new Abstract Record.");
-        res.status(500).send({ message: err });
-        throw new Error("Abort");
-      });
+    try {
+      await abstract
+        .save()
+        .then((anAbstract) => {
+          console.log("Created a new Abstract Record.");
+        })
+        .catch((err) => {
+          console.log("Error Creating a new Abstract Record.");
+          res.status(500).send({
+            message:
+              "There was an error generating all the content, please try again",
+          });
+          throw new Error("Abort");
+        });
+    } catch {
+      return; //added to stop the app from crashing
+    }
   }
 
   const interaction = new Interaction({
