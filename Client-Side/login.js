@@ -88,7 +88,36 @@
 //     });
 //   });
 
-// // Login Form Submission
+// Login Form Submission
+document
+  .getElementById("login-form")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const username = document.getElementById("username").value;
+    console.log("user submited");
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username }),
+    };
+    try {
+      var response = await fetch("http://localhost:8080/users/login", options);
+      response = await response.json();
+      response = response.choices[0].message.content.trim();
+    } catch (error) {
+      console.log(error);
+    }
+    chrome.storage.local.set(
+      { accessToken: response.accessToken },
+      function () {
+        console.log("access token saved successfully!");
+      }
+    );
+    console.log("this is the access token", response.accessToken);
+    console.log(response);
+  });
 // $("#login-form").submit(function (event) {
 //   event.preventDefault();
 //   const username = document.getElementById("login-username").value;
@@ -108,6 +137,7 @@
 //     },
 //   });
 // });
+
 var ratingPilotForm = document.getElementById("ratingPilotForm");
 
 // Function to handle form submission
