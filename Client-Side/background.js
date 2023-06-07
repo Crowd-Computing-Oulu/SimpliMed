@@ -66,12 +66,19 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
           data.urls[currentTab.url].summaryTitle
         );
       } else {
+        // if the abstract doesnt exist in the database, we will generate it
         console.log("this is a new Abstract, which will be summarized soon");
         // to summarize the text for elementary level
         const summarizeElementaryResult = await summarizeTextElementary(
           tabInformation["textToSummarize"],
           OPENAI_TOKEN
         );
+        const responseFromServer = await requestToServer(
+          tabInformation["url"],
+          tabInformation["textTitle"],
+          tabInformation["textToSummarize"]
+        );
+        console.log("this is responseFrom the server", responseFromServer);
         // to summarize the text for advance level
 
         const summarizeAdvancedResult = await summarizeTextAdvanced(
@@ -151,10 +158,45 @@ async function getTabInformation(tab) {
       .textContent.trim(),
     textToSummarize: allParagraphs,
     originalAbs: originalAbstractHtml,
+    url: tab.url,
   };
   return tabInformation;
 }
 
+// ***
+// sending request to the server
+async function requestToServer(url, title, text) {
+  // retrive the access token from the storage
+  let accessToken = "";
+  chrome.storage.local.get("accessToken", function (data) {
+    accessToken = data.accessToken;
+    console.log("the authorization is:", "JWT " + accessToken);
+  });
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `JWT ${accessToken}`,
+    },
+    body: JSON.stringify({ text, title, url }),
+  };
+  try {
+    var response = await fetch(
+      "http://localhost:8080/abstracts/abstract",
+      options
+    );
+    response = await response.json();
+    console.log("the response after json is", response);
+    console.log(
+      "the response after json with choices are",
+      response.response.choices[0].message
+    );
+
+    response = response.choices[0].message.content.trim();
+  } catch (error) {
+    console.log(error);
+  }
+}
 // ****
 const MAX_TOKENS = 800;
 // Using Lower Temperature to generate a more predictable text

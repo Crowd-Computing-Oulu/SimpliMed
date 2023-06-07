@@ -6,7 +6,7 @@
 //     const username = document.getElementById("signup-username").value;
 //     const password = document.getElementById("signup-password").value;
 
-const { exists } = require("../Server-Side/models/abstract");
+// const { exists } = require("../Server-Side/models/abstract");
 
 //     //  signup AJAX request
 //     var xhr = new XMLHttpRequest();
@@ -99,9 +99,8 @@ chrome.storage.local.get("accessToken", function (data) {
     // chrome.storage.local.remove("accessToken", function() {
     //   console.log("accessToken removed from storage");
     // });
-    console.log("this is the acess token", data);
+    console.log("type of access toekn is", typeof data.accessToken);
     document.getElementById("login-container").classList.add("hidden");
-    console.log("access token exist");
   } else {
     // If token doesnt exists, user need to log in
     console.log("access token doesnt exist");
