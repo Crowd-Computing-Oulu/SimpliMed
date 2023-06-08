@@ -65,6 +65,16 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
           data.urls[currentTab.url].summaryAdvanced,
           data.urls[currentTab.url].summaryTitle
         );
+
+        const responseFromServer = await requestToServer(
+          tabInformation["url"],
+          tabInformation["textTitle"],
+          tabInformation["textToSummarize"]
+        );
+        console.log(
+          "this is responseFrom the server in if",
+          responseFromServer
+        );
       } else {
         // if the abstract doesnt exist in the database, we will generate it
         console.log("this is a new Abstract, which will be summarized soon");
@@ -78,7 +88,10 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
           tabInformation["textTitle"],
           tabInformation["textToSummarize"]
         );
-        console.log("this is responseFrom the server", responseFromServer);
+        console.log(
+          "this is responseFrom the server in else",
+          responseFromServer
+        );
         // to summarize the text for advance level
 
         const summarizeAdvancedResult = await summarizeTextAdvanced(
@@ -170,29 +183,47 @@ async function requestToServer(url, title, text) {
   let accessToken = "";
   chrome.storage.local.get("accessToken", function (data) {
     accessToken = data.accessToken;
-    console.log("the authorization is:", "JWT " + accessToken);
+    accessToken = "JWT " + accessToken;
+    console.log(
+      "the authorization is:",
+      typeof accessToken,
+      "/",
+      `${accessToken}`,
+      "/"
+    );
   });
   const options = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `JWT ${accessToken}`,
+      Authorization:
+        "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ODBhMTZlYzZlNTBiYWJhOGVhMzVmMCIsImlhdCI6MTY4NjE1MTUzNCwiZXhwIjoxNjg3MDE1NTM0fQ.e9BNV4p4neZn0pzAoFO9HORiSrsRM565pomMqXODB-Q",
     },
-    body: JSON.stringify({ text, title, url }),
+    body: JSON.stringify({
+      originalAbstract: text,
+      originalTitle: title,
+      url,
+    }),
   };
   try {
+    const test = JSON.stringify({
+      originalAbstract: text,
+      originalTitle: title,
+      url,
+    });
+    console.log("this is test", typeof test, test);
+    console.log("this is title, text and url", text, title, url);
     var response = await fetch(
       "http://localhost:8080/abstracts/abstract",
       options
     );
     response = await response.json();
     console.log("the response after json is", response);
-    console.log(
-      "the response after json with choices are",
-      response.response.choices[0].message
-    );
+    console.log("the response abstrqact  is", response.abstract);
 
-    response = response.choices[0].message.content.trim();
+    console.log("the response message is", response.message);
+
+    // response = response.choices[0].message.content.trim();
   } catch (error) {
     console.log(error);
   }
