@@ -178,55 +178,39 @@ async function getTabInformation(tab) {
 
 // ***
 // sending request to the server
+
 async function requestToServer(url, title, text) {
-  // retrive the access token from the storage
-  let accessToken = "";
-  chrome.storage.local.get("accessToken", function (data) {
-    accessToken = data.accessToken;
-    accessToken = "JWT " + accessToken;
-    console.log(
-      "the authorization is:",
-      typeof accessToken,
-      "/",
-      `${accessToken}`,
-      "/"
-    );
-  });
-  const options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization:
-        "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ODBhMTZlYzZlNTBiYWJhOGVhMzVmMCIsImlhdCI6MTY4NjE1MTUzNCwiZXhwIjoxNjg3MDE1NTM0fQ.e9BNV4p4neZn0pzAoFO9HORiSrsRM565pomMqXODB-Q",
-    },
-    body: JSON.stringify({
-      originalAbstract: text,
-      originalTitle: title,
-      url,
-    }),
-  };
-  try {
-    const test = JSON.stringify({
-      originalAbstract: text,
-      originalTitle: title,
-      url,
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get("accessToken", async function (data) {
+      const accessToken = data.accessToken;
+
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "JWT " + accessToken,
+        },
+        body: JSON.stringify({
+          originalAbstract: text,
+          originalTitle: title,
+          url,
+        }),
+      };
+
+      try {
+        const response = await fetch(
+          "http://localhost:8080/abstracts/abstract",
+          options
+        );
+        const responseData = await response.json();
+        console.log("this is responseData", responseData);
+
+        resolve(responseData);
+      } catch (error) {
+        reject(error);
+      }
     });
-    console.log("this is test", typeof test, test);
-    console.log("this is title, text and url", text, title, url);
-    var response = await fetch(
-      "http://localhost:8080/abstracts/abstract",
-      options
-    );
-    response = await response.json();
-    console.log("the response after json is", response);
-    console.log("the response abstrqact  is", response.abstract);
-
-    console.log("the response message is", response.message);
-
-    // response = response.choices[0].message.content.trim();
-  } catch (error) {
-    console.log(error);
-  }
+  });
 }
 // ****
 const MAX_TOKENS = 800;
@@ -353,10 +337,10 @@ function displayInformation(
   summary1,
   summarizedTitle
 ) {
-  console.log(
-    "the summarized title inside display information is",
-    summarizedTitle
-  );
+  // console.log(
+  //   "the summarized title inside display information is",
+  //   summarizedTitle
+  // );
   // store in the storage
   chrome.storage.local.get("urls", function (data) {
     // if the data object doesnt exist, create it
@@ -381,7 +365,7 @@ function displayInformation(
       console.log("URL already exists in storage.");
     }
     chrome.storage.local.get("urls", function (data) {
-      console.log("data urls are ...", data.urls[currentTab.url]);
+      // console.log("data urls are ...", data.urls[currentTab.url]);
     });
   });
 
@@ -406,18 +390,18 @@ function displayInformation(
 
   const summaryAdvancedElement = document.getElementsByClassName("summary1")[0];
   summaryAdvancedElement.textContent = summary1;
-  console.log(
-    "this is the summaradvance element",
-    summaryAdvancedElement.textContent
-  );
+  // console.log(
+  //   "this is the summaradvance element",
+  //   summaryAdvancedElement.textContent
+  // );
 
   const summaryTitleElement =
     document.getElementsByClassName("summary-title")[0];
   summaryTitleElement.textContent = summarizedTitle;
-  console.log(
-    "this is the summartitle element:::",
-    summaryTitleElement.textContent
-  );
+  // console.log(
+  //   "this is the summartitle element:::",
+  //   summaryTitleElement.textContent
+  // );
   // Adding the slide bar after retrieving the summary and title
   if (
     summaryElementaryElement.textContent !== "" &&
