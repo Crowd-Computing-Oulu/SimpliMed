@@ -18,6 +18,20 @@
   min-width: 40rem !important;
 }
 
+#closeBtn {
+  margin: 10px 10px;
+  padding: 10px;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+#closeBtn:hover {
+  cursor: pointer;
+  background-color: rgb(141, 141, 141);
+}
 .error-message {
   font-size: 1.2rem;
   font-weight: bold;

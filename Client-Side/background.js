@@ -3,6 +3,12 @@
 let currentTab;
 let originalText;
 
+var closeButton = document.getElementById("closeBtn");
+closeButton.addEventListener("click", function () {
+  // Close the popup window
+  window.close();
+});
+
 chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
   currentTab = tabs[0];
 
