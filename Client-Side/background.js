@@ -1,4 +1,4 @@
-import { OPENAI_TOKEN } from "./config.js";
+// import { OPENAI_TOKEN } from "./config.js";
 
 let currentTab;
 let originalText;
@@ -32,88 +32,87 @@ chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
     mainContentElement.innerHTML = `<div class="error-message"> You need to open an article!</div>`;
   }
 
-  // To check if the correct url has a valid abstract
-  // if()
-
   toggleLoader(true);
   // displayInformation("", "");
 
   const tabInformation = await getTabInformation(currentTab);
-  // try {
-  //   // Process the tab information
-  //   // ...
-  // } catch (error) {
-  //   // Handle the error
-  //   console.log("there is an error in the catch");
-  //   console.error(error);
-  // }
+  const responseFromServer = await requestToServer(
+    tabInformation["url"],
+    tabInformation["textTitle"],
+    tabInformation["textToSummarize"]
+  );
+  displayInformation(
+    tabInformation["textTitle"],
+    tabInformation["originalAbs"],
+    responseFromServer.abstract["elementaryAbstract"],
+    responseFromServer.abstract["advancedAbstract"],
+    responseFromServer.abstract["summerizedTitle"]
+  );
+  toggleLoader(false);
+  // chrome.storage.local.get("urls", function (data) {
+  //   (async function () {
+  //     // Checking the both arguments, To prevent an error for undefined data.urls
+  //     if (data.urls && data.urls[currentTab.url]) {
+  //       console.log(
+  //         "This Abstract have been summarized previously, this is the result"
+  //       );
+  //       toggleLoader(false);
+  //       displayInformation(
+  //         tabInformation["textTitle"],
+  //         tabInformation["originalAbs"],
+  //         data.urls[currentTab.url].summaryElementary,
+  //         data.urls[currentTab.url].summaryAdvanced,
+  //         data.urls[currentTab.url].summaryTitle
+  //       );
 
-  // console.log("current tab is ", currentTab);
+  //       const responseFromServer = await requestToServer(
+  //         tabInformation["url"],
+  //         tabInformation["textTitle"],
+  //         tabInformation["textToSummarize"]
+  //       );
+  //       console.log(
+  //         "this is responseFrom the server in if",
+  //         responseFromServer
+  //       );
+  //     } else {
+  //       // if the abstract doesnt exist in the database, we will generate it
+  //       console.log("this is a new Abstract, which will be summarized soon");
+  //       // to summarize the text for elementary level
+  //       // const summarizeElementaryResult = await summarizeTextElementary(
+  //       //   tabInformation["textToSummarize"],
+  //       //   OPENAI_TOKEN
+  //       // );
+  //       const responseFromServer = await requestToServer(
+  //         tabInformation["url"],
+  //         tabInformation["textTitle"],
+  //         tabInformation["textToSummarize"]
+  //       );
+  //       console.log(
+  //         "this is responseFrom the server in else",
+  //         responseFromServer
+  //       );
+  //       // to summarize the text for advance level
 
-  chrome.storage.local.get("urls", function (data) {
-    (async function () {
-      // Checking the both arguments, To prevent an error for undefined data.urls
-      if (data.urls && data.urls[currentTab.url]) {
-        console.log(
-          "This Abstract have been summarized previously, this is the result"
-        );
-        toggleLoader(false);
-        displayInformation(
-          tabInformation["textTitle"],
-          tabInformation["originalAbs"],
-          data.urls[currentTab.url].summaryElementary,
-          data.urls[currentTab.url].summaryAdvanced,
-          data.urls[currentTab.url].summaryTitle
-        );
-
-        const responseFromServer = await requestToServer(
-          tabInformation["url"],
-          tabInformation["textTitle"],
-          tabInformation["textToSummarize"]
-        );
-        console.log(
-          "this is responseFrom the server in if",
-          responseFromServer
-        );
-      } else {
-        // if the abstract doesnt exist in the database, we will generate it
-        console.log("this is a new Abstract, which will be summarized soon");
-        // to summarize the text for elementary level
-        const summarizeElementaryResult = await summarizeTextElementary(
-          tabInformation["textToSummarize"],
-          OPENAI_TOKEN
-        );
-        const responseFromServer = await requestToServer(
-          tabInformation["url"],
-          tabInformation["textTitle"],
-          tabInformation["textToSummarize"]
-        );
-        console.log(
-          "this is responseFrom the server in else",
-          responseFromServer
-        );
-        // to summarize the text for advance level
-
-        const summarizeAdvancedResult = await summarizeTextAdvanced(
-          tabInformation["textToSummarize"],
-          OPENAI_TOKEN
-        );
-        // to summarize the title
-        const summarizedTitleResult = await summarizeTitle(
-          tabInformation["textTitle"],
-          OPENAI_TOKEN
-        );
-        displayInformation(
-          tabInformation["textTitle"],
-          tabInformation["originalAbs"],
-          summarizeElementaryResult,
-          summarizeAdvancedResult,
-          summarizedTitleResult
-        );
-        toggleLoader(false);
-      }
-    })();
-  });
+  //       // const summarizeAdvancedResult = await summarizeTextAdvanced(
+  //       //   tabInformation["textToSummarize"],
+  //       //   OPENAI_TOKEN
+  //       // );
+  //       // to summarize the title
+  //       // const summarizedTitleResult = await summarizeTitle(
+  //       //   tabInformation["textTitle"],
+  //       //   OPENAI_TOKEN
+  //       // );
+  //       displayInformation(
+  //         tabInformation["textTitle"],
+  //         tabInformation["originalAbs"],
+  //         responseFromServer.abstract["elementaryAbstract"],
+  //         responseFromServer.abstract["advancedAbstract"],
+  //         responseFromServer.abstract["summerizedTitle"]
+  //       );
+  //       toggleLoader(false);
+  //     }
+  //   })();
+  // });
 });
 
 async function getTabInformation(tab) {
@@ -180,10 +179,10 @@ async function getTabInformation(tab) {
 // sending request to the server
 
 async function requestToServer(url, title, text) {
+  console.log("title is:", title);
   return new Promise((resolve, reject) => {
     chrome.storage.local.get("accessToken", async function (data) {
       const accessToken = data.accessToken;
-
       const options = {
         method: "POST",
         headers: {
