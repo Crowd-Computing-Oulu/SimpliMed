@@ -161,16 +161,23 @@ exports.test = async (req, res) => {
 };
 ////
 async function requestResults(req) {
+  console.log("the request in server is:", req.body);
   const advancedPrompt =
-    " Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments";
+    "Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments";
   const elementaryPrompt =
-    " Simplify the following abstract of a medical research article to the general public. The target level of simplification is 2 out of 10. Please ensure that the article retains its main ideas and arguments";
+    "Simplify the following abstract of a medical research article to the general public. The target level of simplification is 2 out of 10. Please ensure that the article retains its main ideas and arguments";
   const titlePrompt =
-    " Simplify the following title of a medical research article to the general public";
+    "Simplify the following sentece. the level should be 3 out of 10";
 
-  const advancedResult = await fetchResults(req.body.text, advancedPrompt);
-  const elementaryResult = await fetchResults(req.body.text, elementaryPrompt);
-  const titleResult = await fetchResults(req.body.title, titlePrompt);
+  const advancedResult = await fetchResults(
+    req.body.originalAbstract,
+    advancedPrompt
+  );
+  const elementaryResult = await fetchResults(
+    req.body.originalAbstract,
+    elementaryPrompt
+  );
+  const titleResult = await fetchResults(req.body.originalTitle, titlePrompt);
 
   console.log("result in test", advancedResult, elementaryResult, titleResult);
   // res.status(200).send({ message: "Done" });
