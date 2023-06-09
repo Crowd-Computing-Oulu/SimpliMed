@@ -3,6 +3,10 @@
   "name": "Text Simplifier",
   "description": "This extentsion will simplify text based on an AI",
   "version": "3.0",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
   "browser_action": {
     "default_popup": "popup.html"
   },

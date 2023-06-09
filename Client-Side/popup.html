@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css" />
     <script src="background.js" type="module"></script>
     <script src="login.js" type="module"></script>
+    <script src="popup.js" type="module"></script>
   </head>
   <body>
     <div class="container" id="container">
@@ -116,19 +117,37 @@
 
       <form id="ratingPilotForm">
         <div class="section">
-          <h2>Section 1</h2>
+          <p>
+            Choose the difficulty level of the abstract. 1 is being too easy,
+            and 10 is too difficault
+          </p>
           <input
             type="range"
+            list="tickmarks"
             class="slider"
             min="0"
             max="10"
             value="0"
             step="1"
           />
+          <datalist id="tickmarks">
+            <option value="0"></option>
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option value="7"></option>
+            <option value="8"></option>
+            <option value="9"></option>
+            <option value="10"></option>
+          </datalist>
           <input type="hidden" name="section1Value" />
           <button type="submit">Submit</button>
         </div>
       </form>
+
       <!-- <div class="section">
           <h2>Section 2</h2>
           <input type="range" class="slider" min="0" max="10" value="0" step="1">

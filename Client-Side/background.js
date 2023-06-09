@@ -1,5 +1,8 @@
 // import { OPENAI_TOKEN } from "./config.js";
-
+var externalPort = chrome.runtime.connect({ name: "myConnection" });
+externalPort.onDisconnect.addListener(function () {
+  console.log("Message received:");
+});
 let currentTab;
 let originalText;
 

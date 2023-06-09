@@ -99,7 +99,7 @@ chrome.storage.local.get("accessToken", function (data) {
     // chrome.storage.local.remove("accessToken", function() {
     //   console.log("accessToken removed from storage");
     // });
-    console.log("type of access toekn is", typeof data.accessToken);
+    // console.log("type of access toekn is", typeof data.accessToken);
     document.getElementById("login-container").classList.add("hidden");
   } else {
     // If token doesnt exists, user need to log in
