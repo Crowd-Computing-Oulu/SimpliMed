@@ -4,7 +4,7 @@
   "description": "This extentsion will simplify text based on an AI",
   "version": "3.0",
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["back.js"],
     "persistent": true
   },
   "browser_action": {
@@ -14,7 +14,7 @@
   "host_permissions": ["https://*.pubmed.ncbi.nlm.nih.gov/*"],
   "content_scripts": [
     {
-      "js": ["background.js"],
+      "js": ["front.js"],
       "css": ["style.css"],
       "matches": ["https://*.pubmed.ncbi.nlm.nih.gov/*"]
     }

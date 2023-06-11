@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Text Simplifier</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="background.js" type="module"></script>
+    <!-- <script src="background.js" type="module"></script>
     <script src="login.js" type="module"></script>
-    <script src="popup.js" type="module"></script>
+    <script src="popup.js" type="module"></script> -->
+    <script src="front.js" type="module"></script>
   </head>
   <body>
     <div class="container" id="container">
@@ -28,7 +29,7 @@
         </form>
       </div>
       <!-- LOADER SECTION  -->
-      <div class="loader-container">
+      <div class="loader-container hidden">
         <div>
           <svg
             class="pl"
@@ -79,7 +80,7 @@
         </div>
       </div>
       <!-- SLIDER SECTION  -->
-      <div id="difficulty-lvl" class="hidden">
+      <div id="difficulty-lvl" class="">
         <span class="difficulty-lvl__title"
           >Change the level of the simplified text</span
         >
@@ -104,12 +105,14 @@
         </div>
       </div>
       <!-- ABSTRACTS SECTION  -->
-      <div class="main-content hidden">
-        <h4 class="original-title">Heading</h4>
-        <h4 class="summary-title hidden">Heading</h4>
-        <h2 class="title-abstract hidden">Abstract</h2>
-        <p class="summary hidden">Summary</p>
-        <p class="summary1 hidden">Summary</p>
+      <div class="main-content hidden" id="main-content">
+        <button id="getAbstract" class="btn">Get Abstracr</button>
+
+        <h4 class="original-title"></h4>
+        <h4 class="summary-title"></h4>
+        <h2 class="title-abstract"></h2>
+        <p class="summary"></p>
+        <p class="summary1"></p>
         <div class="original-abs"></div>
       </div>
 
