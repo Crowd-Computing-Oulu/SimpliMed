@@ -5,7 +5,7 @@ let state = {
     url: "test",
     originalTitle: "test",
     summerizedTitle: "test",
-    soriginalAbstract: "test",
+    originalAbstract: "test",
     advancedAbstract: "test",
     elementaryAbstract: "test",
   },
@@ -30,6 +30,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
       state.abstractData = await requestSummary(message.abstractInformation);
       console.log("this is state", state);
       showLoading(false);
+      showDifficulty(true);
     }
   } else if (message.action === "login") {
     if (message.username) {
@@ -103,7 +104,16 @@ async function requestSummary(abstractInfromation) {
 function showLoading(loading) {
   if (loading) {
     chrome.runtime.sendMessage({ action: "showLoading" });
+    // document.getElementsByClassName("loader-container")[0].classList.remove("hidden");
   } else {
     chrome.runtime.sendMessage({ action: "hideLoading" });
+  }
+}
+function showDifficulty(difficulty) {
+  if (difficulty) {
+    chrome.runtime.sendMessage({ action: "showDifficulty" });
+    // document.getElementsByClassName("loader-container")[0].classList.remove("hidden");
+  } else {
+    chrome.runtime.sendMessage({ action: "hideDifficulty" });
   }
 }
