@@ -1,6 +1,11 @@
 let currentTab = "";
 let originalText = "";
+let originalAbstractHtml = "";
 document.addEventListener("DOMContentLoaded", () => {
+  // Close the popup window
+  document.getElementById("closeBtn").addEventListener("click", function () {
+    window.close();
+  });
   const mainContentElement = document.getElementsByClassName("main-content")[0];
   const loaderContainerElement =
     document.getElementsByClassName("loader-container")[0];
@@ -57,6 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // GET ABSTRACT INFORMATION
   const getAbstractBtn = document.getElementById("getAbstract");
   getAbstractBtn.addEventListener("click", async () => {
+    // removing the previous abstract
+    document.getElementById("main-content").classList.add("hidden");
     const abstractInformation = await getTabInformation(currentTab);
     chrome.runtime.sendMessage({
       action: "getAbstractInfromation",
@@ -70,13 +77,26 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("login-container").classList.add("hidden");
         document.getElementById("main-content").classList.remove("hidden");
         if (message.state.abstractData) {
-          console.log("am i working");
-          document.getElementsByClassName("summary1")[0].textContent =
+          document.getElementsByClassName("summary-title")[0].textContent =
+            message.state.abstractData.summerizedTitle;
+          document.getElementsByClassName("original-title")[0].textContent =
+            message.state.abstractData.originalTitle;
+          document.getElementsByClassName("advanced-abs")[0].textContent =
             message.state.abstractData.advancedAbstract;
+          document.getElementsByClassName("elementary-abs")[0].textContent =
+            message.state.abstractData.elementaryAbstract;
+          //below part needs to be fixed
+          document.getElementsByClassName("original-abs")[0].textContent =
+            message.state.abstractData.originalAbstract;
+          // belo code doesnt work because it loads before everthing
+          // document.getElementById("difficulty-lvl").classList.remove("hidden");
         }
       } else {
         document.getElementById("login-container").classList.remove("hidden");
         document.getElementById("main-content").classList.add("hidden");
+        // if (!mainContentElement.classList.contains("hidden")) {
+        //   mainContentElement.classList.add("hidden");
+        // }
       }
     } else if (message.action === "showLoading") {
       document
@@ -86,6 +106,10 @@ document.addEventListener("DOMContentLoaded", () => {
       document
         .getElementsByClassName("loader-container")[0]
         .classList.add("hidden");
+    } else if (message.action === "showDifficulty") {
+      document.getElementById("difficulty-lvl").classList.remove("hidden");
+    } else if (message.action === "hideDifficulty") {
+      document.getElementById("difficulty-lvl").classList.add("hidden");
     }
   });
 
@@ -118,7 +142,7 @@ async function getTabInformation(tab) {
   // to add all paraghraphs when we have different p for background, methods,...
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
   // ***
-  const originalAbstractHtml = doc.getElementById("abstract");
+  originalAbstractHtml = doc.getElementById("abstract");
   if (!originalAbstractHtml) {
     document.getElementById("getAbstract").classList.add("hidden");
     alert(
