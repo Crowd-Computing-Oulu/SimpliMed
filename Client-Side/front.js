@@ -1,46 +1,38 @@
 let currentTab = "";
 let originalText = "";
 document.addEventListener("DOMContentLoaded", () => {
+  const mainContentElement = document.getElementsByClassName("main-content")[0];
+  const loaderContainerElement =
+    document.getElementsByClassName("loader-container")[0];
   chrome.tabs.query(
     { active: true, currentWindow: true },
     async function (tabs) {
       currentTab = tabs[0];
-      // To check if the user is on the right website
+      const regex = /^https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/\d+\/$/;
+      // To check if the URL is correct (containing this string)
       if (currentTab.url.indexOf("pubmed.ncbi.nlm.nih.gov") === -1) {
-        console.log("this url is not supported");
-        const mainContentElement =
-          document.getElementsByClassName("main-content")[0];
-        const lodaerContainerElement =
-          document.getElementsByClassName("loader-container")[0];
-        lodaerContainerElement.classList.add("hidden");
-        mainContentElement.classList.remove("hidden");
-        mainContentElement.innerHTML = `<div class="error-message"> This Url is not supported by the extention!</div>`;
+        mainContentElement.innerHTML = `<div class="error-message">This Website is not supported by the extension!</div>`;
+      } else if (!regex.test(currentTab.url)) {
+        mainContentElement.innerHTML = `<div class="error-message">You are on the correct website, but you need to open an article</div>`;
+        // console.log("Error: Invalid URL format");
       }
-      // Throws and error if the user is on the main page
-      else if (currentTab.url.endsWith("gov/")) {
-        console.log("You need to open an article");
-        const mainContentElement =
-          document.getElementsByClassName("main-content")[0];
-        const lodaerContainerElement =
-          document.getElementsByClassName("loader-container")[0];
-        lodaerContainerElement.classList.add("hidden");
+      // // Throws an error if the user is on the main page using the plugin
+      // else if (currentTab.url.endsWith("gov/")) {
+      //   mainContentElement.innerHTML = `<div class="error-message">You are at the correct website but you need to open an article!</div>`;
+      // }
+      // // Throws an error if the user is on the pubmed website but on an incorrect path
+      // else if (
+      //   currentTab.url.includes("pubmed.ncbi.nlm.nih.gov/trending/") ||
+      //   currentTab.url.includes("pubmed.ncbi.nlm.nih.gov/?term")
+      // ) {
+      //   mainContentElement.innerHTML = `<div class="error-message">You are at the correct website but you need to open an article!</div>`;
+      // }
+
+      // Run the code inside requestAnimationFrame
+      setTimeout(() => {
         mainContentElement.classList.remove("hidden");
-        mainContentElement.innerHTML = `<div class="error-message"> You are at the correct website but you need to open an article!</div>`;
-      }
-      // Throws an error if the user is on the pubmed website but on an incorrect path
-      else if (
-        currentTab.url.includes("pubmed.ncbi.nlm.nih.gov/trending/") ||
-        currentTab.url.includes("pubmed.ncbi.nlm.nih.gov/?term")
-      ) {
-        console.log("You need to open an article");
-        const mainContentElement =
-          document.getElementsByClassName("main-content")[0];
-        const lodaerContainerElement =
-          document.getElementsByClassName("loader-container")[0];
-        lodaerContainerElement.classList.add("hidden");
-        mainContentElement.classList.remove("hidden");
-        mainContentElement.innerHTML = `<div class="error-message"> You are at the correct website but you need to open an article!</div>`;
-      }
+        loaderContainerElement.classList.add("hidden");
+      }, 100);
 
       // toggleLoader(true);
       // displayInformation("", "");
@@ -125,20 +117,19 @@ async function getTabInformation(tab) {
 
   // to add all paraghraphs when we have different p for background, methods,...
   const paragraphs = doc.querySelectorAll("div.abstract-content p");
+  // ***
   const originalAbstractHtml = doc.getElementById("abstract");
-  // if (!originalAbstractHtml) {
-  //   console.log(
-  //     "This article doesnt have a valid abstract, please choose another article"
-  //   );
-  //   alert(
-  //     "This article doesnt have a valid abstract, please choose another article"
-  //   );
-  //   // toggleLoader(false);
-  //   throw new Error(
-  //     "This Article has no Abstract, please choose another Article."
-  //   );
-  // }
-
+  if (!originalAbstractHtml) {
+    document.getElementById("getAbstract").classList.add("hidden");
+    alert(
+      "This article doesnt have a valid abstract, please choose another article"
+    );
+    // toggleLoader(false);
+    throw new Error(
+      "This Article has no Abstract, please choose another Article."
+    );
+  }
+  // ***//
   let allParagraphs = "";
   for (let i = 0; i < paragraphs.length; i++) {
     allParagraphs += paragraphs[i].textContent;
