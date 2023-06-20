@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   // GET ABSTRACT INFORMATION
-  const getAbstractBtn = document.getElementById("getAbstract");
+  // const getAbstractBtn = document.getElementById("getAbstract");
   getAbstractBtn.addEventListener("click", async () => {
     // removing the previous abstract
     document.getElementById("main-content").classList.add("hidden");
@@ -111,6 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (message.action === "hideDifficulty") {
       document.getElementById("difficulty-lvl").classList.add("hidden");
     }
+    else if (message.action === "showAbstractBtn") {
+        getAbstractBtn.classList.remove("hidden")
   });
 
   // LOGIN

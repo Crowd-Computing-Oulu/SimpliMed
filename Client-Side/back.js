@@ -17,6 +17,9 @@ let state = {
   // },
 };
 chrome.storage.local.get("accessToken", async function (data) {
+  if (data.accessToken) {
+    showGetAbstractBtn(true);
+  }
   state.accessToken = data.accessToken;
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
@@ -115,5 +118,12 @@ function showDifficulty(difficulty) {
     // document.getElementsByClassName("loader-container")[0].classList.remove("hidden");
   } else {
     chrome.runtime.sendMessage({ action: "hideDifficulty" });
+  }
+}
+function showGetAbstractBtn(abstractBtn) {
+  if (difficulty) {
+    chrome.runtime.sendMessage({ action: "showGetAbstractBtn" });
+  } else {
+    chrome.runtime.sendMessage({ action: "hideGetAbstractBtn" });
   }
 }
