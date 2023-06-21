@@ -60,10 +60,13 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   // GET ABSTRACT INFORMATION
-  // const getAbstractBtn = document.getElementById("getAbstract");
+  const getAbstractBtn = document.getElementById("getAbstract");
   getAbstractBtn.addEventListener("click", async () => {
     // removing the previous abstract
     document.getElementById("main-content").classList.add("hidden");
+    // removing the difficulty section
+    document.getElementById("difficulty-lvl").classList.add("hidden");
+
     const abstractInformation = await getTabInformation(currentTab);
     chrome.runtime.sendMessage({
       action: "getAbstractInfromation",
@@ -71,11 +74,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     getAbstractBtn.classList.add("hidden");
   });
+  // Listeners
   chrome.runtime.onMessage.addListener((message) => {
+    // listening for a change in state
     if (message.action === "stateUpdate") {
       if (message.state.accessToken) {
         document.getElementById("login-container").classList.add("hidden");
         document.getElementById("main-content").classList.remove("hidden");
+        document.getElementById("difficulty-lvl").classList.remove("hidden");
+
         if (message.state.abstractData) {
           document.getElementsByClassName("summary-title")[0].textContent =
             message.state.abstractData.summerizedTitle;
@@ -92,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
           // document.getElementById("difficulty-lvl").classList.remove("hidden");
         }
       } else {
+        // if there is no access token, the user will see the login section
         document.getElementById("login-container").classList.remove("hidden");
         document.getElementById("main-content").classList.add("hidden");
         // if (!mainContentElement.classList.contains("hidden")) {
@@ -106,13 +114,18 @@ document.addEventListener("DOMContentLoaded", () => {
       document
         .getElementsByClassName("loader-container")[0]
         .classList.add("hidden");
-    } else if (message.action === "showDifficulty") {
-      document.getElementById("difficulty-lvl").classList.remove("hidden");
-    } else if (message.action === "hideDifficulty") {
-      document.getElementById("difficulty-lvl").classList.add("hidden");
+      // } else if (message.action === "showDifficulty") {
+      //   console.log("show the diffculty in front ");
+      //   document.getElementById("difficulty-lvl").classList.remove("hidden");
+      // } else if (message.action === "hideDifficulty") {
+      //   console.log("hide the diffculty in front ");
+      //   document.getElementById("difficulty-lvl").classList.add("hidden");
+      // } else if (message.action === "showGetAbstractBtn") {
+      //   console.log("show the btn in front ");
+      //   document.getElementById("getAbstract").classList.remove("hidden");
+      // } else if (message.action === "hideGetAbstractBtn") {
+      //   getAbstractBtn.classList.add("hidden");
     }
-    else if (message.action === "showAbstractBtn") {
-        getAbstractBtn.classList.remove("hidden")
   });
 
   // LOGIN
@@ -125,6 +138,87 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   chrome.runtime.sendMessage({ action: "state" });
+});
+
+// Changint difficulty level
+
+const rangeInput = document.querySelector('input[type="range"]');
+rangeInput.addEventListener("change", () => {
+  // Showing the first lvl difficulty summary
+  if (rangeInput.value === "1") {
+    // measuring time spent on the Elementary abstract
+    clearInterval(timerInterval); // Clear previous interval to start fresh
+    timerInterval = setInterval(() => {
+      elementaryTime++; // Increment the Elementary time
+      console.log(elementaryTime);
+    }, 1000); // Update the elapsed time every second the user is on elementary abstract
+
+    // adding / removing hidden class based on the range inputvalue
+    document.getElementsByClassName("original-abs")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("elementary-abs")[0]
+      .classList.remove("hidden");
+    document.getElementsByClassName("advanced-abs")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("original-title")[0]
+      .classList.add("hidden");
+    document
+      .getElementsByClassName("summary-title")[0]
+      .classList.remove("hidden");
+    document
+      .getElementsByClassName("title-abstract")[0]
+      .classList.remove("hidden");
+
+    // Showing the second lvl difficulty summary
+  } else if (rangeInput.value === "2") {
+    // measuring time spent on the advanced abstract
+    clearInterval(timerInterval); // Clear previous interval to start fresh
+    timerInterval = setInterval(() => {
+      advancedTime++; // Increment the advanced time
+      console.log(advancedTime);
+    }, 1000); // Update the elapsed time every second the user is on advanced abstract
+
+    document.getElementsByClassName("original-abs")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("elementary-abs")[0]
+      .classList.add("hidden");
+    document
+      .getElementsByClassName("advanced-abs")[0]
+      .classList.remove("hidden");
+    document
+      .getElementsByClassName("title-abstract")[0]
+      .classList.remove("hidden");
+    document
+      .getElementsByClassName("original-title")[0]
+      .classList.add("hidden");
+    document
+      .getElementsByClassName("summary-title")[0]
+      .classList.remove("hidden");
+
+    // showing the original abs
+  } else if (rangeInput.value === "3") {
+    // measuring time spent on the original abstract
+    clearInterval(timerInterval); // Clear previous interval to start fresh
+    timerInterval = setInterval(() => {
+      originalTime++; // Increment the original time
+      console.log(originalTime);
+    }, 1000); // Update the elapsed time every second the user is on original abstract
+
+    document
+      .getElementsByClassName("original-abs")[0]
+      .classList.remove("hidden");
+    // document
+    //   .getElementsByClassName("title-abstract")[0]
+    //   .classList.add("hidden");
+    document
+      .getElementsByClassName("elementary-abs")[0]
+      .classList.add("hidden");
+    document.getElementsByClassName("advanced-abs")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("original-title")[0]
+      .classList.remove("hidden");
+    document.getElementsByClassName("summary-title")[0].classList.add("hidden");
+  }
 });
 
 async function getTabInformation(tab) {

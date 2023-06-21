@@ -18,7 +18,10 @@ let state = {
 };
 chrome.storage.local.get("accessToken", async function (data) {
   if (data.accessToken) {
-    showGetAbstractBtn(true);
+    // console.log(
+    //   "we have an access token so we gonna show the get abstract btn"
+    // );
+    // showGetAbstractBtn(true);
   }
   state.accessToken = data.accessToken;
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
@@ -29,11 +32,12 @@ chrome.runtime.onMessage.addListener(async (message) => {
   if (message.action === "getAbstractInfromation") {
     if (state.accessToken) {
       // state.accessToken = message.accessToken;
+      // showDifficulty(false);
       showLoading(true);
       state.abstractData = await requestSummary(message.abstractInformation);
       console.log("this is state", state);
       showLoading(false);
-      showDifficulty(true);
+      // showDifficulty(true);
     }
   } else if (message.action === "login") {
     if (message.username) {
@@ -121,9 +125,12 @@ function showDifficulty(difficulty) {
   }
 }
 function showGetAbstractBtn(abstractBtn) {
-  if (difficulty) {
+  if (abstractBtn) {
+    console.log("message sent to show the abstract btn");
     chrome.runtime.sendMessage({ action: "showGetAbstractBtn" });
   } else {
+    console.log("message sent to hide the abstract btn");
+
     chrome.runtime.sendMessage({ action: "hideGetAbstractBtn" });
   }
 }
