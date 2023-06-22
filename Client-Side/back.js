@@ -1,14 +1,15 @@
 let state = {
   // accessToken: "",
-  abstractData: {
-    interactionId: "test",
-    url: "test",
-    originalTitle: "test",
-    summerizedTitle: "test",
-    originalAbstract: "test",
-    advancedAbstract: "test",
-    elementaryAbstract: "test",
-  },
+  isLoading: false,
+  // abstractData: {
+  //   interactionId: "test",
+  //   url: "test",
+  //   originalTitle: "test",
+  //   summerizedTitle: "test",
+  //   originalAbstract: "test",
+  //   advancedAbstract: "test",
+  //   elementaryAbstract: "test",
+  // },
   // feedbackData: {
   //   text,
   //   originalDifficulty,
@@ -16,13 +17,8 @@ let state = {
   //   elementaryDifficulty,
   // },
 };
-chrome.storage.local.get("accessToken", async function (data) {
-  if (data.accessToken) {
-    // console.log(
-    //   "we have an access token so we gonna show the get abstract btn"
-    // );
-    // showGetAbstractBtn(true);
-  }
+chrome.storage.local.get(["accessToken", "username"], async function (data) {
+  state.username = data.username;
   state.accessToken = data.accessToken;
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
@@ -32,25 +28,32 @@ chrome.runtime.onMessage.addListener(async (message) => {
   if (message.action === "getAbstractInfromation") {
     if (state.accessToken) {
       // state.accessToken = message.accessToken;
-      // showDifficulty(false);
-      showLoading(true);
+      delete state.abstractData;
+      console.log("abstract data is dfs", state.abstractData);
+      state.isLoading = true;
+      chrome.runtime.sendMessage({ action: "stateUpdate", state });
       state.abstractData = await requestSummary(message.abstractInformation);
-      console.log("this is state", state);
-      showLoading(false);
-      // showDifficulty(true);
+      state.isLoading = false;
     }
   } else if (message.action === "login") {
     if (message.username) {
       const accessToken = await requestLogin(message.username);
+      state.username = message.username;
       state.accessToken = accessToken;
-      chrome.storage.local.set({ accessToken: state.accessToken }, function () {
-        console.log("access token saved in storage successfully!");
-      });
+      chrome.storage.local.set(
+        { accessToken: state.accessToken, username: state.username },
+        function () {
+          console.log("access token saved in storage successfully!");
+        }
+      );
     }
+  } else if (message.action === "logout") {
+    chrome.storage.local.remove(["username", "accessToken"], function () {
+      state = {};
+      // Key-value pairs removed successfully
+      // state deleted
+    });
   }
-  // else if(){
-
-  // }
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
 
@@ -67,10 +70,7 @@ async function requestLogin(username) {
   try {
     var response = await fetch("http://localhost:8080/users/login", options);
     response = await response.json();
-    // response = response.choices[0].message.content.trim();
     accessToken = response.accessToken;
-    console.log("rseponse msg is", response);
-    console.log("access token msg is", accessToken);
   } catch (error) {
     console.log(error);
   }
@@ -108,29 +108,29 @@ async function requestSummary(abstractInfromation) {
     });
   });
 }
-function showLoading(loading) {
-  if (loading) {
-    chrome.runtime.sendMessage({ action: "showLoading" });
-    // document.getElementsByClassName("loader-container")[0].classList.remove("hidden");
-  } else {
-    chrome.runtime.sendMessage({ action: "hideLoading" });
-  }
-}
-function showDifficulty(difficulty) {
-  if (difficulty) {
-    chrome.runtime.sendMessage({ action: "showDifficulty" });
-    // document.getElementsByClassName("loader-container")[0].classList.remove("hidden");
-  } else {
-    chrome.runtime.sendMessage({ action: "hideDifficulty" });
-  }
-}
-function showGetAbstractBtn(abstractBtn) {
-  if (abstractBtn) {
-    console.log("message sent to show the abstract btn");
-    chrome.runtime.sendMessage({ action: "showGetAbstractBtn" });
-  } else {
-    console.log("message sent to hide the abstract btn");
+// function showLoading(loading) {
+//   if (loading) {
+//     chrome.runtime.sendMessage({ action: "showLoading" });
+//     // document.getElementsByClassName("loader-container")[0].classList.remove("hidden");
+//   } else {
+//     chrome.runtime.sendMessage({ action: "hideLoading" });
+//   }
+// }
+// function showDifficulty(difficulty) {
+//   if (difficulty) {
+//     chrome.runtime.sendMessage({ action: "showDifficulty" });
+//     // document.getElementsByClassName("loader-container")[0].classList.remove("hidden");
+//   } else {
+//     chrome.runtime.sendMessage({ action: "hideDifficulty" });
+//   }
+// }
+// function showGetAbstractBtn(abstractBtn) {
+//   if (abstractBtn) {
+//     console.log("message sent to show the abstract btn");
+//     chrome.runtime.sendMessage({ action: "showGetAbstractBtn" });
+//   } else {
+//     console.log("message sent to hide the abstract btn");
 
-    chrome.runtime.sendMessage({ action: "hideGetAbstractBtn" });
-  }
-}
+//     chrome.runtime.sendMessage({ action: "hideGetAbstractBtn" });
+//   }
+// }

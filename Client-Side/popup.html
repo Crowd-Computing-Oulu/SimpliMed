@@ -7,12 +7,18 @@
     <title>Text Simplifier</title>
     <link rel="stylesheet" href="style.css" />
     <!-- <script src="background.js" type="module"></script>
-    <script src="login.js" type="module"></script>
-    <script src="popup.js" type="module"></script> -->
+      <script src="login.js" type="module"></script>
+      <script src="popup.js" type="module"></script> -->
     <script src="front.js" type="module"></script>
   </head>
   <body>
+    <div id="header" class="hidden">
+      <p>Username:<span id="header-username"></span></p>
+      <button id="logoutBtn">Logout</button>
+    </div>
     <div class="container" id="container">
+      <button id="getAbstract" class="btn hidden">Get Abstract</button>
+
       <div id="overlay"></div>
       <button id="closeBtn">X</button>
       <!-- LOGIN SECTION  -->
@@ -80,33 +86,33 @@
         </div>
       </div>
       <!-- SLIDER SECTION  -->
-      <div id="difficulty-lvl" class="">
-        <span class="difficulty-lvl__title"
-          >Change the level of the simplified text</span
-        >
-        <div class="difficulty-lvl__slider">
-          <label for="slider"></label>
-          <input
-            type="range"
-            id="slider"
-            name="slider"
-            min="1"
-            max="3"
-            step="1"
-            value="3"
-            list="tickmarks"
-            class="slider"
-          />
-          <datalist id="tickmarks">
-            <option value="1">Elementry</option>
-            <option value="2">Advanced</option>
-            <option value="3">Original</option>
-          </datalist>
-        </div>
-      </div>
       <!-- ABSTRACTS SECTION  -->
-      <button id="getAbstract" class="btn">Get Abstracr</button>
       <div class="main-content hidden" id="main-content">
+        <div id="difficulty-lvl" class="">
+          <span class="difficulty-lvl__title"
+            >Change the level of the simplified text</span
+          >
+          <div class="difficulty-lvl__slider">
+            <label for="slider"></label>
+            <input
+              type="range"
+              id="slider"
+              name="slider"
+              min="0"
+              max="3"
+              step="1"
+              value="0"
+              list="tickmarks"
+              class="slider"
+            />
+            <datalist id="tickmarks">
+              <option value="0">Ready</option>
+              <option value="1">Elementry</option>
+              <option value="2">Advanced</option>
+              <option value="3">Original</option>
+            </datalist>
+          </div>
+        </div>
         <h4 class="original-title"></h4>
         <h4 class="summary-title"></h4>
         <!-- <h2 class="title-abstract"></h2> -->

@@ -9,7 +9,12 @@
 .hidden {
   display: none !important;
 }
-
+#getAbstract {
+  padding: 10px;
+  background-color: #685b7e;
+  color: white;
+  margin: 10px 0;
+}
 .container {
   display: flex;
   flex-direction: column;
@@ -234,7 +239,22 @@ button:hover {
 } */
 
 /* for login/singin page  */
-h1 {
+#header {
+  margin: 10px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+#header p {
+  margin: 0;
+}
+#login-container {
+  margin: 2.5rem 0;
+}
+h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  /* padding: 0; */
   text-align: center;
 }
 
