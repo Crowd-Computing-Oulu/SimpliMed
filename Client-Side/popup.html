@@ -13,7 +13,7 @@
   </head>
   <body>
     <div id="header" class="hidden">
-      <p>Username:<span id="header-username"></span></p>
+      <p>Username: <span id="header-username"></span></p>
       <button id="logoutBtn">Logout</button>
     </div>
     <div class="container" id="container">
@@ -96,20 +96,21 @@
             <label for="slider"></label>
             <input
               type="range"
-              id="slider"
+              id="difficulty-lvl__input"
               name="slider"
               min="0"
-              max="3"
+              max="4"
               step="1"
               value="0"
               list="tickmarks"
               class="slider"
             />
             <datalist id="tickmarks">
-              <option value="0">Ready</option>
+              <option value="0">Start</option>
               <option value="1">Elementry</option>
               <option value="2">Advanced</option>
               <option value="3">Original</option>
+              <option value="4">Finish</option>
             </datalist>
           </div>
         </div>
@@ -155,32 +156,49 @@
           <button type="submit">Submit</button>
         </div>
       </form>
-
-      <!-- <div class="section">
-          <h2>Section 2</h2>
-          <input type="range" class="slider" min="0" max="10" value="0" step="1">
-          <input type="hidden" name="section2Value">
-        </div>
-        <div class="section">
-          <h2>Section 3</h2>
-          <input type="range" class="slider" min="0" max="10" value="0" step="1">
-          <input type="hidden" name="section3Value">
-        </div>
-        <input type="submit" value="Submit"> -->
-
+      <div id="elementaryFeedback" class="userFeedback">
+        <p class="instruction">Section 1</p>
+        <input
+          type="range"
+          class="slider"
+          min="1"
+          max="7"
+          step="1"
+          id="elementarySlider"
+        />
+        <button id="elementaryFeedbackBtn">Submit</button>
+        <p class="error-message slider-error hidden">
+          Please choose a value before submitting
+        </p>
+        <p class="slider-submitted hidden confirm-message">Value submitted!</p>
+      </div>
+      <div class="userFeedback">
+        <h2>Section 2</h2>
+        <input type="range" class="slider" min="1" max="7" value="0" step="1" />
+        <!-- <input type="hidden" name="section2Value" />
+         -->
+        <button>Submit</button>
+      </div>
+      <div class="section">
+        <h2>Section 3</h2>
+        <input type="range" class="slider" min="1" max="7" value="0" step="1" />
+        <input type="hidden" name="section3Value" />
+      </div>
+      <input type="submit" value="Submit" />
+      <form id="questionForm">
+        <textarea
+          type="text"
+          id="questionInput"
+          placeholder="Type your questions here"
+        ></textarea>
+        <button type="submits" id="sendBtn">Submit and Finish</button>
+      </form>
       <!-- ASK AND ANSWER SECTION  -->
       <!-- <button id="askBtn" class="hidden">Ask a question</button>
       <hr />
       <div id="questionsSection" class="hidden">
         <h4>Ask questions related to the article:</h4>
-        <form id="questionForm">
-          <textarea
-            type="text"
-            id="questionInput"
-            placeholder="Type your question here"
-          ></textarea>
-          <button type="submits" id="sendBtn">Send the question</button>
-        </form>
+
         <p id="answers" class="hidden"></p>
       </div> -->
     </div>
