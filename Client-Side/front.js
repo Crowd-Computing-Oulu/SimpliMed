@@ -121,9 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
     chrome.runtime.sendMessage({ action: "logout" });
   });
 
-  const rangeInput = document.querySelector('input[type="range"]');
-  rangeInput.addEventListener("change", () => {
-    console.log("i have been changedc");
+  const rangeInput = document.getElementById("difficulty-lvl__input");
+
+  rangeInput.addEventListener("input", () => {
     // Showing the first lvl difficulty summary
     if (rangeInput.value === "1") {
       // measuring time spent on the Elementary abstract
@@ -210,6 +210,38 @@ document.addEventListener("DOMContentLoaded", () => {
         .classList.add("hidden");
     }
   });
+  //
+  // FEEDBACK
+  const elementarySubmitBtn = document.getElementById("elementaryFeedbackBtn");
+  const elementaryFeedback = document.getElementById("elementaryFeedback");
+  let elementarySliderValue = document.getElementById("elementarySlider").value;
+  elementarySliderValue = "";
+  document.getElementById("elementarySlider").addEventListener("change", () => {
+    elementarySliderValue = document.getElementById("elementarySlider").value;
+  });
+  elementarySubmitBtn.addEventListener("click", () => {
+    if (elementarySliderValue === "") {
+      console.log("the input is", elementarySliderValue);
+      elementaryFeedback
+        .querySelector(".slider-error")
+        .classList.remove("hidden");
+    } else {
+      console.log("user input submited", elementarySliderValue);
+      document.getElementById("elementarySlider").classList.add("hidden");
+      elementarySubmitBtn.classList.add("hidden");
+      elementarySubmitBtn.disabled = true;
+      elementaryFeedback.querySelector(".slider-error").classList.add("hidden");
+      elementaryFeedback.querySelector(".instruction").classList.add("hidden");
+      elementaryFeedback
+        .querySelector(".slider-submitted")
+        .classList.remove("hidden");
+      chrome.runtime.sendMessage({
+        action: "submitted",
+        elementarySliderValue,
+      });
+    }
+  });
+
   //
   chrome.runtime.sendMessage({ action: "state" });
 });

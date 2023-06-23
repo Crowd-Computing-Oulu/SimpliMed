@@ -53,6 +53,14 @@ chrome.runtime.onMessage.addListener(async (message) => {
       // Key-value pairs removed successfully
       // state deleted
     });
+  } else if (message.action == "submitted") {
+    if (state.feedback) {
+      state.feedback.elementaryDifficulty = message.elementarySliderValue;
+    } else {
+      state.feedback = {};
+      state.feedback.elementaryDifficulty = message.elementarySliderValue;
+      console.log("thee state is", state);
+    }
   }
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
