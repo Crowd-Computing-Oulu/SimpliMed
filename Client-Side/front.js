@@ -133,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
       //   console.log(elementaryTime);
       // }, 1000); // Update the elapsed time every second the user is on elementary abstract
 
+      document.getElementById("formName").value = "elementaryForm";
       // adding / removing hidden class based on the range inputvalue
       document
         .getElementsByClassName("original-abs")[0]
@@ -149,9 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document
         .getElementsByClassName("summary-title")[0]
         .classList.remove("hidden");
-      document
-        .getElementsByClassName("title-abstract")[0]
-        .classList.remove("hidden");
 
       // Showing the second lvl difficulty summary
     } else if (rangeInput.value === "2") {
@@ -161,6 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
       //   advancedTime++; // Increment the advanced time
       //   console.log(advancedTime);
       // }, 1000); // Update the elapsed time every second the user is on advanced abstract
+      document.getElementById("formName").value = "advancedForm";
 
       document
         .getElementsByClassName("original-abs")[0]
@@ -171,9 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document
         .getElementsByClassName("advanced-abs")[0]
         .classList.remove("hidden");
-      document
-        .getElementsByClassName("title-abstract")[0]
-        .classList.remove("hidden");
+
       document
         .getElementsByClassName("original-title")[0]
         .classList.add("hidden");
@@ -189,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
       //   originalTime++; // Increment the original time
       //   console.log(originalTime);
       // }, 1000); // Update the elapsed time every second the user is on original abstract
+      document.getElementById("formName").value = "originalForm";
 
       document
         .getElementsByClassName("original-abs")[0]
@@ -210,39 +208,49 @@ document.addEventListener("DOMContentLoaded", () => {
         .classList.add("hidden");
     }
   });
-  //
-  // FEEDBACK
-  const elementarySubmitBtn = document.getElementById("elementaryFeedbackBtn");
-  const elementaryFeedback = document.getElementById("elementaryFeedback");
-  let elementarySliderValue = document.getElementById("elementarySlider").value;
-  elementarySliderValue = "";
-  document.getElementById("elementarySlider").addEventListener("change", () => {
-    elementarySliderValue = document.getElementById("elementarySlider").value;
-  });
-  elementarySubmitBtn.addEventListener("click", () => {
-    if (elementarySliderValue === "") {
-      console.log("the input is", elementarySliderValue);
-      elementaryFeedback
-        .querySelector(".slider-error")
-        .classList.remove("hidden");
-    } else {
-      console.log("user input submited", elementarySliderValue);
-      document.getElementById("elementarySlider").classList.add("hidden");
-      elementarySubmitBtn.classList.add("hidden");
-      elementarySubmitBtn.disabled = true;
-      elementaryFeedback.querySelector(".slider-error").classList.add("hidden");
-      elementaryFeedback.querySelector(".instruction").classList.add("hidden");
-      elementaryFeedback
-        .querySelector(".slider-submitted")
-        .classList.remove("hidden");
+  //FEEDBACK RADIO
+  document.getElementById("valueSubmitBtn").addEventListener("click", () => {
+    const formName = document.getElementById("formName").value;
+    var feedbackType = "";
+    switch (formName) {
+      case "elementaryForm":
+        feedbackType = "elementaryDifficulty";
+        break;
+      case "advancedForm":
+        feedbackType = "advancedDifficulty";
+        break;
+      case "originalForm":
+        feedbackType = "originalDifficulty";
+        break;
+      default:
+        return;
+    }
+
+    var radios = document.getElementsByName("feedbackValue");
+    var feedbackValue = null;
+
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i].checked) {
+        feedbackValue = radios[i].value;
+        break;
+      }
+    }
+
+    if (feedbackValue) {
+      document.getElementById("error").innerHTML = "";
+      document.getElementById("result").innerHTML = "Submitted Successfully!";
+      // document.getElementById("feedbackForm").classList.add("hidden");
       chrome.runtime.sendMessage({
-        action: "submitted",
-        elementarySliderValue,
+        action: "feedbackValueSubmitted",
+        feedbackType,
+        feedbackValue,
       });
+    } else {
+      document.getElementById("error").innerHTML = "Please select an option!";
+      document.getElementById("result").innerHTML = "";
     }
   });
 
-  //
   chrome.runtime.sendMessage({ action: "state" });
 });
 

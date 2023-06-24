@@ -53,14 +53,13 @@ chrome.runtime.onMessage.addListener(async (message) => {
       // Key-value pairs removed successfully
       // state deleted
     });
-  } else if (message.action == "submitted") {
-    if (state.feedback) {
-      state.feedback.elementaryDifficulty = message.elementarySliderValue;
-    } else {
+  } else if (message.action == "feedbackValueSubmitted") {
+    if (!state.feedback) {
       state.feedback = {};
-      state.feedback.elementaryDifficulty = message.elementarySliderValue;
-      console.log("thee state is", state);
     }
+    state.feedback[message.feedbackType] = message.feedbackValue;
+    // state.feedback.advancedDifficulty = message.feedbackValue;
+    console.log("feedback  is", state.feedback);
   }
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });

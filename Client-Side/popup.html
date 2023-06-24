@@ -124,67 +124,35 @@
 
       <!-- INPUT SECTION FOR PILOT STUDY  -->
 
-      <form id="ratingPilotForm" class="hidden">
-        <div class="section">
-          <p>
-            Choose the difficulty level of the abstract. 1 is being too easy,
-            and 10 is too difficault
-          </p>
-          <input
-            type="range"
-            list="tickmarks"
-            class="slider"
-            min="0"
-            max="10"
-            value="0"
-            step="1"
-          />
-          <datalist id="tickmarks">
-            <option value="0"></option>
-            <option value="1"></option>
-            <option value="2"></option>
-            <option value="3"></option>
-            <option value="4"></option>
-            <option value="5"></option>
-            <option value="6"></option>
-            <option value="7"></option>
-            <option value="8"></option>
-            <option value="9"></option>
-            <option value="10"></option>
-          </datalist>
-          <input type="hidden" name="section1Value" />
-          <button type="submit">Submit</button>
-        </div>
-      </form>
-      <div id="elementaryFeedback" class="userFeedback">
-        <p class="instruction">Section 1</p>
-        <input
-          type="range"
-          class="slider"
-          min="1"
-          max="7"
-          step="1"
-          id="elementarySlider"
-        />
-        <button id="elementaryFeedbackBtn">Submit</button>
-        <p class="error-message slider-error hidden">
-          Please choose a value before submitting
-        </p>
-        <p class="slider-submitted hidden confirm-message">Value submitted!</p>
+      <div class="userFeedbackValue">
+        <form id="feedbackForm">
+          <input type="hidden" id="formName" value="" />
+          <div class="checkboxgroup">
+            <input type="radio" name="feedbackValue" value="1" id="radio1" />
+            <label for="radio1">1</label>
+          </div>
+          <div class="checkboxgroup">
+            <input type="radio" name="feedbackValue" value="2" id="radio2" />
+            <label for="radio2">2</label>
+          </div>
+          <div class="checkboxgroup">
+            <input type="radio" name="feedbackValue" value="3" id="radio3" />
+            <label for="radio3">3</label>
+          </div>
+          <div class="checkboxgroup">
+            <input type="radio" name="feedbackValue" value="4" id="radio4" />
+            <label for="radio4">4</label>
+          </div>
+          <div class="checkboxgroup">
+            <input type="radio" name="feedbackValue" value="5" id="radio5" />
+            <label for="radio5">5</label>
+          </div>
+          <button type="button" id="valueSubmitBtn" class="btn">Submit</button>
+        </form>
+        <p id="error" style="color: red"></p>
+        <p id="result" style="color: green"></p>
       </div>
-      <div class="userFeedback">
-        <h2>Section 2</h2>
-        <input type="range" class="slider" min="1" max="7" value="0" step="1" />
-        <!-- <input type="hidden" name="section2Value" />
-         -->
-        <button>Submit</button>
-      </div>
-      <div class="section">
-        <h2>Section 3</h2>
-        <input type="range" class="slider" min="1" max="7" value="0" step="1" />
-        <input type="hidden" name="section3Value" />
-      </div>
-      <input type="submit" value="Submit" />
+
       <form id="questionForm">
         <textarea
           type="text"

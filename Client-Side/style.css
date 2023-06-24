@@ -310,3 +310,20 @@ form button[type="submit"] {
   padding: 10px;
   font-weight: bold;
 }
+
+/* .userFeedback {
+  display: flex;
+  flex-direction: row;
+}
+.ttt {
+  display: flex;
+  flex-direction: column;
+} */
+.checkboxgroup {
+  display: inline-block;
+  text-align: center;
+  padding: 10px;
+}
+.checkboxgroup label {
+  display: block;
+}

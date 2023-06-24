@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Radio Buttons Example</title>
+    <script>
+      function handleSubmit() {
+        var radios = document.getElementsByName("option");
+        var selectedValue = null;
+
+        for (var i = 0; i < radios.length; i++) {
+          if (radios[i].checked) {
+            selectedValue = radios[i].value;
+            break;
+          }
+        }
+
+        if (selectedValue) {
+          document.getElementById("error").innerHTML = "";
+          document.getElementById("result").innerHTML =
+            "Submitted value: " + selectedValue;
+        } else {
+          document.getElementById("error").innerHTML =
+            "Please select an option.";
+          document.getElementById("result").innerHTML = "";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <form>
+      <label> <input type="radio" name="option" value="1" /> 1 </label>
+      <label> <input type="radio" name="option" value="2" /> 2 </label>
+      <label> <input type="radio" name="option" value="3" /> 3 </label>
+      <label> <input type="radio" name="option" value="4" /> 4 </label>
+      <label> <input type="radio" name="option" value="5" /> 5 </label>
+
+      <p id="error" style="color: red"></p>
+      <button type="button" onclick="handleSubmit()">Submit</button>
+      <p id="result" style="color: green"></p>
+    </form>
+  </body>
+</html>
