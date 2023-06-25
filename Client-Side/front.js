@@ -237,15 +237,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (feedbackValue) {
+      document.getElementById("error").classList.add("hidden");
+      document.getElementById("result").classList.remove("hidden");
       document.getElementById("error").innerHTML = "";
       document.getElementById("result").innerHTML = "Submitted Successfully!";
-      // document.getElementById("feedbackForm").classList.add("hidden");
       chrome.runtime.sendMessage({
         action: "feedbackValueSubmitted",
         feedbackType,
         feedbackValue,
       });
     } else {
+      document.getElementById("error").classList.remove("hidden");
+      document.getElementById("result").classList.add("hidden");
       document.getElementById("error").innerHTML = "Please select an option!";
       document.getElementById("result").innerHTML = "";
     }

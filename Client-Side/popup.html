@@ -124,43 +124,46 @@
 
       <!-- INPUT SECTION FOR PILOT STUDY  -->
 
-      <div class="userFeedbackValue">
-        <form id="feedbackForm">
+      <div class="feedbackValue-container">
+        <form id="feedbackValueForm">
           <input type="hidden" id="formName" value="" />
-          <div class="checkboxgroup">
-            <input type="radio" name="feedbackValue" value="1" id="radio1" />
-            <label for="radio1">1</label>
-          </div>
-          <div class="checkboxgroup">
-            <input type="radio" name="feedbackValue" value="2" id="radio2" />
-            <label for="radio2">2</label>
-          </div>
-          <div class="checkboxgroup">
-            <input type="radio" name="feedbackValue" value="3" id="radio3" />
-            <label for="radio3">3</label>
-          </div>
-          <div class="checkboxgroup">
-            <input type="radio" name="feedbackValue" value="4" id="radio4" />
-            <label for="radio4">4</label>
-          </div>
-          <div class="checkboxgroup">
-            <input type="radio" name="feedbackValue" value="5" id="radio5" />
-            <label for="radio5">5</label>
+          <div>
+            <div class="checkboxgroup">
+              <input type="radio" name="feedbackValue" value="1" id="radio1" />
+              <label for="radio1">1</label>
+            </div>
+            <div class="checkboxgroup">
+              <input type="radio" name="feedbackValue" value="2" id="radio2" />
+              <label for="radio2">2</label>
+            </div>
+            <div class="checkboxgroup">
+              <input type="radio" name="feedbackValue" value="3" id="radio3" />
+              <label for="radio3">3</label>
+            </div>
+            <div class="checkboxgroup">
+              <input type="radio" name="feedbackValue" value="4" id="radio4" />
+              <label for="radio4">4</label>
+            </div>
+            <div class="checkboxgroup">
+              <input type="radio" name="feedbackValue" value="5" id="radio5" />
+              <label for="radio5">5</label>
+            </div>
           </div>
           <button type="button" id="valueSubmitBtn" class="btn">Submit</button>
         </form>
-        <p id="error" style="color: red"></p>
-        <p id="result" style="color: green"></p>
+        <p id="error" class="hidden" style="color: red">Submit again</p>
+        <p id="result" class="hidden" style="color: green">submitted</p>
       </div>
 
-      <form id="questionForm">
+      <!-- <form id="questionForm">
         <textarea
           type="text"
           id="questionInput"
           placeholder="Type your questions here"
         ></textarea>
         <button type="submits" id="sendBtn">Submit and Finish</button>
-      </form>
+      </form> -->
+
       <!-- ASK AND ANSWER SECTION  -->
       <!-- <button id="askBtn" class="hidden">Ask a question</button>
       <hr />

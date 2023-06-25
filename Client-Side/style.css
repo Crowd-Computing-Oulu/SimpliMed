@@ -1,18 +1,31 @@
 @import url("https://unpkg.com/style.css/style.css");
+:root {
+  --primary-color: #543884; /* Define the primary color variable */
+  --secondary-color: #9992a3; /* Define the secondary color variable */
+}
 * {
   border: 0;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
 .hidden {
   display: none !important;
 }
 .btn {
-  border: 10px;
-  padding: 10px;
-  background-color: #685b7e;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 100px;
+}
+
+.btn:hover {
+  background-color: var(--secondary-color);
 }
 #getAbstract {
   padding: 10px;
@@ -269,20 +282,20 @@ h2 {
   text-align: center;
 }
 
-form {
+#login-container form {
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-form h2 {
+#login-container form h2 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-form input[type="text"],
-form input[type="password"] {
+#login-container form input[type="text"],
+#login-container form input[type="password"] {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -290,7 +303,7 @@ form input[type="password"] {
   border-radius: 5px;
 }
 
-form button[type="submit"] {
+#login-container form button[type="submit"] {
   width: 100%;
   padding: 10px;
   background-color: #543884;
@@ -311,19 +324,39 @@ form button[type="submit"] {
   font-weight: bold;
 }
 
-/* .userFeedback {
+/* FEEDBACK VALUES  */
+.feedbackValue-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.feedbackValue-container p {
+  margin: 0;
+  margin-top: 20px;
+}
+.checkboxgroup {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+}
+#feedbackValueForm {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+#feedbackValueForm > div {
   display: flex;
   flex-direction: row;
 }
-.ttt {
-  display: flex;
-  flex-direction: column;
-} */
-.checkboxgroup {
-  display: inline-block;
-  text-align: center;
-  padding: 10px;
-}
+
 .checkboxgroup label {
   display: block;
 }
