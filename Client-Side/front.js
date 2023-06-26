@@ -64,6 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
           message.state.username;
 
         if (message.state.abstractData) {
+          document
+            .getElementById("feedbackValue-container")
+            .classList.remove("hidden");
           document.getElementsByClassName("summary-title")[0].textContent =
             message.state.abstractData.summerizedTitle;
           document.getElementsByClassName("original-title")[0].textContent =
@@ -84,6 +87,18 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("main-content").classList.add("hidden");
         document.getElementById("getAbstract").classList.add("hidden");
         document.getElementById("header").classList.add("hidden");
+      }
+      if (message.state.feedback) {
+        // document
+        //   .getElementById("feedbackValue-container")
+        //   .classList.remove("hidden");
+        if (message.state.feedback.elementaryDifficulty) {
+          // document.getElementById("error").classList.add("hidden");
+          // document.getElementById("result").classList.remove("hidden");
+          // document.getElementById("error").innerHTML = "";
+          // document.getElementById("result").innerHTML =
+          //   "Submitted Successfully!";
+        }
       }
     } else if (message.action === "showLoading") {
       document
@@ -237,6 +252,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (feedbackValue) {
+      // const error = document.createElement("p");
+      // error.id = "elementaryError";
+      // error.innerHtml = "please select an option!";
+      // const parent = document.getElementById("feedbackValue-container");
+      // parent.appendChild(error);
+
       document.getElementById("error").classList.add("hidden");
       document.getElementById("result").classList.remove("hidden");
       document.getElementById("error").innerHTML = "";
