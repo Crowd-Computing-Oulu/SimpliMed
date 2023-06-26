@@ -1,7 +1,12 @@
 @import url("https://unpkg.com/style.css/style.css");
+@import url("https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,600;1,100;1,400&family=Orbitron:wght@600&family=Unbounded&display=swap");
 :root {
-  --primary-color: #543884; /* Define the primary color variable */
-  --secondary-color: #9992a3; /* Define the secondary color variable */
+  --primary-color: #3D8AA4; 
+  --secondary-color: #543884; 
+  --tertiary-color: #E2F0F7; 
+
+  --primary-font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --secondary-font: "Kanit", sans-serif;
 }
 * {
   border: 0;
@@ -14,6 +19,7 @@
 }
 .btn {
   margin-top: 10px;
+  margin-bottom: 10px;
   padding: 8px 16px;
   background-color: var(--primary-color);
   color: white;
@@ -22,16 +28,99 @@
   cursor: pointer;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   max-width: 100px;
+  font-family: var(--secondary-font);
 }
 
 .btn:hover {
+  background-color: var(--secondary-color) !important;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+#header {
+  font-family: Impact, sans-serif;
+  padding: 1.5rem 15px;
+  display: flex;
+  flex-direction: row;
+  /* align-items: flex-start; */
+  justify-content: space-between;
+  background-color: var(--tertiary-color);
+  box-shadow: 0 1px 9px rgba(0, 0, 0, 0.5);
+}
+#header p {
+  margin: 0;
+}
+
+#header span {
+  margin-right: 10px;
+}
+#header #header-username {
+  font-family: Impact, sans-serif;
+  color: var(--secondary-color);
+
+  font-size: 1.2rem;
+}
+.logoutIcon-container {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background-color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logoutIcon-container:hover {
+  cursor: pointer;
   background-color: var(--secondary-color);
 }
-#getAbstract {
-  padding: 10px;
-  background-color: #685b7e;
+.logoutIcon-container i {
   color: white;
-  margin: 10px 0;
+}
+
+.tooltip,
+.tooltipUsername {
+  position: relative;
+}
+
+.tooltip .tooltipText,
+.tooltipUsername .tooltipUsernameText {
+  visibility: hidden;
+  font-family: sans-serif;
+  font-weight: normal;
+  background-color: #c2c0c0;
+  color: #010101;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltipText,
+.tooltipUsername:hover .tooltipUsernameText {
+  visibility: visible;
+  opacity: 1;
+}
+
+#getAbstract {
+  padding: 5px 10px;
+  background-color: var(--primary-color);
+  color: white;
+  margin: 0;
+  font-size: 0.8rem;
+  position: relative;
+}
+#getAbstract:hover{
+  background-color: var(--primary-color);
+
 }
 .container {
   display: flex;
@@ -41,19 +130,22 @@
   min-width: 40rem !important;
 }
 
-#closeBtn {
-  margin: 10px 10px;
-  padding: 10px;
-  width: 35px;
-  height: 35px;
+.closeBtn {
+  background-color: var(--secondary-color);
+  color: white;
+  font-weight: bold;
+  /* margin: 1.9rem 15px; */
+  /* padding: 10px; */
+  width: 30px;
+  height: 30px;
   border-radius: 100%;
-  position: fixed;
-  top: 0;
-  right: 0;
+  /* position: fixed; */
+  /* top: 0; */
+  /* right: 0; */
 }
-#closeBtn:hover {
+.closeBtn:hover {
   cursor: pointer;
-  background-color: rgb(141, 141, 141);
+  background-color: var(--primary-color);
 }
 .confirm-message {
   font-size: 1.2rem;
@@ -68,7 +160,7 @@
   padding: 1rem;
 }
 div.main-content {
-  padding: 5%;
+  padding: 0 5%;
   text-align: justify;
 }
 
@@ -80,8 +172,8 @@ h4.summary-title {
   width: 100%;
   /* margin-top: 0; */
   color: rgb(72, 72, 255);
-
-  font-size: 1.3rem;
+  margin: 1.25rem 0;
+  font-size: 1.15rem;
 }
 p {
   width: 100%;
@@ -96,10 +188,19 @@ p {
   padding: 1.5rem 0;
   width: 100%;
   /* background-color: rgb(220, 221, 221); */
-  background-color: #9a77cf6a;
+  /* background-color: var(--tertiary-color); */
+
+  /* background-color: var(--primary-color);
+  color: white; */
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
+  font-family: var(--secondary-font);
+
+  /* to flow outside of the parent  */
+  position: relative;
+  left: -6%;
+  width: 112%;
 }
 .difficulty-lvl__title {
   font-size: 1rem;
@@ -263,15 +364,7 @@ button:hover {
 } */
 
 /* for login/singin page  */
-#header {
-  margin: 10px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-#header p {
-  margin: 0;
-}
+
 #login-container {
   margin: 2.5rem 0;
 }
@@ -330,23 +423,28 @@ h2 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  /* background-color: white; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  padding: 20px;
   border-radius: 10px;
   /* max-width: 400px; */
   /* margin: 0 auto; */
-  margin-bottom: 1.2rem;
+  position: relative;
+  /* margin-bottom: 1.2rem; */
+  padding: 0 1.2rem;
+  background-color: var(--tertiary-color);
+  font-family: var(--secondary-font);
 }
 .feedbackValue-container p {
   margin: 0;
   margin-top: 20px;
+  font-size: 1rem;
+  font-weight: bold;
 }
 .checkboxgroup {
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 20px;
+  padding: 10px 20px;
 }
 #feedbackValueForm {
   display: flex;
@@ -362,3 +460,26 @@ h2 {
 .checkboxgroup label {
   display: block;
 }
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Create custom radio button style */
+input[type="radio"]:before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #43406c72;
+  margin-right: 5px; /* Add spacing between the button and label */
+}
+
+/* Style the radio button when selected */
+input[type="radio"]:checked:before {
+  background-color: var(--primary-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6); /* Add shadow effect */
+}
+/*

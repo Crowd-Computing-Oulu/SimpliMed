@@ -9,18 +9,42 @@
     <!-- <script src="background.js" type="module"></script>
       <script src="login.js" type="module"></script>
       <script src="popup.js" type="module"></script> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
     <script src="front.js" type="module"></script>
   </head>
   <body>
     <div id="header" class="hidden">
-      <p>Username: <span id="header-username"></span></p>
-      <button id="logoutBtn" class="btn">Logout</button>
+      <!-- <p>Username:</p> -->
+      <button id="getAbstract" class="btn hidden">Get Abstract</button>
+      <div class="flex-row">
+        <span id="header-username" class="tooltipUsername"
+          >Prolific Username<span class="tooltipUsernameText"
+            >Prolific Username</span
+          ></span
+        >
+        <!-- <span id="test" class="tooltipUsername"
+          >resr<span class="tooltipUsernameText">Prolific Username</span></span
+          > -->
+        <span class="logoutIcon-container tooltip" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="tooltipText">Logout</span>
+        </span>
+        <!-- <button class="closeBtn">X</button> -->
+      </div>
+
+      <!-- <button style="visibility: hidden" class="btn">Get Abstract</button> -->
+      <button id="closeBtn" class="closeBtn hidden">X</button>
+
+      <!-- <button id="logoutBtn" class="btn">
+        Logout
+        <i class="fas fa-sign-out-alt"></i>
+      </button> -->
     </div>
     <div class="container" id="container">
-      <button id="getAbstract" class="btn hidden">Get Abstract</button>
-
       <div id="overlay"></div>
-      <button id="closeBtn">X</button>
       <!-- LOGIN SECTION  -->
       <div class="login-container" id="login-container">
         <h2>Sign in with your Profilic username</h2>
@@ -125,6 +149,10 @@
       <!-- INPUT SECTION FOR PILOT STUDY  -->
 
       <div class="feedbackValue-container hidden" id="feedbackValue-container">
+        <p class="feedbackValue-description">
+          On a scale of 1 to 5, where 1 represents the easiest and 5 represents
+          the hardest, how challenging was this text for you to understand?
+        </p>
         <form id="feedbackValueForm">
           <input type="hidden" id="formName" value="" />
           <div>

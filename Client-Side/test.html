@@ -7,7 +7,11 @@
     <title>Document</title>
   </head>
   <body>
-    <div class="feedbackValue-container">
+    <div class="feedbackValue-container" id="feedbackValue-container">
+      <p class="feedbackValue-description">
+        On a scale of 1 to 5, where 1 represents the easiest and 5 represents
+        the hardest, how challenging was this text for you to understand?
+      </p>
       <form id="feedbackValueForm">
         <input type="hidden" id="formName" value="" />
         <div>
@@ -36,6 +40,23 @@
       </form>
       <p id="error" class="hidden" style="color: red">Submit again</p>
       <p id="result" class="hidden" style="color: green">submitted</p>
+    </div>
+    <div class="container">
+      <div class="item">Element 1</div>
+      <div class="item">Element 2</div>
+      <div class="item">Element 3</div>
+    </div>
+
+    <div class="slider">
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+        class="slider-input"
+        id="mySlider"
+      />
+      <span class="slider-value" id="sliderValue">50</span>
     </div>
   </body>
 </html>
