@@ -1,9 +1,9 @@
 @import url("https://unpkg.com/style.css/style.css");
 @import url("https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;0,600;1,100;1,400&family=Orbitron:wght@600&family=Unbounded&display=swap");
 :root {
-  --primary-color: #3D8AA4; 
-  --secondary-color: #543884; 
-  --tertiary-color: #E2F0F7; 
+  --primary-color: #3d8aa4;
+  --secondary-color: #543884;
+  --tertiary-color: #e2f0f7;
 
   --primary-font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   --secondary-font: "Kanit", sans-serif;
@@ -37,6 +37,12 @@
 .flex-row {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -118,9 +124,8 @@
   font-size: 0.8rem;
   position: relative;
 }
-#getAbstract:hover{
+#getAbstract:hover {
   background-color: var(--primary-color);
-
 }
 .container {
   display: flex;
@@ -430,13 +435,13 @@ h2 {
   /* margin: 0 auto; */
   position: relative;
   /* margin-bottom: 1.2rem; */
-  padding: 0 1.2rem;
+  padding: 1rem 1.2rem;
   background-color: var(--tertiary-color);
   font-family: var(--secondary-font);
 }
 .feedbackValue-container p {
   margin: 0;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   font-size: 1rem;
   font-weight: bold;
   color: var(--secondary-color);
@@ -452,6 +457,9 @@ h2 {
   align-items: center;
   flex-direction: column;
   width: 350px;
+}
+#feedbackValueForm > button {
+  margin: 0;
 }
 #feedbackValueForm > div {
   display: flex;
@@ -483,4 +491,23 @@ input[type="radio"]:checked:before {
   background-color: var(--primary-color);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6); /* Add shadow effect */
 }
-/*
+
+.feedbackText-container textarea {
+  width: 350px;
+  height: 200px;
+  border: solid 1px;
+  background-color: var(--tertiary-color);
+  padding: 1rem;
+  font-size: 1rem;
+}
+.feedbackText-container .feedbackText-description {
+  color: var(--secondary-color);
+  font-weight: bold;
+  font-family: var(--secondary-font);
+}
+.feedbackText-container button {
+  background-color: var(--secondary-color);
+}
+.feedbackText-container button:hover {
+  background-color: var(--primary-color) !important;
+}

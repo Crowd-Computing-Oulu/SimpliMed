@@ -128,6 +128,7 @@
               value="0"
               list="tickmarks"
               class="slider"
+              width="300px"
             />
             <datalist id="tickmarks">
               <option value="0">Start</option>
@@ -181,11 +182,46 @@
           </div>
           <button type="button" id="valueSubmitBtn" class="btn">Submit</button>
         </form>
-        <p id="error" class="hidden" style="color: red">Submit again</p>
-        <p id="result" class="hidden" style="color: green">
-          Submitted Successfully!
+        <div>
+          <p id="error" class="hidden" style="color: red">
+            <!-- <i class="fa fa-x"></i> -->
+          </p>
+          <p id="result" class="hidden" style="color: green">
+            <i class="fa fa-check"></i>
+            Submitted!
+          </p>
+        </div>
+      </div>
+      <div class="feedbackText-container hidden" id="feedbackText-container">
+        <div class="flex-col hidden" style="margin-bottom: 30px">
+          <span>1. Elementary Abstract</span>
+          <span>2. Advanced Abstract</span>
+          <span>3. Original Abstract</span>
+        </div>
+
+        <form class="feedbackTextForm flex-col" id="feedbackTextForm">
+          <div>
+            <p id="feedbackText-description" class="feedbackText-description">
+              Type your feedback here!
+            </p>
+          </div>
+          <textarea
+            type="text"
+            id="feedbackTextInput"
+            placeholder="Type your feedback"
+          ></textarea>
+          <button type="button" id="finishBtn" class="btn">
+            Submit & Finish!
+          </button>
+        </form>
+        <p id="feedbackSubmisisonResult" class="hidden"></p>
+        <p id="" class="hidden">
+          Thank you for your participation, Please go back to Prolific!
         </p>
       </div>
+      <!-- <div class="" id="ending-container">
+        Thank you for your participation, Please go back to Prolific!
+      </div> -->
 
       <!-- <form id="questionForm">
         <textarea

@@ -1,6 +1,7 @@
 let state = {
   // accessToken: "",
   isLoading: false,
+  difficultyLevel: 0,
   // abstractData: {
   //   interactionId: "test",
   //   url: "test",
@@ -34,6 +35,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
       state.isLoading = true;
       chrome.runtime.sendMessage({ action: "stateUpdate", state });
       state.abstractData = await requestSummary(message.abstractInformation);
+      console.log("state.abstract", state.abstractData);
       state.isLoading = false;
     }
   } else if (message.action === "login") {
@@ -54,13 +56,46 @@ chrome.runtime.onMessage.addListener(async (message) => {
       // Key-value pairs removed successfully
       // state deleted
     });
-  } else if (message.action == "feedbackValueSubmitted") {
+  } else if (message.action === "feedbackValueSubmitted") {
     if (!state.feedback) {
       state.feedback = {};
     }
     state.feedback[message.feedbackType] = message.feedbackValue;
-    // state.feedback.advancedDifficulty = message.feedbackValue;
     console.log("feedback  is", state.feedback);
+  } else if (message.action === "sendDifficultyLevel") {
+    state.difficultyLevel = message.difficultyLevel;
+    console.log("im difficult", state.difficultyLevel);
+  } else if (message.action === "feedbackTextSubmitted") {
+    if (!state.feedback) {
+      state.feedback = {};
+    }
+    state.feedback.text = message.feedbackText;
+    if (
+      state.feedback.elementaryDifficulty &&
+      state.feedback.advancedDifficulty &&
+      state.feedback.originalDifficulty &&
+      state.feedback.text
+    ) {
+      let result;
+      try {
+        result = await sendFeedback(state.feedback);
+      } catch (error) {
+        result.success = false;
+        result.message = "Feedback submission failed!";
+      }
+      if (!result.success) {
+        state.feedback.status = "failed";
+        state.feedback.message = "Feedback submission failed!";
+      } else {
+        state.feedback.status = "sent";
+        state.feedback.message = "Feedback submission was successfull!";
+      }
+      console.log("i am the result of the esnd feedback", result);
+    } else {
+      console.log("Please fill the feedback form and values!");
+      state.feedback.message = "Please fill the feedback form and values!";
+      state.feedback.status = "empty";
+    }
   }
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
@@ -107,8 +142,10 @@ async function requestSummary(abstractInfromation) {
           "http://localhost:8080/abstracts/abstract",
           options
         );
-        const responseData = await response.json();
+        let responseData = await response.json();
         console.log("this is responseData", responseData);
+        // adding the interactionId in abstractData
+        responseData.abstract.interactionID = responseData.interactionId;
         resolve(responseData.abstract);
       } catch (error) {
         reject(error);
@@ -116,6 +153,46 @@ async function requestSummary(abstractInfromation) {
     });
   });
 }
+
+async function sendFeedback(feedback) {
+  const { elementaryDifficulty, advancedDifficulty, originalDifficulty, text } =
+    feedback;
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get("accessToken", async function (data) {
+      const accessToken = data.accessToken;
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "JWT " + accessToken,
+        },
+        body: JSON.stringify({
+          elementaryDifficulty,
+          advancedDifficulty,
+          originalDifficulty,
+          text,
+          interactionID: state.abstractData.interactionID,
+        }),
+      };
+      try {
+        const response = await fetch(
+          "http://localhost:8080/abstracts/submitFeedback",
+          options
+        );
+        const responseData = await response.json();
+        console.log("this is feedback", responseData);
+        let success = false;
+        if (responseData.feedback) {
+          success = true;
+        }
+        resolve({ success, message: responseData.message });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
+
 // function showLoading(loading) {
 //   if (loading) {
 //     chrome.runtime.sendMessage({ action: "showLoading" });

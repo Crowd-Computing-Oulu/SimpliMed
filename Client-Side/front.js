@@ -2,6 +2,8 @@ let currentTab = "";
 let originalText = "";
 let originalAbstractHtml = "";
 let state = {};
+// let difficultyLevel = 0;
+
 document.addEventListener("DOMContentLoaded", () => {
   // Close the popup window
   document.getElementById("closeBtn").addEventListener("click", function () {
@@ -30,8 +32,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // GET ABSTRACT INFORMATION
   const getAbstractBtn = document.getElementById("getAbstract");
   getAbstractBtn.addEventListener("click", async () => {
-    // removing the previous abstract
+    // removing the previous abstract with feedback form
     document.getElementById("main-content").classList.add("hidden");
+    document.getElementById("feedbackValue-container").classList.add("hidden");
+
     // removing the difficulty section
     // document.getElementById("difficulty-lvl").classList.add("hidden");
 
@@ -67,9 +71,20 @@ document.addEventListener("DOMContentLoaded", () => {
           message.state.username;
 
         if (message.state.abstractData) {
-          document
-            .getElementById("feedbackValue-container")
-            .classList.remove("hidden");
+          document.getElementById("difficulty-lvl__input").value =
+            message.state.difficultyLevel;
+          sliderUpdated(message.state.difficultyLevel, false);
+          if (
+            message.state.difficultyLevel > 0 &&
+            message.state.difficultyLevel < 4
+          ) {
+            document
+              .getElementById("feedbackValue-container")
+              .classList.remove("hidden");
+            // document
+            //   .getElementById("abstract-container")
+            //   .classList.remove("hidden");
+          }
           document.getElementsByClassName("summary-title")[0].textContent =
             message.state.abstractData.summerizedTitle;
           document.getElementsByClassName("original-title")[0].textContent =
@@ -93,6 +108,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       if (message.state.feedback) {
         updateFeedbackForm();
+        if (message.state.feedback.status === "failed") {
+          document
+            .getElementById("feedbackSubmisisonResult")
+            .classList.remove("hidden");
+          document.getElementById("feedbackSubmisisonResult").textContent =
+            message.state.feedback.message;
+        } else if (message.state.feedback.status === "sent") {
+          document.getElementById("feedbackTextForm").classList.add("hidden");
+          document
+            .getElementById("feedbackSubmisisonResult")
+            .classList.remove("hidden");
+          document.getElementById("feedbackSubmisisonResult").textContent =
+            message.state.feedback.message;
+        } else if (message.state.feedback.status === "empty") {
+        }
       }
     } else if (message.action === "showLoading") {
       document
@@ -131,111 +161,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const rangeInput = document.getElementById("difficulty-lvl__input");
+  if (rangeInput.value === "0") {
+    document.getElementById("abstract-container").classList.add("hidden");
+    // chera inkhat badi kar nemikone?
+    // document.getElementById("feedbackValue-container").classList.add("hidden");
+  }
 
   rangeInput.addEventListener("input", () => {
-    // Showing the first lvl difficulty summary
-    if (rangeInput.value === "0") {
-      document.getElementById("abstract-container").classList.add("hidden");
-      document
-        .getElementById("feedbackValue-container")
-        .classList.add("hidden");
-    } else if (rangeInput.value === "1") {
-      // measuring time spent on the Elementary abstract
-      // clearInterval(timerInterval); // Clear previous interval to start fresh
-      // timerInterval = setInterval(() => {
-      //   elementaryTime++; // Increment the Elementary time
-      //   console.log(elementaryTime);
-      // }, 1000); // Update the elapsed time every second the user is on elementary abstract
-      document.getElementById("abstract-container").classList.remove("hidden");
-      document
-        .getElementById("feedbackValue-container")
-        .classList.remove("hidden");
-      document.getElementById("formName").value = "elementaryForm";
-      // adding / removing hidden class based on the range inputvalue
-      document
-        .getElementsByClassName("original-abs")[0]
-        .classList.add("hidden");
-      document
-        .getElementsByClassName("elementary-abs")[0]
-        .classList.remove("hidden");
-      document
-        .getElementsByClassName("advanced-abs")[0]
-        .classList.add("hidden");
-      document
-        .getElementsByClassName("original-title")[0]
-        .classList.add("hidden");
-      document
-        .getElementsByClassName("summary-title")[0]
-        .classList.remove("hidden");
-
-      // Showing the second lvl difficulty summary
-    } else if (rangeInput.value === "2") {
-      // measuring time spent on the advanced abstract
-      // clearInterval(timerInterval); // Clear previous interval to start fresh
-      // timerInterval = setInterval(() => {
-      //   advancedTime++; // Increment the advanced time
-      //   console.log(advancedTime);
-      // }, 1000); // Update the elapsed time every second the user is on advanced abstract
-      document.getElementById("formName").value = "advancedForm";
-      document.getElementById("abstract-container").classList.remove("hidden");
-      document
-        .getElementById("feedbackValue-container")
-        .classList.remove("hidden");
-      document
-        .getElementsByClassName("original-abs")[0]
-        .classList.add("hidden");
-      document
-        .getElementsByClassName("elementary-abs")[0]
-        .classList.add("hidden");
-      document
-        .getElementsByClassName("advanced-abs")[0]
-        .classList.remove("hidden");
-
-      document
-        .getElementsByClassName("original-title")[0]
-        .classList.add("hidden");
-      document
-        .getElementsByClassName("summary-title")[0]
-        .classList.remove("hidden");
-
-      // showing the original abs
-    } else if (rangeInput.value === "3") {
-      // measuring time spent on the original abstract
-      // clearInterval(timerInterval); // Clear previous interval to start fresh
-      // timerInterval = setInterval(() => {
-      //   originalTime++; // Increment the original time
-      //   console.log(originalTime);
-      // }, 1000); // Update the elapsed time every second the user is on original abstract
-      document.getElementById("formName").value = "originalForm";
-      document.getElementById("abstract-container").classList.remove("hidden");
-      document
-        .getElementById("feedbackValue-container")
-        .classList.remove("hidden");
-      document
-        .getElementsByClassName("original-abs")[0]
-        .classList.remove("hidden");
-      // document
-      //   .getElementsByClassName("title-abstract")[0]
-      //   .classList.add("hidden");
-      document
-        .getElementsByClassName("elementary-abs")[0]
-        .classList.add("hidden");
-      document
-        .getElementsByClassName("advanced-abs")[0]
-        .classList.add("hidden");
-      document
-        .getElementsByClassName("original-title")[0]
-        .classList.remove("hidden");
-      document
-        .getElementsByClassName("summary-title")[0]
-        .classList.add("hidden");
-    } else if (rangeInput.value === "4") {
-      document.getElementById("abstract-container").classList.add("hidden");
-      document
-        .getElementById("feedbackValue-container")
-        .classList.add("hidden");
-    }
-    updateFeedbackForm();
+    sliderUpdated(rangeInput.value, true);
   });
   //FEEDBACK RADIO
   document.getElementById("valueSubmitBtn").addEventListener("click", () => {
@@ -266,21 +199,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (feedbackValue) {
-      // const error = document.createElement("p");
-      // error.id = "elementaryError";
-      // error.innerHtml = "please select an option!";
-      // const parent = document.getElementById("feedbackValue-container");
-      // parent.appendChild(error);
-
       document.getElementById("error").classList.add("hidden");
       document.getElementById("result").classList.remove("hidden");
       document.getElementById("error").innerHTML = "";
-      document.getElementById("result").innerHTML = "Submitted Successfully!";
+      document.getElementById("result").innerHTML = "Submitted!";
       chrome.runtime.sendMessage({
         action: "feedbackValueSubmitted",
         feedbackType,
         feedbackValue,
       });
+      emptyFeedbackForm();
     } else {
       document.getElementById("error").classList.remove("hidden");
       document.getElementById("result").classList.add("hidden");
@@ -289,6 +217,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Finish
+  document.getElementById("finishBtn").addEventListener("click", () => {
+    const feedbackText = document.getElementById("feedbackTextInput").value;
+    // document.getElementById("feedbackTextForm").add("hidden");
+    chrome.runtime.sendMessage({
+      action: "feedbackTextSubmitted",
+      feedbackText,
+    });
+  });
   chrome.runtime.sendMessage({ action: "state" });
 });
 
@@ -338,7 +275,6 @@ async function getTabInformation(tab) {
 }
 function updateFeedbackForm() {
   console.log("am i working??");
-
   const formName = document.getElementById("formName").value;
   let feedbackType = "";
   switch (formName) {
@@ -364,5 +300,120 @@ function updateFeedbackForm() {
       document.getElementById("result").classList.add("hidden");
       console.log("am i working?");
     }
+  }
+}
+function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
+  console.log("helllow");
+  if (shouldUpdateBackend) {
+    chrome.runtime.sendMessage({
+      action: "sendDifficultyLevel",
+      difficultyLevel,
+    });
+  }
+  // Showing the first lvl difficulty summary
+  if (difficultyLevel === "0") {
+    document.getElementById("abstract-container").classList.add("hidden");
+    document.getElementById("feedbackValue-container").classList.add("hidden");
+    document.getElementById("feedbackText-container").classList.add("hidden");
+  } else if (difficultyLevel === "1") {
+    // measuring time spent on the Elementary abstract
+    // clearInterval(timerInterval); // Clear previous interval to start fresh
+    // timerInterval = setInterval(() => {
+    //   elementaryTime++; // Increment the Elementary time
+    //   console.log(elementaryTime);
+    // }, 1000); // Update the elapsed time every second the user is on elementary abstract
+    document.getElementById("feedbackText-container").classList.add("hidden");
+
+    document.getElementById("abstract-container").classList.remove("hidden");
+    document
+      .getElementById("feedbackValue-container")
+      .classList.remove("hidden");
+    document.getElementById("formName").value = "elementaryForm";
+    // adding / removing hidden class based on the range inputvalue
+    document.getElementsByClassName("original-abs")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("elementary-abs")[0]
+      .classList.remove("hidden");
+    document.getElementsByClassName("advanced-abs")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("original-title")[0]
+      .classList.add("hidden");
+    document
+      .getElementsByClassName("summary-title")[0]
+      .classList.remove("hidden");
+
+    // Showing the second lvl difficulty summary
+  } else if (difficultyLevel === "2") {
+    // measuring time spent on the advanced abstract
+    // clearInterval(timerInterval); // Clear previous interval to start fresh
+    // timerInterval = setInterval(() => {
+    //   advancedTime++; // Increment the advanced time
+    //   console.log(advancedTime);
+    // }, 1000); // Update the elapsed time every second the user is on advanced abstract
+    document.getElementById("feedbackText-container").classList.add("hidden");
+
+    document.getElementById("formName").value = "advancedForm";
+    document.getElementById("abstract-container").classList.remove("hidden");
+    document
+      .getElementById("feedbackValue-container")
+      .classList.remove("hidden");
+    document.getElementsByClassName("original-abs")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("elementary-abs")[0]
+      .classList.add("hidden");
+    document
+      .getElementsByClassName("advanced-abs")[0]
+      .classList.remove("hidden");
+
+    document
+      .getElementsByClassName("original-title")[0]
+      .classList.add("hidden");
+    document
+      .getElementsByClassName("summary-title")[0]
+      .classList.remove("hidden");
+
+    // showing the original abs
+  } else if (difficultyLevel === "3") {
+    // measuring time spent on the original abstract
+    // clearInterval(timerInterval); // Clear previous interval to start fresh
+    // timerInterval = setInterval(() => {
+    //   originalTime++; // Increment the original time
+    //   console.log(originalTime);
+    // }, 1000); // Update the elapsed time every second the user is on original abstract
+    document.getElementById("feedbackText-container").classList.add("hidden");
+
+    document.getElementById("formName").value = "originalForm";
+    document.getElementById("abstract-container").classList.remove("hidden");
+    document
+      .getElementById("feedbackValue-container")
+      .classList.remove("hidden");
+    document
+      .getElementsByClassName("original-abs")[0]
+      .classList.remove("hidden");
+    // document
+    //   .getElementsByClassName("title-abstract")[0]
+    //   .classList.add("hidden");
+    document
+      .getElementsByClassName("elementary-abs")[0]
+      .classList.add("hidden");
+    document.getElementsByClassName("advanced-abs")[0].classList.add("hidden");
+    document
+      .getElementsByClassName("original-title")[0]
+      .classList.remove("hidden");
+    document.getElementsByClassName("summary-title")[0].classList.add("hidden");
+  } else if (difficultyLevel === "4") {
+    document.getElementById("abstract-container").classList.add("hidden");
+    document.getElementById("feedbackValue-container").classList.add("hidden");
+    document
+      .getElementById("feedbackText-container")
+      .classList.remove("hidden");
+  }
+  updateFeedbackForm();
+}
+function emptyFeedbackForm() {
+  var radios = document.getElementsByName("feedbackValue");
+
+  for (var i = 0; i < radios.length; i++) {
+    radios[i].checked = false;
   }
 }
