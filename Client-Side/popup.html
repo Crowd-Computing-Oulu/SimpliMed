@@ -138,12 +138,14 @@
             </datalist>
           </div>
         </div>
-        <h4 class="original-title"></h4>
-        <h4 class="summary-title"></h4>
-        <!-- <h2 class="title-abstract"></h2> -->
-        <p class="elementary-abs"></p>
-        <p class="advanced-abs"></p>
-        <p class="original-abs"></p>
+        <div id="abstract-container">
+          <h4 class="original-title"></h4>
+          <h4 class="summary-title"></h4>
+          <!-- <h2 class="title-abstract"></h2> -->
+          <p class="elementary-abs"></p>
+          <p class="advanced-abs"></p>
+          <p class="original-abs"></p>
+        </div>
       </div>
 
       <!-- INPUT SECTION FOR PILOT STUDY  -->
@@ -180,7 +182,9 @@
           <button type="button" id="valueSubmitBtn" class="btn">Submit</button>
         </form>
         <p id="error" class="hidden" style="color: red">Submit again</p>
-        <p id="result" class="hidden" style="color: green">submitted</p>
+        <p id="result" class="hidden" style="color: green">
+          Submitted Successfully!
+        </p>
       </div>
 
       <!-- <form id="questionForm">

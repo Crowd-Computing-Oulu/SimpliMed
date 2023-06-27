@@ -1,6 +1,7 @@
 let currentTab = "";
 let originalText = "";
 let originalAbstractHtml = "";
+let state = {};
 document.addEventListener("DOMContentLoaded", () => {
   // Close the popup window
   document.getElementById("closeBtn").addEventListener("click", function () {
@@ -45,6 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
   chrome.runtime.onMessage.addListener((message) => {
     // listening for a change in state
     if (message.action === "stateUpdate") {
+      state = message.state;
+      console.log("the state is,", state);
       if (message.state.isLoading) {
         document
           .getElementsByClassName("loader-container")[0]
@@ -89,16 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("header").classList.add("hidden");
       }
       if (message.state.feedback) {
-        // document
-        //   .getElementById("feedbackValue-container")
-        //   .classList.remove("hidden");
-        if (message.state.feedback.elementaryDifficulty) {
-          // document.getElementById("error").classList.add("hidden");
-          // document.getElementById("result").classList.remove("hidden");
-          // document.getElementById("error").innerHTML = "";
-          // document.getElementById("result").innerHTML =
-          //   "Submitted Successfully!";
-        }
+        updateFeedbackForm();
       }
     } else if (message.action === "showLoading") {
       document
@@ -140,14 +134,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   rangeInput.addEventListener("input", () => {
     // Showing the first lvl difficulty summary
-    if (rangeInput.value === "1") {
+    if (rangeInput.value === "0") {
+      document.getElementById("abstract-container").classList.add("hidden");
+      document
+        .getElementById("feedbackValue-container")
+        .classList.add("hidden");
+    } else if (rangeInput.value === "1") {
       // measuring time spent on the Elementary abstract
       // clearInterval(timerInterval); // Clear previous interval to start fresh
       // timerInterval = setInterval(() => {
       //   elementaryTime++; // Increment the Elementary time
       //   console.log(elementaryTime);
       // }, 1000); // Update the elapsed time every second the user is on elementary abstract
-
+      document.getElementById("abstract-container").classList.remove("hidden");
+      document
+        .getElementById("feedbackValue-container")
+        .classList.remove("hidden");
       document.getElementById("formName").value = "elementaryForm";
       // adding / removing hidden class based on the range inputvalue
       document
@@ -175,7 +177,10 @@ document.addEventListener("DOMContentLoaded", () => {
       //   console.log(advancedTime);
       // }, 1000); // Update the elapsed time every second the user is on advanced abstract
       document.getElementById("formName").value = "advancedForm";
-
+      document.getElementById("abstract-container").classList.remove("hidden");
+      document
+        .getElementById("feedbackValue-container")
+        .classList.remove("hidden");
       document
         .getElementsByClassName("original-abs")[0]
         .classList.add("hidden");
@@ -202,7 +207,10 @@ document.addEventListener("DOMContentLoaded", () => {
       //   console.log(originalTime);
       // }, 1000); // Update the elapsed time every second the user is on original abstract
       document.getElementById("formName").value = "originalForm";
-
+      document.getElementById("abstract-container").classList.remove("hidden");
+      document
+        .getElementById("feedbackValue-container")
+        .classList.remove("hidden");
       document
         .getElementsByClassName("original-abs")[0]
         .classList.remove("hidden");
@@ -221,7 +229,13 @@ document.addEventListener("DOMContentLoaded", () => {
       document
         .getElementsByClassName("summary-title")[0]
         .classList.add("hidden");
+    } else if (rangeInput.value === "4") {
+      document.getElementById("abstract-container").classList.add("hidden");
+      document
+        .getElementById("feedbackValue-container")
+        .classList.add("hidden");
     }
+    updateFeedbackForm();
   });
   //FEEDBACK RADIO
   document.getElementById("valueSubmitBtn").addEventListener("click", () => {
@@ -321,4 +335,34 @@ async function getTabInformation(tab) {
     url: tab.url,
   };
   return abstractInformation;
+}
+function updateFeedbackForm() {
+  console.log("am i working??");
+
+  const formName = document.getElementById("formName").value;
+  let feedbackType = "";
+  switch (formName) {
+    case "elementaryForm":
+      feedbackType = "elementaryDifficulty";
+      break;
+    case "advancedForm":
+      feedbackType = "advancedDifficulty";
+      break;
+    case "originalForm":
+      feedbackType = "originalDifficulty";
+      break;
+    default:
+      return;
+  }
+  if (state.feedback) {
+    if (state.feedback[feedbackType]) {
+      document.getElementById("feedbackValueForm").classList.add("hidden");
+      document.getElementById("result").classList.remove("hidden");
+      console.log("am i working?");
+    } else {
+      document.getElementById("feedbackValueForm").classList.remove("hidden");
+      document.getElementById("result").classList.add("hidden");
+      console.log("am i working?");
+    }
+  }
 }

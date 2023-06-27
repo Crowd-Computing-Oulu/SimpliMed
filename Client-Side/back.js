@@ -29,6 +29,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
     if (state.accessToken) {
       // state.accessToken = message.accessToken;
       delete state.abstractData;
+      delete state.feedback;
       console.log("abstract data is dfs", state.abstractData);
       state.isLoading = true;
       chrome.runtime.sendMessage({ action: "stateUpdate", state });

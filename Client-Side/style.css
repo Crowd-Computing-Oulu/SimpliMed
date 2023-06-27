@@ -171,7 +171,7 @@ h4.original-title,
 h4.summary-title {
   width: 100%;
   /* margin-top: 0; */
-  color: rgb(72, 72, 255);
+  color: var(--secondary-color);
   margin: 1.25rem 0;
   font-size: 1.15rem;
 }
@@ -439,6 +439,7 @@ h2 {
   margin-top: 20px;
   font-size: 1rem;
   font-weight: bold;
+  color: var(--secondary-color);
 }
 .checkboxgroup {
   display: flex;
