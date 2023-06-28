@@ -16,6 +16,9 @@ let state = {
   //   originalDifficulty,
   //   advancedDifficulty,
   //   elementaryDifficulty,
+  //   originalTime,
+  //   advancedTime,
+  //   elementaryTime,
   // },
 };
 chrome.storage.local.get(["accessToken", "username"], async function (data) {
@@ -76,12 +79,12 @@ chrome.runtime.onMessage.addListener(async (message) => {
       state.feedback.originalDifficulty &&
       state.feedback.text
     ) {
-      let result;
+      let result = {};
       try {
         result = await sendFeedback(state.feedback);
       } catch (error) {
         result.success = false;
-        result.message = "Feedback submission failed!";
+        result.message = "Feedback submission failed!!";
       }
       if (!result.success) {
         state.feedback.status = "failed";
@@ -188,6 +191,7 @@ async function sendFeedback(feedback) {
         resolve({ success, message: responseData.message });
       } catch (error) {
         reject(error);
+        // resolve({ success: false, message: "Could not connect to server!" });
       }
     });
   });

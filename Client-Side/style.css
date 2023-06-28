@@ -4,9 +4,11 @@
   --primary-color: #3d8aa4;
   --secondary-color: #543884;
   --tertiary-color: #e2f0f7;
-
   --primary-font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   --secondary-font: "Kanit", sans-serif;
+}
+body {
+  overflow-y: scroll;
 }
 * {
   border: 0;
@@ -80,7 +82,7 @@
 }
 .logoutIcon-container:hover {
   cursor: pointer;
-  background-color: var(--secondary-color);
+  background-color: red !important;
 }
 .logoutIcon-container i {
   color: white;
