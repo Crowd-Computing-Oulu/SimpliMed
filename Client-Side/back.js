@@ -2,6 +2,7 @@ let state = {
   // accessToken: "",
   isLoading: false,
   difficultyLevel: 0,
+  instructionShown: false,
   // abstractData: {
   //   interactionId: "test",
   //   url: "test",
@@ -34,6 +35,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
       // state.accessToken = message.accessToken;
       delete state.abstractData;
       delete state.feedback;
+      state.instructionShown = true;
       console.log("abstract data is", state.abstractData);
       state.isLoading = true;
       chrome.runtime.sendMessage({ action: "stateUpdate", state });
@@ -55,7 +57,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
     }
   } else if (message.action === "logout") {
     await clearChromeStorage();
-    state = {};
+    state = { isLoading: false, difficultyLevel: 0, instructionShown: false };
     console.log("the user logged out in back");
     // Key-value pairs removed successfully
     // state deleted

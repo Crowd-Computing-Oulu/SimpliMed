@@ -66,9 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("header-username").textContent =
           message.state.username;
         // if user is logged in, he will see the instructions
-        document
-          .getElementById("instructions-container")
-          .classList.remove("hidden");
+
         if (message.state.abstractData) {
           document.getElementById("difficulty-lvl__input").value =
             message.state.difficultyLevel;
@@ -106,9 +104,9 @@ document.addEventListener("DOMContentLoaded", () => {
         //   .getElementById("feedbackValue-container")
         //   .classList.add("hidden");
 
-        document
-          .getElementById("instructions-container")
-          .classList.add("hidden");
+        // document
+        //   .getElementById("instructions-container")
+        //   .classList.add("hidden");
       }
       if (message.state.feedback) {
         updateFeedbackForm();
@@ -128,20 +126,25 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (message.state.feedback.status === "empty") {
         }
       }
+      if (!message.state.instructionShown && message.state.accessToken) {
+        document
+          .getElementById("instructions-container")
+          .classList.remove("hidden");
+      } else {
+        document
+          .getElementById("instructions-container")
+          .classList.add("hidden");
+      }
     } else if (message.action === "showLoading") {
       document
         .getElementsByClassName("loader-container")[0]
         .classList.remove("hidden");
-      document
-        .getElementById("instructions-container")
-        .classList.remove("hidden");
+      // document.getElementById("instructions-container").classList.add("hidden");
     } else if (message.action === "hideLoading") {
       document
         .getElementsByClassName("loader-container")[0]
         .classList.add("hidden");
-      document
-        .getElementById("instructions-container")
-        .classList.remove("hidden");
+      // document.getElementById("instructions-container").classList.add("hidden");
     }
   });
 
