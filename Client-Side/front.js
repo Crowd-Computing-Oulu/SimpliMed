@@ -158,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // LOGOUT
   const logoutBtn = document.getElementById("logoutBtn");
   logoutBtn.addEventListener("click", async () => {
+    document.getElementById("feedbackValue-container").classList.add("hidden");
     chrome.runtime.sendMessage({ action: "logout" });
   });
 
