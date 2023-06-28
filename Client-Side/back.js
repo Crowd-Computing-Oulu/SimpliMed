@@ -54,11 +54,11 @@ chrome.runtime.onMessage.addListener(async (message) => {
       );
     }
   } else if (message.action === "logout") {
-    chrome.storage.local.remove(["username", "accessToken"], function () {
-      state = {};
-      // Key-value pairs removed successfully
-      // state deleted
-    });
+    await clearChromeStorage();
+    state = {};
+    console.log("the user logged out in back");
+    // Key-value pairs removed successfully
+    // state deleted
   } else if (message.action === "feedbackValueSubmitted") {
     if (!state.feedback) {
       state.feedback = {};
@@ -100,6 +100,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
       state.feedback.status = "empty";
     }
   }
+
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
 
@@ -196,7 +197,17 @@ async function sendFeedback(feedback) {
     });
   });
 }
-
+async function clearChromeStorage() {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.remove(["username", "accessToken"], function () {
+      resolve();
+      // if (chrome.runtime.lastError) {
+      //   reject(chrome.runtime.lastError);
+      // } else {
+      // }
+    });
+  });
+}
 // function showLoading(loading) {
 //   if (loading) {
 //     chrome.runtime.sendMessage({ action: "showLoading" });

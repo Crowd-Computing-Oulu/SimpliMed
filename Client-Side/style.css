@@ -71,6 +71,11 @@ body {
 
   font-size: 1.2rem;
 }
+.instructions-container {
+  padding: 5% 5%;
+  font-size: 1rem;
+  font-family: var(--primary-font);
+}
 .logoutIcon-container {
   border-radius: 50%;
   width: 30px;

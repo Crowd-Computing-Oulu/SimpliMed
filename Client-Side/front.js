@@ -69,7 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("header").classList.remove("hidden");
         document.getElementById("header-username").textContent =
           message.state.username;
-
+        // if user is logged in, he will see the instructions
+        document
+          .getElementById("instructions-container")
+          .classList.remove("hidden");
         if (message.state.abstractData) {
           document.getElementById("difficulty-lvl__input").value =
             message.state.difficultyLevel;
@@ -97,11 +100,19 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById("main-content").classList.add("hidden");
         }
       } else {
+        console.log("user should see the loginpage again");
         // if there is no access token, the user will see the login section
         document.getElementById("login-container").classList.remove("hidden");
         document.getElementById("main-content").classList.add("hidden");
         document.getElementById("getAbstract").classList.add("hidden");
         document.getElementById("header").classList.add("hidden");
+        // document
+        //   .getElementById("feedbackValue-container")
+        //   .classList.add("hidden");
+
+        document
+          .getElementById("instructions-container")
+          .classList.add("hidden");
       }
       if (message.state.feedback) {
         updateFeedbackForm();
