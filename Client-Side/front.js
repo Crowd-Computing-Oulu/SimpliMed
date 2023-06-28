@@ -165,6 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const difficultyLvlInput = document.getElementById("difficulty-lvl__input");
   if (difficultyLvlInput.value === "0") {
     document.getElementById("abstract-container").classList.add("hidden");
+    document
+      .getElementById("difficulty-lvl_instructions")
+      .classList.remove("hidden");
+
     // the following code doesnt work, we use the background to set the container as hidden
     // document.getElementById("feedbackValue-container").classList.add("hidden");
   }
@@ -314,6 +318,9 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     document.getElementById("abstract-container").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
     document.getElementById("feedbackText-container").classList.add("hidden");
+    document
+      .getElementById("difficulty-lvl_instructions")
+      .classList.remove("hidden");
   } else if (difficultyLevel === "1") {
     // measuring time spent on the Elementary abstract
     // clearInterval(timerInterval); // Clear previous interval to start fresh
@@ -322,6 +329,10 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     //   console.log(elementaryTime);
     // }, 1000); // Update the elapsed time every second the user is on elementary abstract
     document.getElementById("formName").value = "elementaryForm";
+    document
+      .getElementById("difficulty-lvl_instructions")
+      .classList.add("hidden");
+
     showElementaryAbstract();
 
     // Showing the second lvl difficulty summary
@@ -333,6 +344,10 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     //   console.log(advancedTime);
     // }, 1000); // Update the elapsed time every second the user is on advanced abstract
     document.getElementById("formName").value = "advancedForm";
+    document
+      .getElementById("difficulty-lvl_instructions")
+      .classList.add("hidden");
+
     showAdvancedAbstract();
 
     // showing the original abs
@@ -344,10 +359,18 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     //   console.log(originalTime);
     // }, 1000); // Update the elapsed time every second the user is on original abstract
     document.getElementById("formName").value = "originalForm";
+    document
+      .getElementById("difficulty-lvl_instructions")
+      .classList.add("hidden");
+
     showOriginalAbstract();
   } else if (difficultyLevel === "4") {
     document.getElementById("abstract-container").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
+    document
+      .getElementById("difficulty-lvl_instructions")
+      .classList.add("hidden");
+
     document
       .getElementById("feedbackText-container")
       .classList.remove("hidden");

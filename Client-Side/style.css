@@ -214,6 +214,11 @@ p {
   left: -6%;
   width: 112%;
 }
+#difficulty-lvl_instructions {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-family: var(--primary-font);
+}
 .difficulty-lvl__title {
   font-size: 1rem;
   padding-right: 1rem;
