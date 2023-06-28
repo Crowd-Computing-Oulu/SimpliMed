@@ -46,12 +46,13 @@ chrome.runtime.onMessage.addListener(async (message) => {
       const accessToken = await requestLogin(message.username);
       state.username = message.username;
       state.accessToken = accessToken;
-      chrome.storage.local.set(
-        { accessToken: state.accessToken, username: state.username },
-        function () {
-          console.log("access token saved in storage successfully!");
-        }
-      );
+      await setChromeStorage();
+      console.log("access token saved in storage successfully!");
+      // chrome.storage.local.set(
+      //   { accessToken: state.accessToken, username: state.username },
+      //   function () {
+      //   }
+      // );
     }
   } else if (message.action === "logout") {
     await clearChromeStorage();
@@ -100,7 +101,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
       state.feedback.status = "empty";
     }
   }
-
+  console.log("state is updateding hree");
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
 
@@ -206,6 +207,16 @@ async function clearChromeStorage() {
       // } else {
       // }
     });
+  });
+}
+async function setChromeStorage() {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.set(
+      { accessToken: state.accessToken, username: state.username },
+      function () {
+        resolve();
+      }
+    );
   });
 }
 // function showLoading(loading) {
