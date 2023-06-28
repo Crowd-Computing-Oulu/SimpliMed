@@ -34,11 +34,15 @@ chrome.runtime.onMessage.addListener(async (message) => {
       // state.accessToken = message.accessToken;
       delete state.abstractData;
       delete state.feedback;
-      console.log("abstract data is dfs", state.abstractData);
+      console.log("abstract data is", state.abstractData);
       state.isLoading = true;
       chrome.runtime.sendMessage({ action: "stateUpdate", state });
-      state.abstractData = await requestSummary(message.abstractInformation);
-      console.log("state.abstract", state.abstractData);
+      try {
+        state.abstractData = await requestSummary(message.abstractInformation);
+      } catch (error) {
+        console.log(error.message);
+        // show a message
+      }
       state.isLoading = false;
     }
   } else if (message.action === "login") {
@@ -48,11 +52,6 @@ chrome.runtime.onMessage.addListener(async (message) => {
       state.accessToken = accessToken;
       await setChromeStorage();
       console.log("access token saved in storage successfully!");
-      // chrome.storage.local.set(
-      //   { accessToken: state.accessToken, username: state.username },
-      //   function () {
-      //   }
-      // );
     }
   } else if (message.action === "logout") {
     await clearChromeStorage();
@@ -147,11 +146,16 @@ async function requestSummary(abstractInfromation) {
           "http://localhost:8080/abstracts/abstract",
           options
         );
+        console.log("this is response", response);
         let responseData = await response.json();
-        console.log("this is responseData", responseData);
-        // adding the interactionId in abstractData
-        responseData.abstract.interactionID = responseData.interactionId;
-        resolve(responseData.abstract);
+        if (response.status == 200) {
+          // adding the interactionId in abstractData
+          responseData.abstract.interactionID = responseData.interactionId;
+          resolve(responseData.abstract);
+        } else {
+          reject({ message: responseData.message });
+        }
+        // console.log("this is responseData", responseData);
       } catch (error) {
         reject(error);
       }

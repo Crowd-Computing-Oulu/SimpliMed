@@ -32,13 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // GET ABSTRACT INFORMATION
   const getAbstractBtn = document.getElementById("getAbstract");
   getAbstractBtn.addEventListener("click", async () => {
-    // removing the previous abstract with feedback form
+    document.getElementById("instructions-container").classList.add("hidden");
     document.getElementById("main-content").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
-
-    // removing the difficulty section
-    // document.getElementById("difficulty-lvl").classList.add("hidden");
-
     const abstractInformation = await getTabInformation(currentTab);
     chrome.runtime.sendMessage({
       action: "getAbstractInfromation",
@@ -136,10 +132,16 @@ document.addEventListener("DOMContentLoaded", () => {
       document
         .getElementsByClassName("loader-container")[0]
         .classList.remove("hidden");
+      document
+        .getElementById("instructions-container")
+        .classList.remove("hidden");
     } else if (message.action === "hideLoading") {
       document
         .getElementsByClassName("loader-container")[0]
         .classList.add("hidden");
+      document
+        .getElementById("instructions-container")
+        .classList.remove("hidden");
     }
   });
 
