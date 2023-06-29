@@ -200,7 +200,7 @@ async function requestSummary(abstractInfromation) {
           Authorization: "JWT " + accessToken,
         },
         body: JSON.stringify({
-          originalAbstractt: originalAbstract,
+          originalAbstract: originalAbstract,
           originalTitle: originalTitle,
           url: url,
         }),

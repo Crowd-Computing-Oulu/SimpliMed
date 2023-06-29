@@ -10,12 +10,12 @@ let timeType = "";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Close the popup window
-  document.getElementById("closeBtn").addEventListener("click", function () {
-    window.close();
-  });
+  // document.getElementById("closeBtn").addEventListener("click", function () {
+  //   window.close();
+  // });
   const mainContentElement = document.getElementsByClassName("main-content")[0];
-  const loaderContainerElement =
-    document.getElementsByClassName("loader-container")[0];
+  // const loaderContainerElement =
+  //   document.getElementsByClassName("loader-container")[0];
   chrome.tabs.query(
     { active: true, currentWindow: true },
     async function (tabs) {
@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("getAbstract").classList.add("hidden");
         mainContentElement.innerHTML = `<div class="error-message">You are on the correct website, but you need to open an article</div>`;
       }
+      // the next code is needed to throw an error when we dont have a abstract in an article!
       const tabInformation = await getTabInformation(currentTab);
     }
   );
@@ -270,10 +271,16 @@ async function getTabInformation(tab) {
   originalAbstractHtml = doc.getElementById("abstract");
   if (!originalAbstractHtml) {
     document.getElementById("getAbstract").classList.add("hidden");
-    // toggleLoader(false);
-    throw new Error(
-      "This Article has no Abstract, please choose another Article."
-    );
+    const container = document.getElementById("container");
+    const err = document.createElement("p");
+    err.classList.add("error-message");
+    err.id = "noAbstract-error";
+    err.textContent =
+      "This Article has no Abstract, please choose another Article.";
+    container.appendChild(err);
+    // throw new Error(
+    //   "This Article has no Abstract, please choose another Article."
+    // );
   }
   // ***//
   let allParagraphs = "";
