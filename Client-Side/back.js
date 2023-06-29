@@ -1,3 +1,31 @@
+chrome.runtime.onConnect.addListener(function (port) {
+  if (port.name === "popupConnection") {
+    port.onDisconnect.addListener(function () {
+      console.log("popup has been closed");
+      if (tempTimeType) {
+        // if (!state.feedback) {
+        //   state.feedback = {};
+        // }
+        let delta = Date.now() - tempTimeValue;
+        console.log("delta is", typeof delta);
+        if (!state.feedback[tempTimeType]) {
+          state.feedback[tempTimeType] = 0;
+        }
+        state.feedback[tempTimeType] += delta;
+        console.log("time log", delta, tempTimeType);
+        console.log(
+          "state feedback is",
+          state.feedback[tempTimeType],
+          state.feedback
+        );
+
+        tempTimeType = "";
+        tempTimeValue = 0;
+      }
+    });
+  }
+});
+
 let state = {
   // accessToken: "",
   isLoading: false,
@@ -12,7 +40,12 @@ let state = {
   //   advancedAbstract: "test",
   //   elementaryAbstract: "test",
   // },
-  // feedbackData: {
+  feedback: {
+    originalTime: 0,
+    advancedTime: 0,
+    elementaryTime: 0,
+  },
+  // feedback: {
   //   text,
   //   originalDifficulty,
   //   advancedDifficulty,
@@ -22,6 +55,10 @@ let state = {
   //   elementaryTime,
   // },
 };
+
+let tempTimeValue = 0;
+let tempTimeType = "";
+
 chrome.storage.local.get(["accessToken", "username"], async function (data) {
   state.username = data.username;
   state.accessToken = data.accessToken;
@@ -35,6 +72,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
       // state.accessToken = message.accessToken;
       delete state.abstractData;
       delete state.feedback;
+      state.feedback = { originalTime: 0, advancedTime: 0, elementaryTime: 0 };
       state.instructionShown = true;
       console.log("abstract data is", state.abstractData);
       state.isLoading = true;
@@ -57,23 +95,32 @@ chrome.runtime.onMessage.addListener(async (message) => {
     }
   } else if (message.action === "logout") {
     await clearChromeStorage();
-    state = { isLoading: false, difficultyLevel: 0, instructionShown: false };
+    state = {
+      isLoading: false,
+      difficultyLevel: 0,
+      instructionShown: false,
+      feedback: {
+        originalTime: 0,
+        advancedTime: 0,
+        elementaryTime: 0,
+      },
+    };
     console.log("the user logged out in back");
     // Key-value pairs removed successfully
     // state deleted
   } else if (message.action === "feedbackValueSubmitted") {
-    if (!state.feedback) {
-      state.feedback = {};
-    }
+    // if (!state.feedback) {
+    //   state.feedback = {};
+    // }
     state.feedback[message.feedbackType] = message.feedbackValue;
     console.log("feedback  is", state.feedback);
   } else if (message.action === "sendDifficultyLevel") {
     state.difficultyLevel = message.difficultyLevel;
     console.log("im difficult", state.difficultyLevel);
   } else if (message.action === "feedbackTextSubmitted") {
-    if (!state.feedback) {
-      state.feedback = {};
-    }
+    // if (!state.feedback) {
+    //   state.feedback = {};
+    // }
     state.feedback.text = message.feedbackText;
     if (
       state.feedback.elementaryDifficulty &&
@@ -102,9 +149,19 @@ chrome.runtime.onMessage.addListener(async (message) => {
       state.feedback.status = "empty";
     }
   } else if (message.action === "timeUpdate") {
+    // if (!state.feedback) {
+    //   state.feedback = {};
+    // }
+    state.feedback[message.timeType] += message.delta;
+    // avoiding the loop
+    return;
+  } else if (message.action === "tempTimeUpdate") {
+    tempTimeType = message.timeType;
+    tempTimeValue = message.timeValue;
+    // console.log("temptimevalue", typeof tempTimeValue);
     return;
   }
-  console.log("state is updateding hree");
+  // console.log("state is updateding he");
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
 

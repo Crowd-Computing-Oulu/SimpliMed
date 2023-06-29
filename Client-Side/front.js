@@ -1,3 +1,5 @@
+var port = chrome.runtime.connect({ name: "popupConnection" });
+
 let currentTab = "";
 let originalText = "";
 let originalAbstractHtml = "";
@@ -323,6 +325,11 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
 
   // Showing the instructions
   if (difficultyLevel === "0") {
+    chrome.runtime.sendMessage({
+      action: "tempTimeUpdate",
+      timeValue: 0,
+      timeType: "",
+    });
     document.getElementById("abstract-container").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
     document.getElementById("feedbackText-container").classList.add("hidden");
@@ -335,10 +342,16 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     if (timeValue) {
       let delta = Date.now() - timeValue;
       chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
-      console.log(timeType, "is", delta);
+
+      // console.log(timeType, "is", delta);
     }
     timeType = "elementaryTime";
     timeValue = Date.now();
+    chrome.runtime.sendMessage({
+      action: "tempTimeUpdate",
+      timeValue,
+      timeType,
+    });
 
     document.getElementById("formName").value = "elementaryForm";
     document
@@ -356,7 +369,11 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     }
     timeType = "advancedTime";
     timeValue = Date.now();
-
+    chrome.runtime.sendMessage({
+      action: "tempTimeUpdate",
+      timeValue,
+      timeType,
+    });
     document.getElementById("formName").value = "advancedForm";
     document
       .getElementById("difficulty-lvl_instructions")
@@ -374,7 +391,11 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     }
     timeType = "originalTime";
     timeValue = Date.now();
-
+    chrome.runtime.sendMessage({
+      action: "tempTimeUpdate",
+      timeValue,
+      timeType,
+    });
     document.getElementById("formName").value = "originalForm";
     document
       .getElementById("difficulty-lvl_instructions")
@@ -382,6 +403,12 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
 
     showOriginalAbstract();
   } else if (difficultyLevel === "4") {
+    chrome.runtime.sendMessage({
+      action: "tempTimeUpdate",
+      timeValue: 0,
+      timeType: "",
+    });
+
     document.getElementById("abstract-container").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
     document
