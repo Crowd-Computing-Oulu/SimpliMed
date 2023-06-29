@@ -66,7 +66,6 @@ chrome.storage.local.get(["accessToken", "username"], async function (data) {
 });
 
 chrome.runtime.onMessage.addListener(async (message) => {
-  console.log("back is working");
   if (message.action === "getAbstractInfromation") {
     if (state.accessToken) {
       // state.accessToken = message.accessToken;
@@ -74,13 +73,18 @@ chrome.runtime.onMessage.addListener(async (message) => {
       delete state.feedback;
       state.feedback = { originalTime: 0, advancedTime: 0, elementaryTime: 0 };
       state.instructionShown = true;
-      console.log("abstract data is", state.abstractData);
+      // console.log("abstract data is", state.abstractData);
       state.isLoading = true;
       chrome.runtime.sendMessage({ action: "stateUpdate", state });
       try {
         state.abstractData = await requestSummary(message.abstractInformation);
       } catch (error) {
         console.log(error.message);
+        // showing the error message
+        chrome.runtime.sendMessage({
+          action: "requestSummaryError",
+          err: error.message,
+        });
         // show a message
       }
       state.isLoading = false;
@@ -196,7 +200,7 @@ async function requestSummary(abstractInfromation) {
           Authorization: "JWT " + accessToken,
         },
         body: JSON.stringify({
-          originalAbstract: originalAbstract,
+          originalAbstractt: originalAbstract,
           originalTitle: originalTitle,
           url: url,
         }),
@@ -225,8 +229,15 @@ async function requestSummary(abstractInfromation) {
 }
 
 async function sendFeedback(feedback) {
-  const { elementaryDifficulty, advancedDifficulty, originalDifficulty, text } =
-    feedback;
+  const {
+    elementaryDifficulty,
+    advancedDifficulty,
+    originalDifficulty,
+    text,
+    originalTime,
+    advancedTime,
+    elementaryTime,
+  } = feedback;
   return new Promise((resolve, reject) => {
     chrome.storage.local.get("accessToken", async function (data) {
       const accessToken = data.accessToken;
@@ -241,6 +252,9 @@ async function sendFeedback(feedback) {
           advancedDifficulty,
           originalDifficulty,
           text,
+          originalTime,
+          advancedTime,
+          elementaryTime,
           interactionID: state.abstractData.interactionID,
         }),
       };

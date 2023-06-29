@@ -36,6 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // GET ABSTRACT INFORMATION
   const getAbstractBtn = document.getElementById("getAbstract");
   getAbstractBtn.addEventListener("click", async () => {
+    // removing the error message if there is any
+    if (document.getElementById("requestSummaryError")) {
+      document.getElementById("requestSummaryError").remove();
+    }
     document.getElementById("instructions-container").classList.add("hidden");
     document.getElementById("main-content").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
@@ -149,6 +153,14 @@ document.addEventListener("DOMContentLoaded", () => {
         .getElementsByClassName("loader-container")[0]
         .classList.add("hidden");
       // document.getElementById("instructions-container").classList.add("hidden");
+    } else if (message.action === "requestSummaryError") {
+      const container = document.getElementById("container");
+      const err = document.createElement("p");
+      err.classList.add("error-message");
+      err.id = "requestSummaryError";
+      err.textContent = message.err;
+      container.appendChild(err);
+      console.log("requestSummaryError", message.err);
     }
   });
 
