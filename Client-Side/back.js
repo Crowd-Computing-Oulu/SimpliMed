@@ -8,9 +8,9 @@ chrome.runtime.onConnect.addListener(function (port) {
         // }
         let delta = Date.now() - tempTimeValue;
         console.log("delta is", typeof delta);
-        if (!state.feedback[tempTimeType]) {
-          state.feedback[tempTimeType] = 0;
-        }
+        // if (!state.feedback[tempTimeType]) {
+        //   state.feedback[tempTimeType] = 0;
+        // }
         state.feedback[tempTimeType] += delta;
         console.log("time log", delta, tempTimeType);
         console.log(
@@ -20,7 +20,7 @@ chrome.runtime.onConnect.addListener(function (port) {
         );
 
         tempTimeType = "";
-        tempTimeValue = 0;
+        tempTimeValue = null;
       }
     });
   }
@@ -56,7 +56,7 @@ let state = {
   // },
 };
 
-let tempTimeValue = 0;
+let tempTimeValue = null;
 let tempTimeType = "";
 
 chrome.storage.local.get(["accessToken", "username"], async function (data) {

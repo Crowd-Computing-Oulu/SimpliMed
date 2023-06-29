@@ -4,10 +4,9 @@ let currentTab = "";
 let originalText = "";
 let originalAbstractHtml = "";
 let state = {};
-// let timeType = "";
-// let timeValue = 0;
-
-// let difficultyLevel = 0;
+let timeValue = null;
+let delta = 0;
+let timeType = "";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Close the popup window
@@ -311,9 +310,6 @@ function updateFeedbackForm() {
   }
 }
 
-let timeValue = 0;
-let delta = 0;
-let timeType = "";
 function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
   document.getElementById("error").classList.add("hidden");
   if (shouldUpdateBackend) {
@@ -330,6 +326,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
       timeValue: 0,
       timeType: "",
     });
+
     document.getElementById("abstract-container").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
     document.getElementById("feedbackText-container").classList.add("hidden");
@@ -364,8 +361,6 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     if (timeValue) {
       let delta = Date.now() - timeValue;
       chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
-
-      console.log(timeType, "is", delta);
     }
     timeType = "advancedTime";
     timeValue = Date.now();
