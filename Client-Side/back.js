@@ -101,6 +101,8 @@ chrome.runtime.onMessage.addListener(async (message) => {
       state.feedback.message = "Please fill the feedback form and values!";
       state.feedback.status = "empty";
     }
+  } else if (message.action === "timeUpdate") {
+    return;
   }
   console.log("state is updateding hree");
   chrome.runtime.sendMessage({ action: "stateUpdate", state });

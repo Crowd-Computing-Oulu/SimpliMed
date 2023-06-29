@@ -2,6 +2,9 @@ let currentTab = "";
 let originalText = "";
 let originalAbstractHtml = "";
 let state = {};
+// let timeType = "";
+// let timeValue = 0;
+
 // let difficultyLevel = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -305,6 +308,10 @@ function updateFeedbackForm() {
     }
   }
 }
+
+let timeValue = 0;
+let delta = 0;
+let timeType = "";
 function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
   document.getElementById("error").classList.add("hidden");
   if (shouldUpdateBackend) {
@@ -313,7 +320,8 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
       difficultyLevel,
     });
   }
-  // Showing the first lvl difficulty summary
+
+  // Showing the instructions
   if (difficultyLevel === "0") {
     document.getElementById("abstract-container").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
@@ -321,28 +329,34 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     document
       .getElementById("difficulty-lvl_instructions")
       .classList.remove("hidden");
+
+    // Showing the elementary summary
   } else if (difficultyLevel === "1") {
-    // measuring time spent on the Elementary abstract
-    // clearInterval(timerInterval); // Clear previous interval to start fresh
-    // timerInterval = setInterval(() => {
-    //   elementaryTime++; // Increment the Elementary time
-    //   console.log(elementaryTime);
-    // }, 1000); // Update the elapsed time every second the user is on elementary abstract
+    if (timeValue) {
+      let delta = Date.now() - timeValue;
+      chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
+      console.log(timeType, "is", delta);
+    }
+    timeType = "elementaryTime";
+    timeValue = Date.now();
+
     document.getElementById("formName").value = "elementaryForm";
     document
       .getElementById("difficulty-lvl_instructions")
       .classList.add("hidden");
-
     showElementaryAbstract();
 
-    // Showing the second lvl difficulty summary
+    // Showing the advanced summary
   } else if (difficultyLevel === "2") {
-    // measuring time spent on the advanced abstract
-    // clearInterval(timerInterval); // Clear previous interval to start fresh
-    // timerInterval = setInterval(() => {
-    //   advancedTime++; // Increment the advanced time
-    //   console.log(advancedTime);
-    // }, 1000); // Update the elapsed time every second the user is on advanced abstract
+    if (timeValue) {
+      let delta = Date.now() - timeValue;
+      chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
+
+      console.log(timeType, "is", delta);
+    }
+    timeType = "advancedTime";
+    timeValue = Date.now();
+
     document.getElementById("formName").value = "advancedForm";
     document
       .getElementById("difficulty-lvl_instructions")
@@ -352,12 +366,15 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
 
     // showing the original abs
   } else if (difficultyLevel === "3") {
-    // measuring time spent on the original abstract
-    // clearInterval(timerInterval); // Clear previous interval to start fresh
-    // timerInterval = setInterval(() => {
-    //   originalTime++; // Increment the original time
-    //   console.log(originalTime);
-    // }, 1000); // Update the elapsed time every second the user is on original abstract
+    if (timeValue) {
+      let delta = Date.now() - timeValue;
+      chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
+
+      console.log(timeType, "is", delta);
+    }
+    timeType = "originalTime";
+    timeValue = Date.now();
+
     document.getElementById("formName").value = "originalForm";
     document
       .getElementById("difficulty-lvl_instructions")
