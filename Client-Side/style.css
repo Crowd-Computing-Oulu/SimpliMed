@@ -418,13 +418,23 @@ h2 {
   cursor: pointer;
 }
 .error-message {
-  color: red;
+  color: rgba(255, 0, 0, 0.6);
   font-weight: bold;
-  font-family: var(--primary-font);
+  font-family: var(--secondary-font);
   margin: 1%;
   font-size: 1rem;
-  color: red;
   padding: 1rem;
+  opacity: 0;
+  animation: fade-in 1s 1s forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 #message {
   text-align: center;

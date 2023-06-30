@@ -14,23 +14,24 @@ document.addEventListener("DOMContentLoaded", () => {
   //   window.close();
   // });
   const mainContentElement = document.getElementsByClassName("main-content")[0];
-  // const loaderContainerElement =
+  // const loaderContainerElement =this is
   //   document.getElementsByClassName("loader-container")[0];
   chrome.tabs.query(
     { active: true, currentWindow: true },
     async function (tabs) {
       currentTab = tabs[0];
+      console.log("currenttan is", currentTab);
       const regex = /^https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/\d+\/$/;
       // To check if the URL is correct (containing this string)
       if (currentTab.url.indexOf("pubmed.ncbi.nlm.nih.gov") === -1) {
         document.getElementById("getAbstract").classList.add("hidden");
-        mainContentElement.innerHTML = `<div class="error-message">This Website is not supported by the extension!</div>`;
+        mainContentElement.innerHTML = `<div class="error-message"><i class="fas fa-exclamation"></i> This Website is not supported by the extension, please go to https://pubmed.ncbi.nlm.nih.gov/</div>`;
       } else if (!regex.test(currentTab.url)) {
         document.getElementById("getAbstract").classList.add("hidden");
-        mainContentElement.innerHTML = `<div class="error-message">You are on the correct website, but you need to open an article</div>`;
+        mainContentElement.innerHTML = `<div class="error-message"><i class="fas fa-exclamation"></i> You are on the correct website, but you need to open an article</div>`;
       }
-      // the next code is needed to throw an error when we dont have a abstract in an article!
-      const tabInformation = await getTabInformation(currentTab);
+      // the next code is needed to throw an error when we dont have an abstract in an article!
+      await getTabInformation(currentTab);
     }
   );
 
@@ -38,9 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const getAbstractBtn = document.getElementById("getAbstract");
   getAbstractBtn.addEventListener("click", async () => {
     // removing the error message if there is any
-    if (document.getElementById("requestSummaryError")) {
-      document.getElementById("requestSummaryError").remove();
-    }
+    // if (document.getElementById("requestSummaryError")) {
+    //   document.getElementById("requestSummaryError").remove();
+    // }
+    // removing the newArticleMsg if any
+    removeElement("requestSummaryError");
+    removeElement("newArticleMsg");
+    // if (document.getElementById("newArticleMsg")) {
+    //   document.getElementById("newArticleMsg").remove();
+    // }
     document.getElementById("instructions-container").classList.add("hidden");
     document.getElementById("main-content").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
@@ -56,6 +63,26 @@ document.addEventListener("DOMContentLoaded", () => {
     // listening for a change in state
     if (message.action === "stateUpdate") {
       state = message.state;
+      // alerting the user its a  new article
+      if (state.abstractData) {
+        if (currentTab.url != state.abstractData.url) {
+          const regex = /^https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/\d+\/$/;
+          if (regex.test(currentTab.url)) {
+            if (!document.getElementById("newArticleMsg")) {
+              const container = document.getElementById("container");
+              const newArticleMsg = document.createElement("p");
+              // err.classList.add("error-message");
+              newArticleMsg.id = "newArticleMsg";
+              newArticleMsg.classList.add("error-message");
+              newArticleMsg.textContent = `This is a new Article, to get the new result, click on the "get abstract" button at top left corner!`;
+              const firstChild = container.firstChild; // Get the first child of the parent element
+              container.insertBefore(newArticleMsg, firstChild);
+            }
+          }
+
+          // container.appendChild(newArticleMsg);
+        }
+      }
       console.log("the state is,", state);
       if (message.state.isLoading) {
         document
@@ -160,7 +187,9 @@ document.addEventListener("DOMContentLoaded", () => {
       err.classList.add("error-message");
       err.id = "requestSummaryError";
       err.textContent = message.err;
-      container.appendChild(err);
+      const firstChild = container.firstChild; // Get the first child of the parent element
+      container.insertBefore(err, firstChild);
+      // container.appendChild(err);
       console.log("requestSummaryError", message.err);
     }
   });
@@ -276,8 +305,9 @@ async function getTabInformation(tab) {
     err.classList.add("error-message");
     err.id = "noAbstract-error";
     err.textContent =
-      "This Article has no Abstract, please choose another Article.";
-    container.appendChild(err);
+      "This Article has no Abstract, please open another Article!";
+    const firstChild = container.firstChild; // Get the first child of the parent element
+    container.insertBefore(err, firstChild);
     // throw new Error(
     //   "This Article has no Abstract, please choose another Article."
     // );
@@ -300,7 +330,6 @@ async function getTabInformation(tab) {
   return abstractInformation;
 }
 function updateFeedbackForm() {
-  console.log("am i working??");
   const formName = document.getElementById("formName").value;
   let feedbackType = "";
   switch (formName) {
@@ -320,11 +349,9 @@ function updateFeedbackForm() {
     if (state.feedback[feedbackType]) {
       document.getElementById("feedbackValueForm").classList.add("hidden");
       document.getElementById("result").classList.remove("hidden");
-      console.log("am i working?");
     } else {
       document.getElementById("feedbackValueForm").classList.remove("hidden");
       document.getElementById("result").classList.add("hidden");
-      console.log("am i working?");
     }
   }
 }
@@ -482,6 +509,15 @@ function showOriginalAbstract() {
     .classList.remove("hidden");
   document.getElementsByClassName("summary-title")[0].classList.add("hidden");
 }
+
+function removeElement(elementId) {
+  console.log("removing an element");
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.remove();
+  }
+}
+
 // function hideAbstractsFeedbacks{
 
 // }
