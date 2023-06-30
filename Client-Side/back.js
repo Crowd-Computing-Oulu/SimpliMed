@@ -211,8 +211,8 @@ async function requestSummary(abstractInfromation) {
           "http://localhost:8080/abstracts/abstract",
           options
         );
-        console.log("this is response", response);
         let responseData = await response.json();
+        console.log("this is response", responseData);
         if (response.status == 200) {
           // adding the interactionId in abstractData
           responseData.abstract.interactionID = responseData.interactionId;
@@ -256,6 +256,7 @@ async function sendFeedback(feedback) {
           advancedTime,
           elementaryTime,
           interactionID: state.abstractData.interactionID,
+          abstractID: state.abstractData._id,
         }),
       };
       try {

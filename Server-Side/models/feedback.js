@@ -4,10 +4,20 @@ const Schema = mongoose.Schema;
 // Abstract Schema
 const feedbackSchema = new Schema(
   {
+    userID: {
+      type: mongoose.Schema.Types.ObjectId, //userSchema,
+      ref: "User",
+      required: [true, "user id is required!"],
+    },
     interactionID: {
       type: mongoose.Schema.Types.ObjectId, //interactionSchema,
       ref: "Interaction",
-      required: [true, "Interaction is required!"],
+      required: [true, "Interaction id is required!"],
+    },
+    abstractID: {
+      type: mongoose.Schema.Types.ObjectId, //interactionSchema,
+      ref: "Abstract",
+      required: [true, "Abstract id is required!"],
     },
     originalDifficulty: {
       type: Number,
