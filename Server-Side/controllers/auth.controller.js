@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
   user
     .save()
     .then((user) => {
-      res.status(200).send({ message: "User registered successfully" });
+      res.status(200).send({ message: "User registered successfully!" });
     })
     .catch((err) => {
       res.status(500).send({ message: err });

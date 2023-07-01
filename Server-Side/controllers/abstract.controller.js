@@ -220,7 +220,7 @@ exports.requestAbstract = async (req, res) => {
           console.log("Error Creating a new Abstract Record.");
           res.status(500).send({
             message:
-              "There was an error generating all the content, please try again",
+              "There was an error generating all the content, please try again!",
           });
           throw new Error("Abort");
         });
@@ -236,7 +236,7 @@ exports.requestAbstract = async (req, res) => {
     advancedTime: req.body.advancedTime,
     elementaryTime: req.body.elementaryTime,
   });
-  // interaction will be saved regardless of the existance of the abstract in databse
+  // interaction will be saved regardless of the existance of the abstract in database
   await interaction
     .save()
     .then((interaction) => {
