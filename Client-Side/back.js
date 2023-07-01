@@ -31,6 +31,7 @@ let state = {
   isLoading: false,
   difficultyLevel: 0,
   instructionShown: false,
+
   // abstractData: {
   //   interactionId: "test",
   //   url: "test",
@@ -58,10 +59,15 @@ let state = {
 
 let tempTimeValue = null;
 let tempTimeType = "";
+let studyStatus = "";
 
 chrome.storage.local.get(["accessToken", "username"], async function (data) {
   state.username = data.username;
   state.accessToken = data.accessToken;
+  studyStatus = await requestStudyStatus();
+  state.numberOfFeedbacks = studyStatus.feedbacks.length;
+
+  console.log(state.numberOfFeedbacks);
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
 
@@ -144,9 +150,16 @@ chrome.runtime.onMessage.addListener(async (message) => {
         state.feedback.message = "Feedback submission failed!";
       } else {
         state.feedback.status = "sent";
-        state.feedback.message = "Feedback submission was successfull!";
+        state.feedback.message =
+          "Feedback submission was successfull, you have 1 remaining article to read and submit a feedback!";
       }
       console.log("i am the result of the esnd feedback", result);
+      studyStatus = await requestStudyStatus();
+      state.numberOfFeedbacks = studyStatus.feedbacks.length;
+      console.log(
+        "number of feedback after submission",
+        state.numberOfFeedbacks
+      );
     } else {
       console.log("Please fill the feedback form and values!");
       state.feedback.message = "Please fill the feedback form and values!";
@@ -227,6 +240,42 @@ async function requestSummary(abstractInfromation) {
     });
   });
 }
+async function requestStudyStatus() {
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get("accessToken", async function (data) {
+      const accessToken = data.accessToken;
+      console.log(accessToken);
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "JWT " + accessToken,
+        },
+        // body: JSON.stringify({
+        //   // we are sending the user authentication in server side
+        // }),
+      };
+
+      try {
+        const response = await fetch(
+          "http://localhost:8080/study/status",
+          options
+        );
+        console.log(response);
+        let responseData = await response.json();
+        console.log("this is study status", responseData);
+        if (response.status == 200) {
+          resolve(responseData);
+        } else {
+          reject({ message: responseData.message });
+        }
+        // console.log("this is responseData", responseData);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
 
 async function sendFeedback(feedback) {
   const {
@@ -293,35 +342,23 @@ async function setChromeStorage() {
   return new Promise((resolve, reject) => {
     chrome.storage.local.set(
       { accessToken: state.accessToken, username: state.username },
-      function () {
+      async function () {
+        studyStatus = await requestStudyStatus();
+        state.numberOfFeedbacks = studyStatus.feedbacks.length;
+        console.log(state.numberOfFeedbacks);
         resolve();
       }
     );
   });
 }
-// function showLoading(loading) {
-//   if (loading) {
-//     chrome.runtime.sendMessage({ action: "showLoading" });
-//     // document.getElementsByClassName("loader-container")[0].classList.remove("hidden");
-//   } else {
-//     chrome.runtime.sendMessage({ action: "hideLoading" });
-//   }
-// }
-// function showDifficulty(difficulty) {
-//   if (difficulty) {
-//     chrome.runtime.sendMessage({ action: "showDifficulty" });
-//     // document.getElementsByClassName("loader-container")[0].classList.remove("hidden");
-//   } else {
-//     chrome.runtime.sendMessage({ action: "hideDifficulty" });
-//   }
-// }
-// function showGetAbstractBtn(abstractBtn) {
-//   if (abstractBtn) {
-//     console.log("message sent to show the abstract btn");
-//     chrome.runtime.sendMessage({ action: "showGetAbstractBtn" });
-//   } else {
-//     console.log("message sent to hide the abstract btn");
 
-//     chrome.runtime.sendMessage({ action: "hideGetAbstractBtn" });
-//   }
-// }
+function remainingFeedbacks(something) {
+  let message = "";
+  if (something) {
+    message =
+      "Please find 1 more related article for this phrase and read it and submit a feedback";
+    return message;
+  }
+  message =
+    "You completed all your tasks, please use this link to go to post-questionnaire";
+}
