@@ -18,7 +18,11 @@
   <body>
     <div id="header" class="hidden">
       <!-- <p>Username:</p> -->
-      <button id="getAbstract" class="btn hidden">Get Abstract</button>
+      <div>
+        <button id="getAbstract" class="btn hidden">Get Abstract</button>
+        <span id="numberOfFeedbacks"></span>
+      </div>
+
       <div class="flex-row">
         <span id="header-username" class="tooltipUsername"
           >Prolific Username<span class="tooltipUsernameText"
@@ -51,7 +55,7 @@
         </li>
         <li>
           The phrase of the day is:
-          <span class="phrase">An apple a day, keeps the doctors away!</span>
+          <span class="dailyPhrase"></span>
         </li>
         <li>
           Go on pubmed website and use the search bar to find related articles
@@ -161,7 +165,7 @@
           Read the different versions of the abstract by the above slider!
           <p>
             The phrase of the day is:
-            <span class="phrase">An apple a day, keeps the doctors away!</span>
+            <span class="dailyPhrase"></span>
           </p>
         </div>
         <div id="abstract-container">

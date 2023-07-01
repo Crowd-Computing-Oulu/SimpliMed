@@ -48,6 +48,10 @@ body {
   align-items: center;
   justify-content: center;
 }
+.dailyPhrase {
+  font-weight: bold;
+  font-family: var(--secondary-font);
+}
 #header {
   font-family: Impact, sans-serif;
   padding: 1.5rem 15px;
@@ -64,6 +68,11 @@ body {
 
 #header span {
   margin-right: 10px;
+}
+#numberOfFeedbacks {
+  font-size: 0.9rem;
+  color: gray;
+  font-family: var(--primary-font);
 }
 #header #header-username {
   font-family: Impact, sans-serif;

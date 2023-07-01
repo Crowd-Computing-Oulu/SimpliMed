@@ -63,6 +63,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // listening for a change in state
     if (message.action === "stateUpdate") {
       state = message.state;
+      // showing the number of feedbacks
+      updateStudyState();
       // alerting the user its a  new article
       if (state.abstractData) {
         if (currentTab.url != state.abstractData.url) {
@@ -517,7 +519,19 @@ function removeElement(elementId) {
     element.remove();
   }
 }
+function updateStudyState() {
+  document.getElementById("numberOfFeedbacks").textContent =
+    " " +
+    state.remainingFeedbacks +
+    (state.remainingFeedbacks <= 1
+      ? " Feedback Remaining"
+      : " Feedbacks Remaining");
+  const dailyPhraseElements = document.getElementsByClassName("dailyPhrase");
 
+  for (let i = 0; i < dailyPhraseElements.length; i++) {
+    dailyPhraseElements[i].textContent = state.dailyPhrase;
+  }
+}
 // function hideAbstractsFeedbacks{
 
 // }

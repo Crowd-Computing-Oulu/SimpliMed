@@ -64,10 +64,7 @@ let studyStatus = "";
 chrome.storage.local.get(["accessToken", "username"], async function (data) {
   state.username = data.username;
   state.accessToken = data.accessToken;
-  studyStatus = await requestStudyStatus();
-  state.numberOfFeedbacks = studyStatus.feedbacks.length;
-
-  console.log(state.numberOfFeedbacks);
+  await updateStudyStatus();
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
 
@@ -79,7 +76,6 @@ chrome.runtime.onMessage.addListener(async (message) => {
       delete state.feedback;
       state.feedback = { originalTime: 0, advancedTime: 0, elementaryTime: 0 };
       state.instructionShown = true;
-      // console.log("abstract data is", state.abstractData);
       state.isLoading = true;
       chrome.runtime.sendMessage({ action: "stateUpdate", state });
       try {
@@ -149,17 +145,20 @@ chrome.runtime.onMessage.addListener(async (message) => {
         state.feedback.status = "failed";
         state.feedback.message = "Feedback submission failed!";
       } else {
-        state.feedback.status = "sent";
-        state.feedback.message =
-          "Feedback submission was successfull, you have 1 remaining article to read and submit a feedback!";
+        if (state.remainingFeedbacks - 1 == 0) {
+          state.feedback.message =
+            "Feedback submission was succesfull, you have finished all of your task, please continue the study by going to post-questionnaire";
+        } else {
+          let message =
+            state.remainingFeedbacks - 1 <= 1 ? " Feedback" : " Feedbacks";
+          state.feedback.status = "sent";
+          state.feedback.message = `Feedback submission was successfull, you have ${
+            state.remainingFeedbacks - 1
+          }${message} remaining articles to read and submit a feedback!`;
+        }
       }
       console.log("i am the result of the esnd feedback", result);
-      studyStatus = await requestStudyStatus();
-      state.numberOfFeedbacks = studyStatus.feedbacks.length;
-      console.log(
-        "number of feedback after submission",
-        state.numberOfFeedbacks
-      );
+      await updateStudyStatus();
     } else {
       console.log("Please fill the feedback form and values!");
       state.feedback.message = "Please fill the feedback form and values!";
@@ -244,7 +243,6 @@ async function requestStudyStatus() {
   return new Promise((resolve, reject) => {
     chrome.storage.local.get("accessToken", async function (data) {
       const accessToken = data.accessToken;
-      console.log(accessToken);
       const options = {
         method: "POST",
         headers: {
@@ -343,22 +341,19 @@ async function setChromeStorage() {
     chrome.storage.local.set(
       { accessToken: state.accessToken, username: state.username },
       async function () {
-        studyStatus = await requestStudyStatus();
-        state.numberOfFeedbacks = studyStatus.feedbacks.length;
-        console.log(state.numberOfFeedbacks);
+        await updateStudyStatus();
         resolve();
       }
     );
   });
 }
 
-function remainingFeedbacks(something) {
-  let message = "";
-  if (something) {
-    message =
-      "Please find 1 more related article for this phrase and read it and submit a feedback";
-    return message;
-  }
-  message =
-    "You completed all your tasks, please use this link to go to post-questionnaire";
+async function updateStudyStatus() {
+  let studyStatus = await requestStudyStatus();
+  state.numberOfDailyFeedbacks = studyStatus.dailyFeedbacks.length;
+  let remainingFeedbacks =
+    studyStatus.requiredFeedbacks - studyStatus.dailyFeedbacks.length;
+  state.dailyPhrase = studyStatus.dailyPhrase;
+  state.remainingFeedbacks = remainingFeedbacks;
+  return;
 }
