@@ -5,6 +5,7 @@ const Feedback = require("../models/feedback");
 
 const { sendHttpRequest, sendHttpsRequest } = require("../utils/requestUtils");
 const axios = require("axios");
+const feedback = require("../models/feedback");
 
 // fetch abstracts
 async function fetchResults(text, prompt) {
@@ -229,6 +230,23 @@ exports.requestAbstract = async (req, res) => {
     }
   }
 
+  // Check if there is any feedback for this abstract id or not
+  let feedback = null;
+  await Feedback.findOne({ abstractID: abstract._id, userID: req.user.id })
+    .exec()
+    .then((aFeedback) => {
+      feedback = aFeedback;
+      // Checking if the abstract already has a feedback with this user id
+      if (aFeedback != null) {
+        console.log("feedback Already Exists. ", feedback);
+      }
+    })
+    .catch((err) => {
+      console.log("Feedback Request Error.");
+      // res.status(500).send({ message: err });
+      // throw new Error("Abort");
+    });
+  //
   const interaction = new Interaction({
     userID: req.user.id,
     abstractID: abstract._id,
@@ -244,6 +262,7 @@ exports.requestAbstract = async (req, res) => {
       res.status(200).send({
         message: "Interaction registered successfully",
         abstract,
+        feedback,
         interactionId: interaction._id,
       });
     })
