@@ -7,9 +7,12 @@ const axios = require("axios");
 
 const study = {
   phases: {
-    "2023-07-03": { phrase: "Test!", requiredFeedbacks: 10 },
+    "2023-07-03": {
+      phrase: "An apple a day, keeps the cancer away!",
+      requiredFeedbacks: 2,
+    },
     "2023-07-04": {
-      phrase: "An apple a day, keeps the doctor away!",
+      phrase: "An apple a day, keeps the cancer away!",
       requiredFeedbacks: 2,
     },
     "2023-07-05": { phrase: "Water Skin", requiredFeedbacks: 6 },

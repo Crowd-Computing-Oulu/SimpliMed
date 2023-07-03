@@ -160,11 +160,10 @@ chrome.runtime.onMessage.addListener(async (message) => {
         state.feedback.status = "failed";
         state.feedback.message = "Feedback submission failed!";
       } else {
-        if (state.remainingFeedbacks == 0) {
+        if (state.remainingFeedbacks <= 0) {
           console.log("i am not executed");
           state.feedback.status = "sent";
-          state.feedback.message =
-            "Feedback submission was succesfull, you have finished all of your task, please continue the study by going to post-questionnaire";
+          state.feedback.message = `Feedback submission was succesfull, you have finished all of your task, please continue the study by going to post-questionnaire (next to "Get Abstract" button)`;
         } else {
           let message =
             state.remainingFeedbacks <= 1
@@ -174,13 +173,20 @@ chrome.runtime.onMessage.addListener(async (message) => {
           state.feedback.message = `Feedback submission was successfull, you have ${state.remainingFeedbacks}${message} to read and submit a feedback!`;
         }
       }
-      console.log("i am the result of the esnd feedback", result);
+      // console.log("i am the result of the send feedback", result);
       await updateStudyStatus();
     } else {
       // show and erro to user here
-      console.log("Please fill the feedback form and values!");
-      state.feedback.message = "Please fill the feedback form and values!";
+      console.log(
+        "Please fill all the values for each version and add a feedback."
+      );
+      state.feedback.message =
+        "Please fill all the values for each version and add a feedback.";
       state.feedback.status = "empty";
+      chrome.runtime.sendMessage({
+        action: "emptySubmissionError",
+        err: state.feedback.message,
+      });
     }
   } else if (message.action === "timeUpdate") {
     // if (!state.feedback) {
@@ -195,6 +201,19 @@ chrome.runtime.onMessage.addListener(async (message) => {
     // console.log("temptimevalue", typeof tempTimeValue);
     return;
   }
+  // else if (message.action === "newUrl") {
+  //   delete state;
+  //   state = {
+  //     isLoading: false,
+  //     difficultyLevel: 0,
+  //     instructionShown: false,
+  //     feedback: {
+  //       originalTime: 0,
+  //       advancedTime: 0,
+  //       elementaryTime: 0,
+  //     },
+  //   };
+  // }
   // console.log("state is updateding he");
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });

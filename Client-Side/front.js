@@ -51,7 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("instructions-container").classList.add("hidden");
     document.getElementById("main-content").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
-    document.getElementById("feedbackText-container").classList.add("hidden");
+    // document
+    //   .getElementById("feedbackText-container")
+    //   .classList.remove("hidden");
+    // document.getElementById("feedbackTextForm").classList.remove("hidden");
+    document.getElementById("feedbackSubmisisonResult").classList.add("hidden");
 
     const abstractInformation = await getTabInformation(currentTab);
     chrome.runtime.sendMessage({
@@ -72,22 +76,21 @@ document.addEventListener("DOMContentLoaded", () => {
         if (currentTab.url != state.abstractData.url) {
           const regex = /^https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/\d+\/$/;
           if (regex.test(currentTab.url)) {
+            // chrome.runtime.sendMessage("newUrl");
             if (!document.getElementById("newArticleMsg")) {
               const container = document.getElementById("container");
               const newArticleMsg = document.createElement("p");
               // err.classList.add("error-message");
               newArticleMsg.id = "newArticleMsg";
               newArticleMsg.classList.add("error-message");
-              newArticleMsg.textContent = `This is a new Article, to get the new result, click on the "get abstract" button at top left corner!`;
+              newArticleMsg.textContent = `You are on a new article page, to get the new result, click on the "get abstract" button at top left corner! (Below is the result of your previous abstract!)`;
               const firstChild = container.firstChild; // Get the first child of the parent element
               container.insertBefore(newArticleMsg, firstChild);
             }
           }
-
-          // container.appendChild(newArticleMsg);
         }
       }
-      console.log("the state is,", state);
+      // console.log("the state is,", state);
       if (message.state.isLoading) {
         document
           .getElementsByClassName("loader-container")[0]
@@ -134,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById("main-content").classList.add("hidden");
         }
       } else {
-        console.log("user should see the loginpage again");
+        // console.log("user should see the loginpage again");
         // if there is no access token, the user will see the login section
         document.getElementById("login-container").classList.remove("hidden");
         document.getElementById("main-content").classList.add("hidden");
@@ -193,8 +196,15 @@ document.addEventListener("DOMContentLoaded", () => {
       err.textContent = message.err;
       const firstChild = container.firstChild; // Get the first child of the parent element
       container.insertBefore(err, firstChild);
-      // container.appendChild(err);
-      console.log("requestSummaryError", message.err);
+      // console.log("requestSummaryError", message.err);
+    } else if (message.action === "emptySubmissionError") {
+      const emptySubmissionError = document.createElement("p");
+      emptySubmissionError.style.color = "red";
+      emptySubmissionError.textContent = message.err;
+      document
+        .getElementById("feedbackTextForm")
+        .appendChild(emptySubmissionError);
+      // console.log("i am not rugggngn");
     }
   });
 
@@ -209,6 +219,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const logoutBtn = document.getElementById("logoutBtn");
   logoutBtn.addEventListener("click", async () => {
     document.getElementById("feedbackValue-container").classList.add("hidden");
+    document.getElementById("feedbackText-container").classList.add("hidden");
+
     chrome.runtime.sendMessage({ action: "logout" });
   });
 
@@ -432,7 +444,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
       let delta = Date.now() - timeValue;
       chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
 
-      console.log(timeType, "is", delta);
+      // console.log(timeType, "is", delta);
     }
     timeType = "originalTime";
     timeValue = Date.now();
@@ -463,6 +475,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     document
       .getElementById("feedbackText-container")
       .classList.remove("hidden");
+    document.getElementById("feedbackTextForm").classList.remove("hidden");
   }
   updateFeedbackForm();
 }
@@ -515,19 +528,25 @@ function showOriginalAbstract() {
 }
 
 function removeElement(elementId) {
-  console.log("removing an element");
+  // console.log("removing an element");
   const element = document.getElementById(elementId);
   if (element) {
     element.remove();
   }
 }
 function updateStudyState() {
-  document.getElementById("remaininFeedbacks").textContent =
-    " " +
-    state.remainingFeedbacks +
-    (state.remainingFeedbacks <= 1
-      ? " Feedback Remaining"
-      : " Feedbacks Remaining");
+  if (state.remainingFeedbacks <= 0) {
+    document.getElementById(
+      "remaininFeedbacks"
+    ).innerHTML = ` <a href="https://google.com" target="_blank">Post-Questionnaire</a>`;
+  } else {
+    document.getElementById("remaininFeedbacks").textContent =
+      " " +
+      state.remainingFeedbacks +
+      (state.remainingFeedbacks <= 1
+        ? " Feedback Remaining"
+        : " Feedbacks Remaining");
+  }
   const dailyPhraseElements = document.getElementsByClassName("dailyPhrase");
 
   for (let i = 0; i < dailyPhraseElements.length; i++) {
