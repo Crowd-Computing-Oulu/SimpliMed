@@ -79,7 +79,21 @@ chrome.runtime.onMessage.addListener(async (message) => {
       state.isLoading = true;
       chrome.runtime.sendMessage({ action: "stateUpdate", state });
       try {
-        state.abstractData = await requestSummary(message.abstractInformation);
+        // state.abstractData = await requestSummary(message.abstractInformation);
+        let result = await requestSummary(message.abstractInformation);
+        state.abstractData = result.abstract;
+        state.feedback = result.feedback;
+        if (!state.feedback) {
+          state.feedback = {
+            originalTime: 0,
+            advancedTime: 0,
+            elementaryTime: 0,
+          };
+        } else {
+          state.feedback.status = "sent";
+          state.feedback.message =
+            "You have already submitted a feedback for this article!";
+        }
       } catch (error) {
         console.log(error.message);
         // showing the error message
@@ -137,6 +151,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
       let result = {};
       try {
         result = await sendFeedback(state.feedback);
+        await updateStudyStatus();
       } catch (error) {
         result.success = false;
         result.message = "Feedback submission failed!!";
@@ -145,21 +160,24 @@ chrome.runtime.onMessage.addListener(async (message) => {
         state.feedback.status = "failed";
         state.feedback.message = "Feedback submission failed!";
       } else {
-        if (state.remainingFeedbacks - 1 == 0) {
+        if (state.remainingFeedbacks == 0) {
+          console.log("i am not executed");
+          state.feedback.status = "sent";
           state.feedback.message =
             "Feedback submission was succesfull, you have finished all of your task, please continue the study by going to post-questionnaire";
         } else {
           let message =
-            state.remainingFeedbacks - 1 <= 1 ? " Feedback" : " Feedbacks";
+            state.remainingFeedbacks <= 1
+              ? " remaining article"
+              : " remaining articles";
           state.feedback.status = "sent";
-          state.feedback.message = `Feedback submission was successfull, you have ${
-            state.remainingFeedbacks - 1
-          }${message} remaining articles to read and submit a feedback!`;
+          state.feedback.message = `Feedback submission was successfull, you have ${state.remainingFeedbacks}${message} to read and submit a feedback!`;
         }
       }
       console.log("i am the result of the esnd feedback", result);
       await updateStudyStatus();
     } else {
+      // show and erro to user here
       console.log("Please fill the feedback form and values!");
       state.feedback.message = "Please fill the feedback form and values!";
       state.feedback.status = "empty";
@@ -200,6 +218,7 @@ async function requestLogin(username) {
   }
   return accessToken;
 }
+// requestAbstract
 async function requestSummary(abstractInfromation) {
   const { url, originalTitle, originalAbstract } = abstractInfromation;
   return new Promise((resolve, reject) => {
@@ -226,9 +245,12 @@ async function requestSummary(abstractInfromation) {
         let responseData = await response.json();
         console.log("this is response", responseData);
         if (response.status == 200) {
+          let result = {};
           // adding the interactionId in abstractData
           responseData.abstract.interactionID = responseData.interactionId;
-          resolve(responseData.abstract);
+          result.abstract = responseData.abstract;
+          result.feedback = responseData.feedback;
+          resolve(result);
         } else {
           reject({ message: responseData.message });
         }

@@ -69,7 +69,7 @@ body {
 #header span {
   margin-right: 10px;
 }
-#numberOfFeedbacks {
+#remaininFeedbacks {
   font-size: 0.9rem;
   color: gray;
   font-family: var(--primary-font);
@@ -540,4 +540,10 @@ input[type="radio"]:checked:before {
 }
 .feedbackText-container button:hover {
   background-color: var(--primary-color) !important;
+}
+#feedbackSubmisisonResult {
+  padding: 2% 0;
+  margin: 0 1%;
+  font-family: var(--secondary-font);
+  color: green;
 }

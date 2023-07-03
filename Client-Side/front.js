@@ -51,6 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("instructions-container").classList.add("hidden");
     document.getElementById("main-content").classList.add("hidden");
     document.getElementById("feedbackValue-container").classList.add("hidden");
+    document.getElementById("feedbackText-container").classList.add("hidden");
+
     const abstractInformation = await getTabInformation(currentTab);
     chrome.runtime.sendMessage({
       action: "getAbstractInfromation",
@@ -520,7 +522,7 @@ function removeElement(elementId) {
   }
 }
 function updateStudyState() {
-  document.getElementById("numberOfFeedbacks").textContent =
+  document.getElementById("remaininFeedbacks").textContent =
     " " +
     state.remainingFeedbacks +
     (state.remainingFeedbacks <= 1

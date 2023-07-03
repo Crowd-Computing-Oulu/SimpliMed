@@ -20,7 +20,7 @@
       <!-- <p>Username:</p> -->
       <div>
         <button id="getAbstract" class="btn hidden">Get Abstract</button>
-        <span id="numberOfFeedbacks"></span>
+        <span id="remaininFeedbacks"></span>
       </div>
 
       <div class="flex-row">
@@ -55,7 +55,7 @@
         </li>
         <li>
           The phrase of the day is:
-          <span class="dailyPhrase"></span>
+          <span class="dailyPhrase" style="color: green"></span>
         </li>
         <li>
           Go on pubmed website and use the search bar to find related articles
@@ -63,6 +63,10 @@
         </li>
         <li>Open the article of your choice.</li>
         <li>Start the study by clicking on the "Get Abstract" button.</li>
+        <li>
+          If you are going away from your keyword for few minutes, Please do not
+          leave the plugin (popup) open!
+        </li>
       </ol>
     </div>
     <div class="container" id="container">
@@ -154,19 +158,26 @@
             />
             <datalist id="tickmarks">
               <option value="0">Start</option>
-              <option value="1">Elementry</option>
-              <option value="2">Advanced</option>
-              <option value="3">Original</option>
+              <option value="1">V1</option>
+              <option value="2">V2</option>
+              <option value="3">V3</option>
               <option value="4">Finish</option>
             </datalist>
           </div>
         </div>
         <div id="difficulty-lvl_instructions" class="hidden">
-          Read the different versions of the abstract by the above slider!
           <p>
             The phrase of the day is:
-            <span class="dailyPhrase"></span>
+            <span class="dailyPhrase" style="color: green"></span>
           </p>
+          <ol>
+            <li>
+              Read the different versions of the abstract using the above
+              slider!
+            </li>
+            <li>Read and Rate each Version!</li>
+            <li>Submit a text at the end!</li>
+          </ol>
         </div>
         <div id="abstract-container">
           <h4 class="original-title"></h4>
