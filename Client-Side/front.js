@@ -20,18 +20,42 @@ document.addEventListener("DOMContentLoaded", () => {
     { active: true, currentWindow: true },
     async function (tabs) {
       currentTab = tabs[0];
-      console.log("currenttan is", currentTab);
       const regex = /^https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/\d+\/$/;
       // To check if the URL is correct (containing this string)
       if (currentTab.url.indexOf("pubmed.ncbi.nlm.nih.gov") === -1) {
         document.getElementById("getAbstract").classList.add("hidden");
-        mainContentElement.innerHTML = `<div class="error-message"><i class="fas fa-exclamation"></i> This Website is not supported by the extension, please go to https://pubmed.ncbi.nlm.nih.gov/</div>`;
+
+        const container = document.getElementById("container");
+        const newArticleMsg = document.createElement("p");
+        newArticleMsg.id = "newArticleMsg";
+        newArticleMsg.classList.add("error-message");
+        newArticleMsg.innerHTML = `<p><i class="fas fa-exclamation"></i> This Website is not supported by the extension, please go to https://pubmed.ncbi.nlm.nih.gov/</p>`;
+
+        const firstChild = container.firstChild; // Get the first child of the parent element
+        container.insertBefore(newArticleMsg, firstChild);
+        // docuemnt
+        //   .getElementById("instructions-container")
+        //   .classList.add("hidden");
+        // mainContentElement.classList.remove("hidden");
+        // mainContentElement.innerHTML = `<div class="error-message"><i class="fas fa-exclamation"></i> This Website is not supported by the extension, please go to https://pubmed.ncbi.nlm.nih.gov/</div>`;
       } else if (!regex.test(currentTab.url)) {
         document.getElementById("getAbstract").classList.add("hidden");
-        mainContentElement.innerHTML = `<div class="error-message"><i class="fas fa-exclamation"></i> You are on the correct website, but you need to open an article</div>`;
+        // mainContentElement.innerHTML = `<div class="error-message"><i class="fas fa-exclamation"></i> You are on the correct website, but you need to open an article</div>`;
+
+        const container = document.getElementById("container");
+        const newArticleMsg = document.createElement("p");
+        newArticleMsg.id = "newArticleMsg";
+        newArticleMsg.classList.add("error-message");
+        newArticleMsg.innerHTML = `<p><i class="fas fa-exclamation"></i> You are on the correct website, but you need to open an article!</p>`;
+        const firstChild = container.firstChild; // Get the first child of the parent element
+        container.insertBefore(newArticleMsg, firstChild);
+        // docuemnt
+        //   .getElementById("instructions-container")
+        //   .classList.add("hidden");
+      } else {
+        // the next code is needed to throw an error when we dont have an abstract in an article!
+        await getTabInformation(currentTab);
       }
-      // the next code is needed to throw an error when we dont have an abstract in an article!
-      await getTabInformation(currentTab);
     }
   );
 
