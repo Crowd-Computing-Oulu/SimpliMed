@@ -229,7 +229,10 @@ async function requestLogin(username) {
     body: JSON.stringify({ username }),
   };
   try {
-    var response = await fetch("http://localhost:8080/users/login", options);
+    var response = await fetch(
+      "http://86.50.229.149:8080/users/login",
+      options
+    );
     response = await response.json();
     accessToken = response.accessToken;
   } catch (error) {
@@ -258,7 +261,7 @@ async function requestSummary(abstractInfromation) {
 
       try {
         const response = await fetch(
-          "http://localhost:8080/abstracts/abstract",
+          "http://86.50.229.149:8080/abstracts/abstract",
           options
         );
         let responseData = await response.json();
@@ -297,7 +300,7 @@ async function requestStudyStatus() {
 
       try {
         const response = await fetch(
-          "http://localhost:8080/study/status",
+          "http://86.50.229.149:8080/study/status",
           options
         );
         // console.log(response);
@@ -349,7 +352,7 @@ async function sendFeedback(feedback) {
       };
       try {
         const response = await fetch(
-          "http://localhost:8080/abstracts/submitFeedback",
+          "http://86.50.229.149:8080/abstracts/submitFeedback",
           options
         );
         const responseData = await response.json();
