@@ -1,0 +1,13 @@
+{
+  "phases": {
+    "2023-07-03": {
+      "phrase": "An apple a day, keeps the cancer away!",
+      "requiredFeedbacks": 2
+    },
+    "2023-07-04": {
+      "phrase": "An apple a day, keeps the doctor away!",
+      "requiredFeedbacks": 2
+    },
+    "2023-07-05": { "phrase": "Water Skin", "requiredFeedbacks": 6 }
+  }
+}
