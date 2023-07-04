@@ -4,20 +4,21 @@ const Interaction = require("../models/interaction");
 const Feedback = require("../models/feedback");
 // const { sendHttpRequest, sendHttpsRequest } = require("../utils/requestUtils");
 const axios = require("axios");
+const study = require("../study/studyStatus.json");
 
-const study = {
-  phases: {
-    "2023-07-03": {
-      phrase: "An apple a day, keeps the cancer away!",
-      requiredFeedbacks: 2,
-    },
-    "2023-07-04": {
-      phrase: "An apple a day, keeps the cancer away!",
-      requiredFeedbacks: 2,
-    },
-    "2023-07-05": { phrase: "Water Skin", requiredFeedbacks: 6 },
-  },
-};
+// const study = {
+//   phases: {
+//     "2023-07-03": {
+//       phrase: "An apple a day, keeps the cancer away!",
+//       requiredFeedbacks: 2,
+//     },
+//     "2023-07-04": {
+//       phrase: "An apple a day, keeps the cancer away!",
+//       requiredFeedbacks: 2,
+//     },
+//     "2023-07-05": { phrase: "Water Skin", requiredFeedbacks: 6 },
+//   },
+// };
 
 exports.requestStudyStatus = async (req, res) => {
   let now = new Date();

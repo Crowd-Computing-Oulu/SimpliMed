@@ -88,67 +88,6 @@ exports.submitFeedback = async (req, res) => {
   return;
 };
 
-//
-exports.test = async (req, res) => {
-  const advancedPrompt =
-    " Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments";
-  const elementaryPrompt =
-    " Simplify the following abstract of a medical research article to the general public. The target level of simplification is 2 out of 10. Please ensure that the article retains its main ideas and arguments";
-  const titlePrompt =
-    " Simplify the following title of a medical research article to the general public";
-
-  const advancedResult = await fetchResults(req.body.text, advancedPrompt);
-  const elementaryResult = await fetchResults(req.body.text, elementaryPrompt);
-  const titleResult = await fetchResults(req.body.title, titlePrompt);
-
-  console.log("result in test", advancedResult, elementaryResult, titleResult);
-  res.status(200).send({ message: "Done" });
-  return;
-  const payload = {
-    model: "gpt-3.5-turbo",
-    messages: [
-      {
-        role: "system",
-        content:
-          "You are an expert science communicator who understands how to simplify scientific text specifically in the medical field. You know how to write so that people from all backgrounds can understand the text. In this task, you must simplify the following abstract, using simplification levels. Simplification level 1 means the output should be as simple as possible, written to an elementary school pupil. In other words, an elementary school pupil should be able to understand what the original text communicates. Simplification level 10 means no simplification, the output text should be exactly the same as the original text. In any case, remember to retain key information in the abstract, but transform all jargon and complicated medical terminology into easier-to-read text, according to the wanted simplification level.",
-      },
-      {
-        role: "user",
-        content: ` Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments. ${req.body.text}`,
-      },
-    ],
-    temperature: 0.2,
-    max_tokens: 900,
-  };
-
-  try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_TOKEN}`,
-        },
-      }
-    );
-    if (response.status !== 200) {
-      throw new Error(`Error code: ${response.status}. ${response.data}`);
-    }
-    const message = response.data.choices[0].message.content;
-    const result = { message: message };
-
-    console.log("this is the result including message", result);
-    return result;
-    // const data = response.data;
-    // console.log("this suppose to be the response data", data);
-
-    res.status(200).send({ message: "Done" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ error: "Something went wrong" });
-  }
-};
 ////
 async function requestResults(req) {
   console.log("the request in server is:", req.body);

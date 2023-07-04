@@ -1,23 +1,23 @@
 chrome.runtime.onConnect.addListener(function (port) {
   if (port.name === "popupConnection") {
     port.onDisconnect.addListener(function () {
-      console.log("popup has been closed");
+      // console.log("popup has been closed");
       if (tempTimeType) {
         // if (!state.feedback) {
         //   state.feedback = {};
         // }
         let delta = Date.now() - tempTimeValue;
-        console.log("delta is", typeof delta);
+        // console.log("delta is", typeof delta);
         // if (!state.feedback[tempTimeType]) {
         //   state.feedback[tempTimeType] = 0;
         // }
         state.feedback[tempTimeType] += delta;
-        console.log("time log", delta, tempTimeType);
-        console.log(
-          "state feedback is",
-          state.feedback[tempTimeType],
-          state.feedback
-        );
+        // console.log("time log", delta, tempTimeType);
+        // console.log(
+        //   "state feedback is",
+        //   state.feedback[tempTimeType],
+        //   state.feedback
+        // );
 
         tempTimeType = "";
         tempTimeValue = null;
@@ -95,7 +95,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
             "You have already submitted a feedback for this article!";
         }
       } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
         // showing the error message
         chrome.runtime.sendMessage({
           action: "requestSummaryError",
@@ -125,7 +125,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
         elementaryTime: 0,
       },
     };
-    console.log("the user logged out in back");
+    // console.log("the user logged out in back");
     // Key-value pairs removed successfully
     // state deleted
   } else if (message.action === "feedbackValueSubmitted") {
@@ -133,10 +133,10 @@ chrome.runtime.onMessage.addListener(async (message) => {
     //   state.feedback = {};
     // }
     state.feedback[message.feedbackType] = message.feedbackValue;
-    console.log("feedback  is", state.feedback);
+    // console.log("feedback  is", state.feedback);
   } else if (message.action === "sendDifficultyLevel") {
     state.difficultyLevel = message.difficultyLevel;
-    console.log("im difficult", state.difficultyLevel);
+    // console.log("im difficult", state.difficultyLevel);
   } else if (message.action === "feedbackTextSubmitted") {
     // if (!state.feedback) {
     //   state.feedback = {};
@@ -161,9 +161,9 @@ chrome.runtime.onMessage.addListener(async (message) => {
         state.feedback.message = "Feedback submission failed!";
       } else {
         if (state.remainingFeedbacks <= 0) {
-          console.log("i am not executed");
+          // console.log("i am not executed");
           state.feedback.status = "sent";
-          state.feedback.message = `Feedback submission was succesfull, you have finished all of your task, please continue the study by going to post-questionnaire (next to "Get Abstract" button)`;
+          state.feedback.message = `Feedback submission was succesfull, you have finished all of your tasks, please continue the study by going to post-questionnaire (next to "Get Abstract" button)`;
         } else {
           let message =
             state.remainingFeedbacks <= 1
@@ -219,7 +219,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
 });
 
 async function requestLogin(username) {
-  console.log(username);
+  // console.log(username);
   let accessToken = "";
   const options = {
     method: "POST",
@@ -233,7 +233,7 @@ async function requestLogin(username) {
     response = await response.json();
     accessToken = response.accessToken;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
   return accessToken;
 }
@@ -262,7 +262,7 @@ async function requestSummary(abstractInfromation) {
           options
         );
         let responseData = await response.json();
-        console.log("this is response", responseData);
+        // console.log("this is response", responseData);
         if (response.status == 200) {
           let result = {};
           // adding the interactionId in abstractData
@@ -300,9 +300,9 @@ async function requestStudyStatus() {
           "http://localhost:8080/study/status",
           options
         );
-        console.log(response);
+        // console.log(response);
         let responseData = await response.json();
-        console.log("this is study status", responseData);
+        // console.log("this is study status", responseData);
         if (response.status == 200) {
           resolve(responseData);
         } else {
@@ -353,7 +353,7 @@ async function sendFeedback(feedback) {
           options
         );
         const responseData = await response.json();
-        console.log("this is feedback", responseData);
+        // console.log("this is feedback", responseData);
         let success = false;
         if (responseData.feedback) {
           success = true;
