@@ -9,13 +9,6 @@ let delta = 0;
 let timeType = "";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Close the popup window
-  // document.getElementById("closeBtn").addEventListener("click", function () {
-  //   window.close();
-  // });
-  const mainContentElement = document.getElementsByClassName("main-content")[0];
-  // const loaderContainerElement =this is
-  //   document.getElementsByClassName("loader-container")[0];
   chrome.tabs.query(
     { active: true, currentWindow: true },
     async function (tabs) {
@@ -24,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // To check if the URL is correct (containing this string)
       if (currentTab.url.indexOf("pubmed.ncbi.nlm.nih.gov") === -1) {
         document.getElementById("getAbstract").classList.add("hidden");
-
         const container = document.getElementById("container");
         const newArticleMsg = document.createElement("p");
         newArticleMsg.id = "newArticleMsg";
@@ -33,20 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const firstChild = container.firstChild; // Get the first child of the parent element
         container.insertBefore(newArticleMsg, firstChild);
-        //
-        document
-          .getElementById("feedbackValue-container")
-          .classList.add("hidden");
-        console.log("wrong website");
-        // docuemnt
-        //   .getElementById("instructions-container")
-        //   .classList.add("hidden");
-        // mainContentElement.classList.remove("hidden");
-        // mainContentElement.innerHTML = `<div class="error-message"><i class="fas fa-exclamation"></i> This Website is not supported by the extension, please go to https://pubmed.ncbi.nlm.nih.gov/</div>`;
+        setTimeout(function () {
+          document
+            .getElementById("feedbackValue-container")
+            .classList.add("hidden");
+          document
+            .getElementById("feedbackText-container")
+            .classList.add("hidden");
+        }, 300);
       } else if (!regex.test(currentTab.url)) {
         document.getElementById("getAbstract").classList.add("hidden");
-        // mainContentElement.innerHTML = `<div class="error-message"><i class="fas fa-exclamation"></i> You are on the correct website, but you need to open an article</div>`;
-
         const container = document.getElementById("container");
         const newArticleMsg = document.createElement("p");
         newArticleMsg.id = "newArticleMsg";
@@ -54,22 +42,25 @@ document.addEventListener("DOMContentLoaded", () => {
         newArticleMsg.innerHTML = `<p><i class="fas fa-exclamation"></i> You are on the correct website, but you need to open an article!</p>`;
         const firstChild = container.firstChild; // Get the first child of the parent element
         container.insertBefore(newArticleMsg, firstChild);
-        //
-        document
-          .getElementById("feedbackValue-container")
-          .classList.add("hidden");
-        console.log("correct website");
-        //
-        // docuemnt
-        //   .getElementById("instructions-container")
-        //   .classList.add("hidden");
+        setTimeout(function () {
+          document
+            .getElementById("feedbackValue-container")
+            .classList.add("hidden");
+          document
+            .getElementById("feedbackText-container")
+            .classList.add("hidden");
+        }, 300);
       } else {
         // the next code is needed to throw an error when we dont have an abstract in an article!
         await getTabInformation(currentTab);
-        document
-          .getElementById("feedbackValue-container")
-          .classList.add("hidden");
-        console.log("no abstract");
+        setTimeout(function () {
+          document
+            .getElementById("feedbackValue-container")
+            .classList.add("hidden");
+          document
+            .getElementById("feedbackText-container")
+            .classList.add("hidden");
+        }, 300);
       }
     }
   );
