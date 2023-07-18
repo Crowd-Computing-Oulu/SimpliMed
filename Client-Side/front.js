@@ -33,6 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const firstChild = container.firstChild; // Get the first child of the parent element
         container.insertBefore(newArticleMsg, firstChild);
+        //
+        document
+          .getElementById("feedbackValue-container")
+          .classList.add("hidden");
+        console.log("wrong website");
         // docuemnt
         //   .getElementById("instructions-container")
         //   .classList.add("hidden");
@@ -49,12 +54,22 @@ document.addEventListener("DOMContentLoaded", () => {
         newArticleMsg.innerHTML = `<p><i class="fas fa-exclamation"></i> You are on the correct website, but you need to open an article!</p>`;
         const firstChild = container.firstChild; // Get the first child of the parent element
         container.insertBefore(newArticleMsg, firstChild);
+        //
+        document
+          .getElementById("feedbackValue-container")
+          .classList.add("hidden");
+        console.log("correct website");
+        //
         // docuemnt
         //   .getElementById("instructions-container")
         //   .classList.add("hidden");
       } else {
         // the next code is needed to throw an error when we dont have an abstract in an article!
         await getTabInformation(currentTab);
+        document
+          .getElementById("feedbackValue-container")
+          .classList.add("hidden");
+        console.log("no abstract");
       }
     }
   );
@@ -92,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
   chrome.runtime.onMessage.addListener((message) => {
     // listening for a change in state
     if (message.action === "stateUpdate") {
+      console.log("hello");
       state = message.state;
       // showing the number of feedbacks
       updateStudyState();
@@ -99,18 +115,20 @@ document.addEventListener("DOMContentLoaded", () => {
       if (state.abstractData) {
         if (currentTab.url != state.abstractData.url) {
           const regex = /^https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/\d+\/$/;
+          console.log("sending newurl message");
+          chrome.runtime.sendMessage({ action: "newUrl" });
           if (regex.test(currentTab.url)) {
-            // chrome.runtime.sendMessage("newUrl");
-            if (!document.getElementById("newArticleMsg")) {
-              const container = document.getElementById("container");
-              const newArticleMsg = document.createElement("p");
-              // err.classList.add("error-message");
-              newArticleMsg.id = "newArticleMsg";
-              newArticleMsg.classList.add("error-message");
-              newArticleMsg.textContent = `You are on a new article page, to get the new result, click on the "get abstract" button at top left corner! (Below is the result of your previous abstract!)`;
-              const firstChild = container.firstChild; // Get the first child of the parent element
-              container.insertBefore(newArticleMsg, firstChild);
-            }
+            // return;
+            // if (!document.getElementById("newArticleMsg")) {
+            //   const container = document.getElementById("container");
+            //   const newArticleMsg = document.createElement("p");
+            //   // err.classList.add("error-message");
+            //   newArticleMsg.id = "newArticleMsg";
+            //   newArticleMsg.classList.add("error-message");
+            //   newArticleMsg.textContent = `You are on a new article page, to get the new result, click on the "get abstract" button at top left corner! (Below is the result of your previous abstract!)`;
+            //   const firstChild = container.firstChild; // Get the first child of the parent element
+            //   container.insertBefore(newArticleMsg, firstChild);
+            // }
           }
         }
       }
@@ -203,6 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .classList.add("hidden");
       }
     } else if (message.action === "showLoading") {
+      console.log("am i showing loading");
       document
         .getElementsByClassName("loader-container")[0]
         .classList.remove("hidden");

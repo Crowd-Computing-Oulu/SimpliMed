@@ -200,21 +200,17 @@ chrome.runtime.onMessage.addListener(async (message) => {
     tempTimeValue = message.timeValue;
     // console.log("temptimevalue", typeof tempTimeValue);
     return;
+  } else if (message.action === "newUrl") {
+    console.log("this is a new url", state);
+    delete state.abstractData;
+    delete state.feedback;
+    state.feedback = { originalTime: 0, advancedTime: 0, elementaryTime: 0 };
+    state.instructionShown = false;
+    state.isLoading = false;
+    console.log("after", state);
   }
-  // else if (message.action === "newUrl") {
-  //   delete state;
-  //   state = {
-  //     isLoading: false,
-  //     difficultyLevel: 0,
-  //     instructionShown: false,
-  //     feedback: {
-  //       originalTime: 0,
-  //       advancedTime: 0,
-  //       elementaryTime: 0,
-  //     },
-  //   };
-  // }
-  // console.log("state is updateding he");
+
+  console.log("i am constantly rnning");
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
 
@@ -229,10 +225,7 @@ async function requestLogin(username) {
     body: JSON.stringify({ username }),
   };
   try {
-    var response = await fetch(
-      "http://86.50.229.149:8080/users/login",
-      options
-    );
+    var response = await fetch("http://localhost:8080/users/login", options);
     response = await response.json();
     accessToken = response.accessToken;
   } catch (error) {
@@ -261,7 +254,7 @@ async function requestSummary(abstractInfromation) {
 
       try {
         const response = await fetch(
-          "http://86.50.229.149:8080/abstracts/abstract",
+          "http://localhost:8080/abstracts/abstract",
           options
         );
         let responseData = await response.json();
@@ -300,7 +293,7 @@ async function requestStudyStatus() {
 
       try {
         const response = await fetch(
-          "http://86.50.229.149:8080/study/status",
+          "http://localhost:8080/study/status",
           options
         );
         // console.log(response);
@@ -352,7 +345,7 @@ async function sendFeedback(feedback) {
       };
       try {
         const response = await fetch(
-          "http://86.50.229.149:8080/abstracts/submitFeedback",
+          "http://localhost:8080/abstracts/submitFeedback",
           options
         );
         const responseData = await response.json();
