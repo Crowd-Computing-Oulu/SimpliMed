@@ -111,7 +111,7 @@ async function requestResults(req) {
     req.body.originalAbstract,
     elementaryPrompt
   );
-  const testResult = await fetchResults(req.body.originalAbstract, testPrompt);
+  // const testResult = await fetchResults(req.body.originalAbstract, testPrompt);
   const titleResult = await fetchResults(req.body.originalTitle, titlePrompt);
 
   // res.status(200).send({ message: "Done" });
