@@ -83,6 +83,8 @@ chrome.runtime.onMessage.addListener(async (message) => {
         let result = await requestSummary(message.abstractInformation);
         state.abstractData = result.abstract;
         state.feedback = result.feedback;
+        state.abstractData.shuffledArray = shuffleArray(["1", "2", "3"]);
+        console.log(state.abstractData.shuffledArray);
         if (!state.feedback) {
           state.feedback = {
             originalTime: 0,
@@ -393,4 +395,12 @@ async function updateStudyStatus() {
   state.dailyPhrase = studyStatus.dailyPhrase;
   state.remainingFeedbacks = remainingFeedbacks;
   return;
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }

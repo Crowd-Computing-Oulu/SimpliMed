@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const firstChild = container.firstChild; // Get the first child of the parent element
         container.insertBefore(newArticleMsg, firstChild);
         setTimeout(function () {
+          console.log("i am being triggered1");
           document
             .getElementById("feedbackValue-container")
             .classList.add("hidden");
@@ -43,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const firstChild = container.firstChild; // Get the first child of the parent element
         container.insertBefore(newArticleMsg, firstChild);
         setTimeout(function () {
+          console.log("i am being triggered2");
           document
             .getElementById("feedbackValue-container")
             .classList.add("hidden");
@@ -54,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // the next code is needed to throw an error when we dont have an abstract in an article!
         await getTabInformation(currentTab);
         setTimeout(function () {
+          console.log("i am being triggered3");
           document
             .getElementById("feedbackValue-container")
             .classList.add("hidden");
@@ -155,6 +158,8 @@ document.addEventListener("DOMContentLoaded", () => {
               .getElementById("feedbackValue-container")
               .classList.remove("hidden");
           }
+
+          //
           document.getElementsByClassName("summary-title")[0].textContent =
             message.state.abstractData.summerizedTitle;
           document.getElementsByClassName("original-title")[0].textContent =
@@ -431,7 +436,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
       .classList.remove("hidden");
 
     // Showing the elementary summary
-  } else if (difficultyLevel === "1") {
+  } else if (difficultyLevel === state.abstractData.shuffledArray[0]) {
     if (timeValue) {
       let delta = Date.now() - timeValue;
       chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
@@ -453,7 +458,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     showElementaryAbstract();
 
     // Showing the advanced summary
-  } else if (difficultyLevel === "2") {
+  } else if (difficultyLevel === state.abstractData.shuffledArray[1]) {
     if (timeValue) {
       let delta = Date.now() - timeValue;
       chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
@@ -473,7 +478,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     showAdvancedAbstract();
 
     // showing the original abs
-  } else if (difficultyLevel === "3") {
+  } else if (difficultyLevel === state.abstractData.shuffledArray[2]) {
     if (timeValue) {
       let delta = Date.now() - timeValue;
       chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
@@ -511,6 +516,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
       .classList.remove("hidden");
     document.getElementById("feedbackTextForm").classList.remove("hidden");
   }
+  console.log(state.abstractData.shuffledArray);
   updateFeedbackForm();
 }
 function emptyFeedbackForm() {
@@ -587,6 +593,3 @@ function updateStudyState() {
     dailyPhraseElements[i].textContent = state.dailyPhrase;
   }
 }
-// function hideAbstractsFeedbacks{
-
-// }
