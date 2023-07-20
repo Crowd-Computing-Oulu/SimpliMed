@@ -111,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const regex = /^https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/\d+\/$/;
           console.log("sending newurl message");
           chrome.runtime.sendMessage({ action: "newUrl" });
+          // document.getElementById("difficulty-lvl__input").value = "0";
           setTimeout(function () {
             console.log("i am being triggered1");
             document
@@ -581,8 +582,8 @@ function updateStudyState() {
       " " +
       state.remainingFeedbacks +
       (state.remainingFeedbacks <= 1
-        ? " Feedback Remaining"
-        : " Feedbacks Remaining");
+        ? " Submission Remaining"
+        : " Submissions Remaining");
   }
   const dailyPhraseElements = document.getElementsByClassName("dailyPhrase");
 
