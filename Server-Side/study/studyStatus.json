@@ -1,28 +1,16 @@
 {
   "phases": {
-    "2023-07-17": {
-      "phrase": "Drinking eight glasses of water a day will keep your skin flawless!",
-      "requiredFeedbacks": 2
-    },
-    "2023-07-18": {
-      "phrase": "Standing too close to the microwave can cause cancer.",
-      "requiredFeedbacks": 2
-    },
-    "2023-07-19": {
-      "phrase": "Eating carrots enhances night vision.",
-      "requiredFeedbacks": 2
-    },
     "2023-07-20": {
-      "phrase": "An apple a day, keeps the doctor away!",
+      "phrase": "An apple a day, keeps the cancer away!",
       "requiredFeedbacks": 2
     },
     "2023-07-21": {
       "phrase": "Daily Exercises reduce the risk of hearth deseases",
-      "requiredFeedbacks": 6
+      "requiredFeedbacks": 2
     },
     "2023-07-22": {
       "phrase": "Cracking your knuckles leads to arthritis.",
-      "requiredFeedbacks": 6
+      "requiredFeedbacks": 2
     },
     "2023-07-23": {
       "phrase": "Drinking eight glasses of water a day will keep your skin flawless!",
@@ -37,16 +25,28 @@
       "requiredFeedbacks": 2
     },
     "2023-07-26": {
-      "phrase": "An apple a day, keeps the doctor away!",
+      "phrase": "An apple a day, keeps the cancer away!",
       "requiredFeedbacks": 2
     },
     "2023-07-27": {
       "phrase": "Daily Exercises reduce the risk of hearth deseases",
-      "requiredFeedbacks": 6
+      "requiredFeedbacks": 2
     },
     "2023-07-28": {
       "phrase": "Cracking your knuckles leads to arthritis.",
-      "requiredFeedbacks": 6
+      "requiredFeedbacks": 2
+    },
+    "2023-07-29": {
+      "phrase": "Drinking eight glasses of water a day will keep your skin flawless!",
+      "requiredFeedbacks": 2
+    },
+    "2023-07-30": {
+      "phrase": "Standing too close to the microwave can cause cancer.",
+      "requiredFeedbacks": 2
+    },
+    "2023-07-31": {
+      "phrase": "Eating carrots enhances night vision.",
+      "requiredFeedbacks": 2
     }
   }
 }
