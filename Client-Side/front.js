@@ -55,15 +55,15 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         // the next code is needed to throw an error when we dont have an abstract in an article!
         await getTabInformation(currentTab);
-        setTimeout(function () {
-          console.log("i am being triggered3");
-          document
-            .getElementById("feedbackValue-container")
-            .classList.add("hidden");
-          document
-            .getElementById("feedbackText-container")
-            .classList.add("hidden");
-        }, 300);
+        // setTimeout(function () {
+        //   console.log("i am being triggered3");
+        //   document
+        //     .getElementById("feedbackValue-container")
+        //     .classList.add("hidden");
+        //   document
+        //     .getElementById("feedbackText-container")
+        //     .classList.add("hidden");
+        // }, 300);
       }
     }
   );
@@ -105,25 +105,23 @@ document.addEventListener("DOMContentLoaded", () => {
       state = message.state;
       // showing the number of feedbacks
       updateStudyState();
-      // alerting the user its a  new article
+      // Removing the state if there is a new url
       if (state.abstractData) {
         if (currentTab.url != state.abstractData.url) {
           const regex = /^https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/\d+\/$/;
           console.log("sending newurl message");
           chrome.runtime.sendMessage({ action: "newUrl" });
-          if (regex.test(currentTab.url)) {
-            // return;
-            // if (!document.getElementById("newArticleMsg")) {
-            //   const container = document.getElementById("container");
-            //   const newArticleMsg = document.createElement("p");
-            //   // err.classList.add("error-message");
-            //   newArticleMsg.id = "newArticleMsg";
-            //   newArticleMsg.classList.add("error-message");
-            //   newArticleMsg.textContent = `You are on a new article page, to get the new result, click on the "get abstract" button at top left corner! (Below is the result of your previous abstract!)`;
-            //   const firstChild = container.firstChild; // Get the first child of the parent element
-            //   container.insertBefore(newArticleMsg, firstChild);
-            // }
-          }
+          setTimeout(function () {
+            console.log("i am being triggered1");
+            document
+              .getElementById("feedbackValue-container")
+              .classList.add("hidden");
+            document
+              .getElementById("feedbackText-container")
+              .classList.add("hidden");
+          }, 300);
+          // if (regex.test(currentTab.url)) {
+          // }
         }
       }
       // console.log("the state is,", state);
@@ -243,7 +241,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document
         .getElementById("feedbackTextForm")
         .appendChild(emptySubmissionError);
-      // console.log("i am not rugggngn");
     }
   });
 
