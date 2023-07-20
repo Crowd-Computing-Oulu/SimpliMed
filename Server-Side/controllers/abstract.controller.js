@@ -14,9 +14,10 @@ async function fetchResults(text, prompt) {
     messages: [
       {
         role: "system",
+        content:
+          "You are an expert science communicator who understands how to simplify scientific text specifically in the medical field. You can simplify the text based on different levels of simplification. In this task, you must simplify the given text, using the user's description.",
         // content:
-        //   "You are an expert science communicator who understands how to simplify scientific text specifically in the medical field. You know how to write so that people from all backgrounds can understand the text. In this task, you must simplify the following abstract, using simplification levels. Simplification level 1 means the output should be as simple as possible, written to an elementary school pupil. In other words, an elementary school pupil should be able to understand what the original text communicates. Simplification level 10 means no simplification, the output text should be exactly the same as the original text. In any case, remember to retain key information in the abstract, but transform all jargon and complicated medical terminology into easier-to-read text, according to the wanted simplification level.",
-        content: "You are an expert science communicator.",
+        //   "You are an expert science communicator who understands how to simplify scientific text specifically in the medical field. You know how to write so that people from all backgrounds can understand the text. In this task, you must simplify the given text, using the user's description .simplification levels. Simplification level 10 means no simplification, the output text should be exactly the same as the original text. Simplification level 1 means the output should be as simple as possible, written to an elementary school pupil.",
       },
       {
         role: "user",
@@ -94,16 +95,18 @@ async function requestResults(req) {
   console.log("the request in server is:", req.body);
 
   const advancedPrompt =
-    "You are an expert science communicator who understands how to simplify scientific text specifically in the medical field. You know how to write so that people from all backgrounds can understand the text. In this task, you must simplify the following abstract to the general public, targeting a simplification level of 8 out of 10. Ensure that the article retains its main ideas and arguments. Simplify complex medical terms and use simpler vocabulary. For example, if the abstract mentions 'cardiovascular disease,' simplify it to 'heart disease'. ";
+    "Simplify the following abstract of a medical article while retaining the main idea. The target audience is individuals with an undergraduate university degree. Use language that is understandable for this audience while keeping some technical terms that are not overly complicated. Try not to summerize it. Ensure that the main idea of the original text is preserved without adding any additional information. this is the abstract:";
 
-  const elementaryPrompt = "simplify this text for a child";
+  const elementaryPrompt =
+    "Simplify the following abstract of a medical article while retaining the main idea. The target audience is individuals with an elementary school education degree. Use easy-to-understand language and avoid technical jargon and complex terms. You are allowed to summerize the text, but try not to summerize it too much. Ensure that the main idea of the original text is preserved without adding any additional information.  this is the abstract";
+  // const elementaryPrompt =
+  //   "Simplify the following text, using simplification level 2 out of 10. Simplification level 10 means no simplification, the output text should be exactly the same as the original text. Simplification level 1 means the output should be as simple as possible, written to an elementary school pupil. In other words, an elementary school pupil should be able to understand what the original text communicates. In any case, remember to retain key information in the text, but replace all jargon and complicated medical terminology into easier-to-read text. the vocabulary should be suitable for a kid in elementary level. for instance if the text mentions 'cardiovascular disease,' simplify it to 'heart disease':";
 
   // const advancedPrompt =
   //   "You are an expert science communicator who understands how to simplify scientific text specifically in the medical field. You know how to write so that people from all backgrounds can understand the text. In this task, you must simplify the following abstract, using simplification levels. Simplification level 1 means the output should be as simple as possible, written to an elementary school pupil. In other words, an elementary school pupil should be able to understand what the original text communicates. Simplification level 10 means no simplification, the output text should be exactly the same as the original text. In any case, remember to retain key information in the abstract, but transform all jargon and complicated medical terminology into easier-to-read text, according to the wanted simplification level. Simplify the following abstract of a medical research article to the general public. The target level of simplification is 8 out of 10. Please ensure that the article retains its main ideas and arguments";
   // const elementaryPrompt =
   //   "You are an expert science communicator who understands how to simplify scientific text specifically in the medical field. You know how to write so that people from all backgrounds can understand the text. In this task, you must simplify the following abstract, using simplification levels. Simplification level 1 means the output should be as simple as possible, written to an elementary school pupil. In other words, an elementary school pupil should be able to understand what the original text communicates. Simplification level 10 means no simplification, the output text should be exactly the same as the original text. Simplify the following abstract of a medical research article to the general public. The target level of simplification is 2 out of 10. Please ensure that the article retains its main ideas and arguments";
-  const titlePrompt =
-    "Simplify the following sentece. the level should be 3 out of 10";
+  const titlePrompt = "Simplify the following title:";
 
   const advancedResult = await fetchResults(
     req.body.originalAbstract,
