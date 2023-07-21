@@ -498,6 +498,7 @@ h2 {
 
 .checkboxgroup label {
   display: block;
+  text-align: center;
 }
 input[type="radio"] {
   appearance: none;
