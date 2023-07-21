@@ -206,6 +206,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
   } else if (message.action === "newUrl") {
     console.log("this is a new url", state);
     delete state.abstractData;
+    state.difficultyLevel = "0";
     delete state.feedback;
     state.feedback = { originalTime: 0, advancedTime: 0, elementaryTime: 0 };
     state.instructionShown = false;
