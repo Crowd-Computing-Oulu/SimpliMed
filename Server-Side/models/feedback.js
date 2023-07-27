@@ -2,6 +2,28 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Abstract Schema
+const onBoardingQuestionnaireSchema = new Schema({
+  Q1Text: {
+    type: String,
+    required: [true, "Q1Text 1 is required!"],
+  },
+  Q2Text: {
+    type: String,
+    required: [true, "Q2Text 2 is required!"],
+  },
+  Q3Text: {
+    type: String,
+    required: [true, "Q3Text 3 is required!"],
+  },
+  // Q4Text: {
+  //   type: String,
+  //   required: [true, "Q4Text 4 is required!"],
+  // },
+  multipleChoice: {
+    type: String,
+    required: [true, "multipleChoice 5 is required!"],
+  },
+});
 const feedbackSchema = new Schema(
   {
     userID: {
@@ -19,21 +41,25 @@ const feedbackSchema = new Schema(
       ref: "Abstract",
       required: [true, "Abstract id is required!"],
     },
-    originalDifficulty: {
-      type: Number,
-      required: [true, "Original Value is required!"],
-    },
-    advancedDifficulty: {
-      type: Number,
-      required: [true, "Advanced Value is required!"],
-    },
-    elementaryDifficulty: {
-      type: Number,
-      required: [true, "Elementary Value is required!"],
-    },
-    text: {
-      type: String,
-      required: [true, "Text is required!"],
+    // originalDifficulty: {
+    //   type: Number,
+    //   required: [true, "Original Value is required!"],
+    // },
+    // advancedDifficulty: {
+    //   type: Number,
+    //   required: [true, "Advanced Value is required!"],
+    // },
+    // elementaryDifficulty: {
+    //   type: Number,
+    //   required: [true, "Elementary Value is required!"],
+    // },
+    // text: {
+    //   type: String,
+    //   required: [true, "Text is required!"],
+    // },
+    onBoardingQuestionnaire: {
+      type: onBoardingQuestionnaireSchema, // Using the separate onBoardingQuestionnaire here
+      required: [true, "onBoardingQuestionnaire is required!"],
     },
     created: {
       type: Date,

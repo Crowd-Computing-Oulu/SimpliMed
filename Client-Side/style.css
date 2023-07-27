@@ -48,6 +48,7 @@ body {
   align-items: center;
   justify-content: center;
 }
+
 .dailyPhrase {
   font-weight: bold;
   font-family: var(--secondary-font);
@@ -525,7 +526,7 @@ input[type="radio"]:checked:before {
 
 .feedbackText-container textarea {
   width: 350px;
-  height: 200px;
+  height: 150px;
   border: solid 1px;
   background-color: var(--tertiary-color);
   padding: 1rem;
@@ -548,4 +549,19 @@ input[type="radio"]:checked:before {
   /* margin: 0 1%; */
   font-family: var(--secondary-font);
   color: green;
+}
+
+/*  Main Study  */
+.question-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.question-container .question {
+  margin-top: 1rem;
+  color: var(--secondary-color);
+  font-weight: bold;
+  font-family: var(--secondary-font);
+  max-width: 80%;
 }

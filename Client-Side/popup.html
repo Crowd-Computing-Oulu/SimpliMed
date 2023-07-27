@@ -238,16 +238,74 @@
       </div>
       <div class="feedbackText-container hidden" id="feedbackText-container">
         <form class="feedbackTextForm flex-col" id="feedbackTextForm">
-          <div>
-            <p id="feedbackText-description" class="feedbackText-description">
-              Type your search keywords here!
+          <hr
+            style="border: 1px solid rgb(140, 183, 205); width: 100%; height: 0"
+          />
+          <!-- <div class="question-container">
+            <p class="question">
+              1. Please explain why did you choose this article:
             </p>
+            <textarea type="text" id="Q1Text" placeholder=""></textarea>
+          </div> -->
+          <hr style="border: 1px dotted purple; width: 90%; height: 0" />
+
+          <div class="question-container">
+            <p class="feedbackText-description question question">
+              2. Which abstract version did you prefer to read?
+            </p>
+            <div class="flex-row">
+              <div class="checkboxgroup">
+                <input
+                  type="radio"
+                  name="multipleChoice"
+                  value="1"
+                  id="radio1"
+                />
+                <label for="radio1">Elementary</label>
+              </div>
+              <div class="checkboxgroup">
+                <input
+                  type="radio"
+                  name="multipleChoice"
+                  value="2"
+                  id="radio2"
+                />
+                <label for="radio2">Advanced</label>
+              </div>
+              <div class="checkboxgroup">
+                <input
+                  type="radio"
+                  name="multipleChoice"
+                  value="3"
+                  id="radio3"
+                />
+                <label for="radio3">Original</label>
+              </div>
+            </div>
           </div>
-          <textarea
-            type="text"
-            id="feedbackTextInput"
-            placeholder="Please submit what keywords or phrases you used to find this article."
-          ></textarea>
+          <hr style="border: 1px dotted purple; width: 90%; height: 0" />
+
+          <div class="question-container">
+            <p class="question">3. Justify your Above Answer:</p>
+            <textarea type="text" id="Q1Text" placeholder=""></textarea>
+          </div>
+          <hr style="border: 1px dotted purple; width: 90%; height: 0" />
+
+          <div class="question-container">
+            <p class="question">
+              4. Explain what did you learn from today's topic?
+            </p>
+            <textarea type="text" id="Q2Text" placeholder=""></textarea>
+          </div>
+          <hr style="border: 1px dotted purple; width: 90%; height: 0" />
+
+          <div class="question-container">
+            <p id="" class="question">
+              5. Has your understanding of the topic changed after reading the
+              abstracts? Why/why not?
+            </p>
+            <textarea type="text" id="Q3Text" placeholder=""></textarea>
+          </div>
           <button type="button" id="finishBtn" class="btn">
             Submit & Finish!
           </button>

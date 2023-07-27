@@ -140,16 +140,17 @@ chrome.runtime.onMessage.addListener(async (message) => {
   } else if (message.action === "sendDifficultyLevel") {
     state.difficultyLevel = message.difficultyLevel;
     // console.log("im difficult", state.difficultyLevel);
-  } else if (message.action === "feedbackTextSubmitted") {
+  } else if (message.action === "answersSubmitted") {
     // if (!state.feedback) {
     //   state.feedback = {};
     // }
-    state.feedback.text = message.feedbackText;
+    state.feedback.onBoardingQuestionnaire = message.onBoardingQuestionnaire;
     if (
-      state.feedback.elementaryDifficulty &&
-      state.feedback.advancedDifficulty &&
-      state.feedback.originalDifficulty &&
-      state.feedback.text
+      state.feedback.onBoardingQuestionnaire.Q1Text &&
+      state.feedback.onBoardingQuestionnaire.Q2Text &&
+      state.feedback.onBoardingQuestionnaire.Q3Text &&
+      // state.feedback.onBoardingQuestionnaire.Q4Text &&
+      state.feedback.onBoardingQuestionnaire.multipleChoice
     ) {
       let result = {};
       try {
@@ -166,25 +167,24 @@ chrome.runtime.onMessage.addListener(async (message) => {
         if (state.remainingFeedbacks <= 0) {
           // console.log("i am not executed");
           state.feedback.status = "sent";
-          state.feedback.message = `Feedback submission was succesfull, you have finished all of your tasks, please continue the study by going to post-questionnaire (next to "Get Abstract" button)`;
+          state.feedback.message = `Submission was succesfull, you have finished all of your tasks, please continue the study by going to post-questionnaire (next to "Get Abstract" button)`;
         } else {
           let message =
             state.remainingFeedbacks <= 1
               ? " remaining article"
               : " remaining articles";
           state.feedback.status = "sent";
-          state.feedback.message = `Feedback submission was successfull, you have ${state.remainingFeedbacks}${message} to read and submit a feedback!`;
+          state.feedback.message = `Submission was successfull, you have ${state.remainingFeedbacks}${message} to read and submit!`;
         }
       }
       // console.log("i am the result of the send feedback", result);
       await updateStudyStatus();
     } else {
       // show and erro to user here
-      console.log(
-        "Please fill all the values for each version and add a feedback."
-      );
-      state.feedback.message =
-        "Please fill all the values for each version and add a feedback.";
+      console.log("Please answer all the quetsions.");
+      // state.feedback.message =
+      //   "Please fill all the values for each version and add a feedback.";
+      state.feedback.message = "Please answer all the quetsions.";
       state.feedback.status = "empty";
       chrome.runtime.sendMessage({
         action: "emptySubmissionError",
@@ -214,7 +214,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
     console.log("after", state);
   }
 
-  console.log("i am constantly rnning");
+  // console.log("i am constantly rnning");
   chrome.runtime.sendMessage({ action: "stateUpdate", state });
 });
 
@@ -229,10 +229,7 @@ async function requestLogin(username) {
     body: JSON.stringify({ username }),
   };
   try {
-    var response = await fetch(
-      `http://86.50.229.149:8080/users/login`,
-      options
-    );
+    var response = await fetch(`http://localhost:8080/users/login`, options);
     response = await response.json();
     accessToken = response.accessToken;
   } catch (error) {
@@ -261,7 +258,7 @@ async function requestSummary(abstractInfromation) {
 
       try {
         const response = await fetch(
-          `http://86.50.229.149:8080/abstracts/abstract`,
+          `http://localhost:8080/abstracts/abstract`,
           options
         );
         let responseData = await response.json();
@@ -300,7 +297,7 @@ async function requestStudyStatus() {
 
       try {
         const response = await fetch(
-          `http://86.50.229.149:8080/study/status`,
+          `http://localhost:8080/study/status`,
           options
         );
         // console.log(response);
@@ -320,11 +317,17 @@ async function requestStudyStatus() {
 }
 
 async function sendFeedback(feedback) {
+  // const {
+  //   elementaryDifficulty,
+  //   advancedDifficulty,
+  //   originalDifficulty,
+  //   text,
+  //   originalTime,
+  //   advancedTime,
+  //   elementaryTime,
+  // } = feedback;
   const {
-    elementaryDifficulty,
-    advancedDifficulty,
-    originalDifficulty,
-    text,
+    onBoardingQuestionnaire,
     originalTime,
     advancedTime,
     elementaryTime,
@@ -338,11 +341,19 @@ async function sendFeedback(feedback) {
           "Content-Type": "application/json",
           Authorization: "JWT " + accessToken,
         },
+        // body: JSON.stringify({
+        //   elementaryDifficulty,
+        //   advancedDifficulty,
+        //   originalDifficulty,
+        //   text,
+        //   originalTime,
+        //   advancedTime,
+        //   elementaryTime,
+        //   interactionID: state.abstractData.interactionID,
+        //   abstractID: state.abstractData._id,
+        // }),
         body: JSON.stringify({
-          elementaryDifficulty,
-          advancedDifficulty,
-          originalDifficulty,
-          text,
+          onBoardingQuestionnaire,
           originalTime,
           advancedTime,
           elementaryTime,
@@ -352,7 +363,7 @@ async function sendFeedback(feedback) {
       };
       try {
         const response = await fetch(
-          `http://86.50.229.149:8080/abstracts/submitFeedback`,
+          `http://localhost:8080/abstracts/submitFeedback`,
           options
         );
         const responseData = await response.json();

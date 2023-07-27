@@ -53,18 +53,28 @@ async function fetchResults(text, prompt) {
 //
 
 exports.submitFeedback = async (req, res) => {
+  // const feedback = new Feedback({
+  //   userID: req.user.id,
+  //   interactionID: req.body.interactionID,
+  //   abstractID: req.body.abstractID,
+  //   originalDifficulty: req.body.originalDifficulty,
+  //   advancedDifficulty: req.body.advancedDifficulty,
+  //   elementaryDifficulty: req.body.elementaryDifficulty,
+  //   text: req.body.text,
+  //   originalTime: req.body.originalTime,
+  //   advancedTime: req.body.advancedTime,
+  //   elementaryTime: req.body.elementaryTime,
+  // });
   const feedback = new Feedback({
     userID: req.user.id,
     interactionID: req.body.interactionID,
     abstractID: req.body.abstractID,
-    originalDifficulty: req.body.originalDifficulty,
-    advancedDifficulty: req.body.advancedDifficulty,
-    elementaryDifficulty: req.body.elementaryDifficulty,
-    text: req.body.text,
+    onBoardingQuestionnaire: req.body.onBoardingQuestionnaire,
     originalTime: req.body.originalTime,
     advancedTime: req.body.advancedTime,
     elementaryTime: req.body.elementaryTime,
   });
+
   await feedback
     .save()
     .then((feedback) => {
