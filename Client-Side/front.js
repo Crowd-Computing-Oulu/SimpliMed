@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const firstChild = container.firstChild; // Get the first child of the parent element
         container.insertBefore(newArticleMsg, firstChild);
         setTimeout(function () {
-          console.log("i am being triggered1");
+          // console.log("i am being triggered1");
           document
             .getElementById("feedbackValue-container")
             .classList.add("hidden");
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const firstChild = container.firstChild; // Get the first child of the parent element
         container.insertBefore(newArticleMsg, firstChild);
         setTimeout(function () {
-          console.log("i am being triggered2");
+          // console.log("i am being triggered2");
           document
             .getElementById("feedbackValue-container")
             .classList.add("hidden");
@@ -101,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
   chrome.runtime.onMessage.addListener((message) => {
     // listening for a change in state
     if (message.action === "stateUpdate") {
-      console.log("hello");
       state = message.state;
       // showing the number of feedbacks
       updateStudyState();
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
           chrome.runtime.sendMessage({ action: "newUrl" });
           // document.getElementById("difficulty-lvl__input").value = "0";
           setTimeout(function () {
-            console.log("i am being triggered1");
+            // console.log("i am being triggered1");
             document
               .getElementById("feedbackValue-container")
               .classList.add("hidden");
@@ -216,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .classList.add("hidden");
       }
     } else if (message.action === "showLoading") {
-      console.log("am i showing loading");
+      // console.log("am i showing loading");
       document
         .getElementsByClassName("loader-container")[0]
         .classList.remove("hidden");
@@ -514,7 +513,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
       .classList.remove("hidden");
     document.getElementById("feedbackTextForm").classList.remove("hidden");
   }
-  console.log(state.abstractData.shuffledArray);
+  // console.log(state.abstractData.shuffledArray);
   updateFeedbackForm();
 }
 function emptyFeedbackForm() {
