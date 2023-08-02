@@ -21,7 +21,7 @@ const onBoardingQuestionnaireSchema = new Schema({
   // },
   multipleChoice: {
     type: String,
-    required: [true, "multipleChoice 5 is required!"],
+    required: [true, "multipleChoice is required!"],
   },
 });
 const feedbackSchema = new Schema(
@@ -41,18 +41,18 @@ const feedbackSchema = new Schema(
       ref: "Abstract",
       required: [true, "Abstract id is required!"],
     },
-    // originalDifficulty: {
-    //   type: Number,
-    //   required: [true, "Original Value is required!"],
-    // },
-    // advancedDifficulty: {
-    //   type: Number,
-    //   required: [true, "Advanced Value is required!"],
-    // },
-    // elementaryDifficulty: {
-    //   type: Number,
-    //   required: [true, "Elementary Value is required!"],
-    // },
+    originalDifficulty: {
+      type: Number,
+      required: [true, "Original Value is required!"],
+    },
+    advancedDifficulty: {
+      type: Number,
+      required: [true, "Advanced Value is required!"],
+    },
+    elementaryDifficulty: {
+      type: Number,
+      required: [true, "Elementary Value is required!"],
+    },
     // text: {
     //   type: String,
     //   required: [true, "Text is required!"],

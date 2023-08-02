@@ -241,8 +241,15 @@ option {
   padding: 0;
 }
 input[type="range"] {
-  width: 200px;
-  margin: 0;
+  width: 400px;
+}
+
+/* .slider {
+  color: blue;
+  border-radius: 50px;
+} */
+#tickmarks option {
+  margin-right: 50px;
 }
 
 .loader-container {

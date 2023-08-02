@@ -274,50 +274,50 @@ document.addEventListener("DOMContentLoaded", () => {
   difficultyLvlInput.addEventListener("input", () => {
     sliderUpdated(difficultyLvlInput.value, true); // true indicates that user has manually updated the difficulty Slider
   });
-  //FEEDBACK RADIO
-  // document.getElementById("valueSubmitBtn").addEventListener("click", () => {
-  //   const formName = document.getElementById("formName").value;
-  //   var feedbackType = "";
-  //   switch (formName) {
-  //     case "elementaryForm":
-  //       feedbackType = "elementaryDifficulty";
-  //       break;
-  //     case "advancedForm":
-  //       feedbackType = "advancedDifficulty";
-  //       break;
-  //     case "originalForm":
-  //       feedbackType = "originalDifficulty";
-  //       break;
-  //     default:
-  //       return;
-  //   }
-  //   var radios = document.getElementsByName("feedbackValue");
-  //   var feedbackValue = null;
-  //   for (var i = 0; i < radios.length; i++) {
-  //     if (radios[i].checked) {
-  //       feedbackValue = radios[i].value;
-  //       break;
-  //     }
-  //   }
+  // FEEDBACK RADIO
+  document.getElementById("valueSubmitBtn").addEventListener("click", () => {
+    const formName = document.getElementById("formName").value;
+    var feedbackType = "";
+    switch (formName) {
+      case "elementaryForm":
+        feedbackType = "elementaryDifficulty";
+        break;
+      case "advancedForm":
+        feedbackType = "advancedDifficulty";
+        break;
+      case "originalForm":
+        feedbackType = "originalDifficulty";
+        break;
+      default:
+        return;
+    }
+    var radios = document.getElementsByName("feedbackValue");
+    var feedbackValue = null;
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i].checked) {
+        feedbackValue = radios[i].value;
+        break;
+      }
+    }
 
-  //   if (feedbackValue) {
-  //     document.getElementById("error").classList.add("hidden");
-  //     document.getElementById("result").classList.remove("hidden");
-  //     // document.getElementById("error").innerHTML = "";
-  //     // document.getElementById("result").innerHTML = "Submitted!";
-  //     chrome.runtime.sendMessage({
-  //       action: "feedbackValueSubmitted",
-  //       feedbackType,
-  //       feedbackValue,
-  //     });
-  //     emptyFeedbackForm();
-  //   } else {
-  //     document.getElementById("error").classList.remove("hidden");
-  //     document.getElementById("result").classList.add("hidden");
-  //     // document.getElementById("error").innerHTML = "Please select an option!";
-  //     // document.getElementById("result").innerHTML = "";
-  //   }
-  // });
+    if (feedbackValue) {
+      document.getElementById("error").classList.add("hidden");
+      document.getElementById("result").classList.remove("hidden");
+      // document.getElementById("error").innerHTML = "";
+      // document.getElementById("result").innerHTML = "Submitted!";
+      chrome.runtime.sendMessage({
+        action: "feedbackValueSubmitted",
+        feedbackType,
+        feedbackValue,
+      });
+      emptyFeedbackForm();
+    } else {
+      document.getElementById("error").classList.remove("hidden");
+      document.getElementById("result").classList.add("hidden");
+      // document.getElementById("error").innerHTML = "Please select an option!";
+      // document.getElementById("result").innerHTML = "";
+    }
+  });
 
   // Finish
   document.getElementById("finishBtn").addEventListener("click", () => {
@@ -332,13 +332,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const Q1Text = document.getElementById("Q1Text").value;
     const Q2Text = document.getElementById("Q2Text").value;
     const Q3Text = document.getElementById("Q3Text").value;
-    const Q4Text = document.getElementById("Q4Text").value;
     var onBoardingQuestionnaire = {
       multipleChoice: multipleChoice,
       Q1Text: Q1Text,
       Q2Text: Q2Text,
       Q3Text: Q3Text,
-      Q4Text: Q4Text,
     };
     // const feedbackText = document.getElementById("feedbackTextInput").value;
     console.log(onBoardingQuestionnaire);

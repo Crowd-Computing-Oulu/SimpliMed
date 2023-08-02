@@ -53,6 +53,10 @@ async function fetchResults(text, prompt) {
 //
 
 exports.submitFeedback = async (req, res) => {
+  console.log(
+    "this is request body -==--==============================================================================================",
+    req.body
+  );
   // const feedback = new Feedback({
   //   userID: req.user.id,
   //   interactionID: req.body.interactionID,
@@ -69,6 +73,9 @@ exports.submitFeedback = async (req, res) => {
     userID: req.user.id,
     interactionID: req.body.interactionID,
     abstractID: req.body.abstractID,
+    originalDifficulty: req.body.originalDifficulty,
+    advancedDifficulty: req.body.advancedDifficulty,
+    elementaryDifficulty: req.body.elementaryDifficulty,
     onBoardingQuestionnaire: req.body.onBoardingQuestionnaire,
     originalTime: req.body.originalTime,
     advancedTime: req.body.advancedTime,

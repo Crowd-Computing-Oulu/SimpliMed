@@ -1,28 +1,28 @@
 {
   "phases": {
-    "2023-07-20": {
+    "2023-08-02": {
       "phrase": "An apple a day, keeps the cancer away!",
-      "requiredFeedbacks": 2
+      "requiredFeedbacks": 3
     },
-    "2023-07-21": {
+    "2023-08-03": {
       "phrase": "Daily Exercises reduce the risk of hearth diseases",
-      "requiredFeedbacks": 2
+      "requiredFeedbacks": 3
     },
-    "2023-07-22": {
+    "2023-08-04": {
       "phrase": "Cracking your knuckles leads to arthritis.",
-      "requiredFeedbacks": 2
+      "requiredFeedbacks": 3
     },
-    "2023-07-23": {
+    "2023-08-05": {
       "phrase": "Drinking eight glasses of water a day will keep your skin flawless!",
-      "requiredFeedbacks": 2
+      "requiredFeedbacks": 3
     },
     "2023-07-24": {
       "phrase": "Standing too close to the microwave can cause cancer.",
-      "requiredFeedbacks": 2
+      "requiredFeedbacks": 3
     },
     "2023-07-25": {
       "phrase": "Eating carrots enhances night vision.",
-      "requiredFeedbacks": 2
+      "requiredFeedbacks": 3
     },
     "2023-07-26": {
       "phrase": "An apple a day, keeps the cancer away!",

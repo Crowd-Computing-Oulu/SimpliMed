@@ -145,11 +145,14 @@ chrome.runtime.onMessage.addListener(async (message) => {
     //   state.feedback = {};
     // }
     state.feedback.onBoardingQuestionnaire = message.onBoardingQuestionnaire;
+    // state.feedback.
     if (
+      state.feedback.elementaryDifficulty &&
+      state.feedback.advancedDifficulty &&
+      state.feedback.originalDifficulty &&
       state.feedback.onBoardingQuestionnaire.Q1Text &&
       state.feedback.onBoardingQuestionnaire.Q2Text &&
       state.feedback.onBoardingQuestionnaire.Q3Text &&
-      // state.feedback.onBoardingQuestionnaire.Q4Text &&
       state.feedback.onBoardingQuestionnaire.multipleChoice
     ) {
       let result = {};
@@ -327,11 +330,15 @@ async function sendFeedback(feedback) {
   //   elementaryTime,
   // } = feedback;
   const {
+    elementaryDifficulty,
+    advancedDifficulty,
+    originalDifficulty,
     onBoardingQuestionnaire,
     originalTime,
     advancedTime,
     elementaryTime,
   } = feedback;
+  console.log(feedback);
   return new Promise((resolve, reject) => {
     chrome.storage.local.get("accessToken", async function (data) {
       const accessToken = data.accessToken;
@@ -353,6 +360,9 @@ async function sendFeedback(feedback) {
         //   abstractID: state.abstractData._id,
         // }),
         body: JSON.stringify({
+          elementaryDifficulty,
+          advancedDifficulty,
+          originalDifficulty,
           onBoardingQuestionnaire,
           originalTime,
           advancedTime,
