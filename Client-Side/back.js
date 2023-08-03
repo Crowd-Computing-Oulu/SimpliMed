@@ -85,7 +85,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
         state.abstractData = result.abstract;
         state.feedback = result.feedback;
         state.abstractData.shuffledArray = shuffleArray(["1", "2", "3"]);
-        console.log(state.abstractData.shuffledArray);
+        // console.log(state.abstractData.shuffledArray);
         if (!state.feedback) {
           state.feedback = {
             originalTime: 0,
@@ -339,7 +339,7 @@ async function sendFeedback(feedback) {
     advancedTime,
     elementaryTime,
   } = feedback;
-  console.log(feedback);
+  // console.log(feedback);
   return new Promise((resolve, reject) => {
     chrome.storage.local.get("accessToken", async function (data) {
       const accessToken = data.accessToken;

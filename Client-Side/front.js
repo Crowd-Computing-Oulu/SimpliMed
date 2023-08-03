@@ -597,7 +597,7 @@ function updateStudyState() {
   });
   if (state.remainingFeedbacks <= 0) {
     if (state.isStudyCompleted) {
-      console.log("i am completed");
+      // console.log("i am completed");
       document.getElementById(
         "remainingFeedbacks"
       ).innerHTML = ` <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPUnbrSiH7Q45X-ncwy4O5qZ3M-VD3JcYn7v1L6-coPZcsBA/viewform" target="_blank">Post-Questionnaire</a>`;
