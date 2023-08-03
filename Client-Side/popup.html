@@ -20,7 +20,7 @@
       <!-- <p>Username:</p> -->
       <div>
         <button id="getAbstract" class="btn hidden">Get Abstract</button>
-        <span id="remaininFeedbacks"></span>
+        <span id="remainingFeedbacks"></span>
       </div>
 
       <div class="flex-row">
@@ -223,7 +223,7 @@
               <label for="radio5">5 (Extremely Hard)</label>
             </div>
           </div>
-          <button type="button" id="valueSubmitBtn" class="btn">Submit</button>
+          <button type="button" id="valueSubmitBtn" class="btn">Rate</button>
         </form>
         <div>
           <p id="error" class="hidden" style="color: red">
@@ -284,26 +284,29 @@
               </div>
             </div>
           </div>
-          <hr style="border: 1px dotted purple; width: 90%; height: 0" />
 
+          <hr style="border: 1px dotted purple; width: 90%; height: 0" />
           <div class="question-container">
             <p class="question">2. Justify your Above Answer:</p>
             <textarea type="text" id="Q1Text" placeholder=""></textarea>
           </div>
-          <hr style="border: 1px dotted purple; width: 90%; height: 0" />
 
-          <div class="question-container">
+          <div class="question-container dailyQuestions hidden">
+            <hr style="border: 1px dotted purple; width: 90%; height: 0" />
+
             <p class="question">
-              3. Explain what did you learn from today's topic?
+              3. Explain what did you learn from today's topic after reading
+              these 3 articles?
             </p>
             <textarea type="text" id="Q2Text" placeholder=""></textarea>
           </div>
-          <hr style="border: 1px dotted purple; width: 90%; height: 0" />
 
-          <div class="question-container">
+          <div class="question-container dailyQuestions hidden">
+            <hr style="border: 1px dotted purple; width: 90%; height: 0" />
+
             <p id="" class="question">
-              4. Has your understanding of the topic changed after reading the
-              abstracts? Why/why not?
+              4. Has your understanding of the topic changed after reading these
+              articles? Why/why not?
             </p>
             <textarea type="text" id="Q3Text" placeholder=""></textarea>
           </div>

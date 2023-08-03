@@ -19,8 +19,33 @@ const study = require("../study/studyStatus.json");
 //     "2023-07-05": { phrase: "Water Skin", requiredFeedbacks: 6 },
 //   },
 // };
-
 exports.requestStudyStatus = async (req, res) => {
+  let isCompleted = true;
+  for (const [key, value] of Object.entries(study.phases)) {
+    let date = new Date(key);
+    let nextDate = new Date(key);
+    nextDate.setDate(nextDate.getDate() + 1);
+    await Feedback.find({
+      userID: req.user.id,
+      created: { $gte: date, $lt: nextDate },
+    })
+      .exec()
+      .then((dailyFeedbacks) => {
+        if (dailyFeedbacks.length >= value.requiredFeedbacks) {
+        } else {
+          isCompleted = false;
+        }
+
+        // console.log(dailyFeedbacks);
+        // res.status(200).send({
+        //   message: "dailyFeedbacks",
+        //   dailyFeedbacks,
+        //   dailyPhrase,
+        //   requiredFeedbacks,
+        // });
+      });
+  }
+
   let now = new Date();
   let timeString = now.toISOString().toString().substring(0, 10);
   let today = new Date(timeString);
@@ -52,6 +77,7 @@ exports.requestStudyStatus = async (req, res) => {
         dailyFeedbacks,
         dailyPhrase,
         requiredFeedbacks,
+        isCompleted,
       });
     })
     .catch((err) => {

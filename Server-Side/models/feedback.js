@@ -13,7 +13,7 @@ const onBoardingQuestionnaireSchema = new Schema({
   },
   Q3Text: {
     type: String,
-    required: [true, "Q3Text 3 is required!"],
+    required: [false, "Q3Text 3 is not required!"],
   },
   // Q4Text: {
   //   type: String,
@@ -21,7 +21,7 @@ const onBoardingQuestionnaireSchema = new Schema({
   // },
   multipleChoice: {
     type: String,
-    required: [true, "multipleChoice is required!"],
+    required: [false, "multipleChoice is not required!"],
   },
 });
 const feedbackSchema = new Schema(

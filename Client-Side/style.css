@@ -70,7 +70,7 @@ body {
 #header span {
   margin-right: 10px;
 }
-#remaininFeedbacks {
+#remainingFeedbacks {
   font-size: 0.9rem;
   color: gray;
   font-family: var(--primary-font);

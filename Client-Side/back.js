@@ -168,9 +168,9 @@ chrome.runtime.onMessage.addListener(async (message) => {
         state.feedback.message = "Feedback submission failed!";
       } else {
         if (state.remainingFeedbacks <= 0) {
-          // console.log("i am not executed");
+          // add two questions
           state.feedback.status = "sent";
-          state.feedback.message = `Submission was succesfull, you have finished all of your tasks, please continue the study by going to post-questionnaire (next to "Get Abstract" button)`;
+          state.feedback.message = `Submission was succesfull, you have finished all of your tasks for today, please come back tomorrow for the next daily topic.`;
         } else {
           let message =
             state.remainingFeedbacks <= 1
@@ -184,10 +184,11 @@ chrome.runtime.onMessage.addListener(async (message) => {
       await updateStudyStatus();
     } else {
       // show and erro to user here
-      console.log("Please answer all the quetsions.");
+      console.log("Please answer all the quetsions and rate each version.");
       // state.feedback.message =
       //   "Please fill all the values for each version and add a feedback.";
-      state.feedback.message = "Please answer all the quetsions.";
+      state.feedback.message =
+        "Please answer all the quetsions and rate each version.";
       state.feedback.status = "empty";
       chrome.runtime.sendMessage({
         action: "emptySubmissionError",
@@ -416,10 +417,16 @@ async function setChromeStorage() {
 async function updateStudyStatus() {
   let studyStatus = await requestStudyStatus();
   state.numberOfDailyFeedbacks = studyStatus.dailyFeedbacks.length;
+  state.isStudyCompleted = studyStatus.isCompleted;
   let remainingFeedbacks =
     studyStatus.requiredFeedbacks - studyStatus.dailyFeedbacks.length;
   state.dailyPhrase = studyStatus.dailyPhrase;
   state.remainingFeedbacks = remainingFeedbacks;
+  // console.log(
+  //   "remaining and ",
+  //   studyStatus.dailyFeedbacks.length,
+  //   studyStatus.requiredFeedbacks
+  // );
   return;
 }
 

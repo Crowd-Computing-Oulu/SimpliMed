@@ -591,12 +591,32 @@ function removeElement(elementId) {
   }
 }
 function updateStudyState() {
+  const dailyQuestions = document.querySelectorAll(".dailyQuestions");
+  dailyQuestions.forEach((element) => {
+    element.classList.add("hidden");
+  });
   if (state.remainingFeedbacks <= 0) {
-    document.getElementById(
-      "remaininFeedbacks"
-    ).innerHTML = ` <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPUnbrSiH7Q45X-ncwy4O5qZ3M-VD3JcYn7v1L6-coPZcsBA/viewform" target="_blank">Post-Questionnaire</a>`;
+    if (state.isStudyCompleted) {
+      console.log("i am completed");
+      document.getElementById(
+        "remainingFeedbacks"
+      ).innerHTML = ` <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPUnbrSiH7Q45X-ncwy4O5qZ3M-VD3JcYn7v1L6-coPZcsBA/viewform" target="_blank">Post-Questionnaire</a>`;
+    }
+  } else if (state.remainingFeedbacks == 1) {
+    const dailyQuestions = document.querySelectorAll(".dailyQuestions");
+    dailyQuestions.forEach((element) => {
+      element.classList.remove("hidden");
+
+      document.getElementById("remainingFeedbacks").textContent =
+        " " +
+        state.remainingFeedbacks +
+        (state.remainingFeedbacks <= 1
+          ? " Submission Remaining"
+          : " Submissions Remaining");
+    });
+    // show the last 2 question
   } else {
-    document.getElementById("remaininFeedbacks").textContent =
+    document.getElementById("remainingFeedbacks").textContent =
       " " +
       state.remainingFeedbacks +
       (state.remainingFeedbacks <= 1
