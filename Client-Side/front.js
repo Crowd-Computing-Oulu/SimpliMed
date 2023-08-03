@@ -608,6 +608,9 @@ function updateStudyState() {
       document.getElementById(
         "remainingFeedbacks"
       ).innerHTML = ` <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPUnbrSiH7Q45X-ncwy4O5qZ3M-VD3JcYn7v1L6-coPZcsBA/viewform" target="_blank">Post-Questionnaire</a>`;
+    } else {
+      document.getElementById("remainingFeedbacks").textContent =
+        " 0 Daily Submission Remaining";
     }
   } else if (state.remainingFeedbacks == 1) {
     const dailyQuestions = document.querySelectorAll(".dailyQuestions");
@@ -618,8 +621,8 @@ function updateStudyState() {
         " " +
         state.remainingFeedbacks +
         (state.remainingFeedbacks <= 1
-          ? " Submission Remaining"
-          : " Submissions Remaining");
+          ? " Daily Submission Remaining"
+          : " Daily Submissions Remaining");
     });
     // show the last 2 question
   } else {

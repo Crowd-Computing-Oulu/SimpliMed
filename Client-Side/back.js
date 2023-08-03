@@ -95,7 +95,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
         } else {
           state.feedback.status = "sent";
           state.feedback.message =
-            "You have already submitted a feedback for this article!";
+            "You have already read this article and submitted your answers. If there are remaining daily submissions, choose another article!";
         }
       } catch (error) {
         // console.log(error.message);
@@ -181,10 +181,10 @@ chrome.runtime.onMessage.addListener(async (message) => {
         } else {
           let message =
             state.remainingFeedbacks <= 1
-              ? " remaining article"
-              : " remaining articles";
+              ? " remaining daily submission"
+              : " remaining daily submissions";
           state.feedback.status = "sent";
-          state.feedback.message = `Submission was successfull, you have ${state.remainingFeedbacks}${message} to read and submit for today!`;
+          state.feedback.message = `Submission was successfull. You have ${state.remainingFeedbacks}${message}, please choose another article!`;
         }
         state.feedback.onBoardingQuestionnaire = {};
       }
