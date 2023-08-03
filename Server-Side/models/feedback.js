@@ -3,26 +3,26 @@ const Schema = mongoose.Schema;
 
 // Abstract Schema
 const onBoardingQuestionnaireSchema = new Schema({
+  multipleChoice: {
+    type: String,
+    required: [true, "multipleChoice is  required!"],
+  },
   Q1Text: {
     type: String,
     required: [true, "Q1Text 1 is required!"],
   },
   Q2Text: {
     type: String,
-    required: [true, "Q2Text 2 is required!"],
+    required: false,
   },
   Q3Text: {
     type: String,
-    required: [false, "Q3Text 3 is not required!"],
+    required: false,
   },
   // Q4Text: {
   //   type: String,
   //   required: [true, "Q4Text 4 is required!"],
   // },
-  multipleChoice: {
-    type: String,
-    required: [false, "multipleChoice is not required!"],
-  },
 });
 const feedbackSchema = new Schema(
   {

@@ -190,19 +190,25 @@ document.addEventListener("DOMContentLoaded", () => {
       if (message.state.feedback) {
         updateFeedbackForm();
         if (message.state.feedback.status === "failed") {
-          document
-            .getElementById("feedbackSubmisisonResult")
-            .classList.remove("hidden");
-          document.getElementById("feedbackSubmisisonResult").textContent =
-            message.state.feedback.message;
+          let feedbackSubmisisonResult = document.getElementById(
+            "feedbackSubmisisonResult"
+          );
+          feedbackSubmisisonResult.classList.remove("hidden");
+          feedbackSubmisisonResult.style.color = "green";
+
+          feedbackSubmisisonResult.textContent = message.state.feedback.message;
         } else if (message.state.feedback.status === "sent") {
           document.getElementById("feedbackTextForm").classList.add("hidden");
-          document
-            .getElementById("feedbackSubmisisonResult")
-            .classList.remove("hidden");
-          document.getElementById("feedbackSubmisisonResult").textContent =
-            message.state.feedback.message;
+          feedbackSubmisisonResult.classList.remove("hidden");
+          feedbackSubmisisonResult.style.color = "green";
+          feedbackSubmisisonResult.textContent = message.state.feedback.message;
+          document.getElementById("Q1Text").value = "";
+          document.getElementById("Q2Text").value = "";
+          document.getElementById("Q3Text").value = "";
         } else if (message.state.feedback.status === "empty") {
+          feedbackSubmisisonResult.classList.remove("hidden");
+          feedbackSubmisisonResult.textContent = message.state.feedback.message;
+          feedbackSubmisisonResult.style.color = "red";
         }
       }
       if (!message.state.instructionShown && message.state.accessToken) {
@@ -234,14 +240,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const firstChild = container.firstChild; // Get the first child of the parent element
       container.insertBefore(err, firstChild);
       // console.log("requestSummaryError", message.err);
-    } else if (message.action === "emptySubmissionError") {
-      const emptySubmissionError = document.createElement("p");
-      emptySubmissionError.style.color = "red";
-      emptySubmissionError.textContent = message.err;
-      document
-        .getElementById("feedbackTextForm")
-        .appendChild(emptySubmissionError);
     }
+    // else if (message.action === "emptySubmissionError") {
+    //   const emptySubmissionError = document.createElement("p");
+    //   emptySubmissionError.style.color = "red";
+    //   emptySubmissionError.textContent = message.err;
+    //   document
+    //     .getElementById("feedbackTextForm")
+    //     .appendChild(emptySubmissionError);
+    // }
   });
 
   // LOGIN

@@ -126,6 +126,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
         originalTime: 0,
         advancedTime: 0,
         elementaryTime: 0,
+        onBoardingQuestionnaire: {},
       },
     };
     // console.log("the user logged out in back");
@@ -151,9 +152,10 @@ chrome.runtime.onMessage.addListener(async (message) => {
       state.feedback.advancedDifficulty &&
       state.feedback.originalDifficulty &&
       state.feedback.onBoardingQuestionnaire.Q1Text &&
-      state.feedback.onBoardingQuestionnaire.Q2Text &&
-      state.feedback.onBoardingQuestionnaire.Q3Text &&
-      state.feedback.onBoardingQuestionnaire.multipleChoice
+      state.feedback.onBoardingQuestionnaire.multipleChoice &&
+      ((state.feedback.onBoardingQuestionnaire.Q2Text &&
+        state.feedback.onBoardingQuestionnaire.Q3Text) ||
+        state.remainingFeedbacks != 1)
     ) {
       let result = {};
       try {
@@ -169,8 +171,13 @@ chrome.runtime.onMessage.addListener(async (message) => {
       } else {
         if (state.remainingFeedbacks <= 0) {
           // add two questions
-          state.feedback.status = "sent";
-          state.feedback.message = `Submission was succesfull, you have finished all of your tasks for today, please come back tomorrow for the next daily topic.`;
+          if (state.isStudyCompleted) {
+            state.feedback.status = "sent";
+            state.feedback.message = `Submission was succesfull. You have done all of your 5days tasks. Please find the Post-Questionnaire link next to "Get Abstract" button and fill it and finish the study.`;
+          } else {
+            state.feedback.status = "sent";
+            state.feedback.message = `Submission was succesfull, you have finished all of your tasks for today, please come back tomorrow for the next daily topic.`;
+          }
         } else {
           let message =
             state.remainingFeedbacks <= 1
@@ -179,8 +186,8 @@ chrome.runtime.onMessage.addListener(async (message) => {
           state.feedback.status = "sent";
           state.feedback.message = `Submission was successfull, you have ${state.remainingFeedbacks}${message} to read and submit!`;
         }
+        state.feedback.onBoardingQuestionnaire = {};
       }
-      // console.log("i am the result of the send feedback", result);
       await updateStudyStatus();
     } else {
       // show and erro to user here
