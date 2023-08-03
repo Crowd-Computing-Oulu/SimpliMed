@@ -452,7 +452,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
       .classList.remove("hidden");
 
     // Showing the elementary summary
-  } else if (difficultyLevel === state.abstractData.shuffledArray[0]) {
+  } else if (difficultyLevel === "1") {
     if (timeValue) {
       let delta = Date.now() - timeValue;
       chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
@@ -474,7 +474,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     showElementaryAbstract();
 
     // Showing the advanced summary
-  } else if (difficultyLevel === state.abstractData.shuffledArray[1]) {
+  } else if (difficultyLevel === "2") {
     if (timeValue) {
       let delta = Date.now() - timeValue;
       chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });
@@ -494,7 +494,7 @@ function sliderUpdated(difficultyLevel, shouldUpdateBackend) {
     showAdvancedAbstract();
 
     // showing the original abs
-  } else if (difficultyLevel === state.abstractData.shuffledArray[2]) {
+  } else if (difficultyLevel === "3") {
     if (timeValue) {
       let delta = Date.now() - timeValue;
       chrome.runtime.sendMessage({ action: "timeUpdate", delta, timeType });

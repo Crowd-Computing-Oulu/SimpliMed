@@ -1,23 +1,7 @@
 {
   "phases": {
-    "2023-08-02": {
-      "phrase": "An apple a day, keeps the cancer away!",
-      "requiredFeedbacks": 3
-    },
     "2023-08-03": {
-      "phrase": "Cracking your knuckles leads to arthritis.",
-      "requiredFeedbacks": 3
-    },
-    "2023-07-24": {
-      "phrase": "Standing too close to the microwave can cause cancer.",
-      "requiredFeedbacks": 3
-    },
-    "2023-07-25": {
-      "phrase": "Sugar substitutes can cause cancer.",
-      "requiredFeedbacks": 3
-    },
-    "2023-07-26": {
-      "phrase": "Autism disorder is a result of childhood vaccinations!",
+      "phrase": "An apple a day, keeps the cancer away!",
       "requiredFeedbacks": 3
     }
   }
