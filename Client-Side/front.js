@@ -627,8 +627,8 @@ function updateStudyState() {
       " " +
       state.remainingFeedbacks +
       (state.remainingFeedbacks <= 1
-        ? " Submission Remaining"
-        : " Submissions Remaining");
+        ? " Daily Submission Remaining"
+        : " Daily Submissions Remaining");
   }
   const dailyPhraseElements = document.getElementsByClassName("dailyPhrase");
 

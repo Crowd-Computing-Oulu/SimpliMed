@@ -1,7 +1,7 @@
 {
   "phases": {
     "2023-08-03": {
-      "phrase": "An apple a day, keeps the cancer away!",
+      "phrase": "An apple a day, keeps the cancer away.",
       "requiredFeedbacks": 3
     },
     "2023-08-04": {
@@ -17,7 +17,7 @@
       "requiredFeedbacks": 3
     },
     "2023-08-07": {
-      "phrase": "Autism disorder is a result of childhood vaccinations!",
+      "phrase": "Autism disorder is a result of childhood vaccinations.",
       "requiredFeedbacks": 3
     }
   }

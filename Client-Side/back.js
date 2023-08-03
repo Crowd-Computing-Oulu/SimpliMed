@@ -184,14 +184,14 @@ chrome.runtime.onMessage.addListener(async (message) => {
               ? " remaining article"
               : " remaining articles";
           state.feedback.status = "sent";
-          state.feedback.message = `Submission was successfull, you have ${state.remainingFeedbacks}${message} to read and submit!`;
+          state.feedback.message = `Submission was successfull, you have ${state.remainingFeedbacks}${message} to read and submit for today!`;
         }
         state.feedback.onBoardingQuestionnaire = {};
       }
       await updateStudyStatus();
     } else {
       // show and erro to user here
-      console.log("Please answer all the quetsions and rate each version.");
+      console.log("Please answer all the questions and rate each version.");
       // state.feedback.message =
       //   "Please fill all the values for each version and add a feedback.";
       state.feedback.message =
