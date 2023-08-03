@@ -5,7 +5,7 @@ const Feedback = require("../models/feedback");
 
 const { sendHttpRequest, sendHttpsRequest } = require("../utils/requestUtils");
 const axios = require("axios");
-const feedback = require("../models/feedback");
+// const feedback = require("../models/feedback");
 
 // fetch abstracts
 async function fetchResults(text, prompt) {
